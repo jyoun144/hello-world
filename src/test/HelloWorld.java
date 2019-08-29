@@ -6,26 +6,25 @@ public class HelloWorld {
 	private static float aFreq = 0.25f;
 	private static float gFreq = 0.25f;
 	private static float tFreq = 0.25f;
-	private static float cFreq = 0.25f;
-	
+	private static float cFreq = 0.25f;	
 	private static int totalSequenceCount = 1000;
-	private static final String targetCodon = "AAA";
-	
+	private static final String targetCodon = "AAA";	
 
-	public static void main(String[] args) {
-	    int sequenceCount = 0;	
+	public static void main(String[] args) 
+	{
+		int sequenceCount = 0;	
 	    int targetCodonCount = 0;
 		for(int i=0; i<totalSequenceCount; i++)
 		{
 	     String currentCodon = GetCodon();
 	     System.out.println(currentCodon);
-	     if(currentCodon.contentEquals(targetCodon))
+	     if(currentCodon.equals(targetCodon))
 	     {
 	    	 targetCodonCount = targetCodonCount + 1;	    	    	 
 	     }		
 		 sequenceCount = sequenceCount + 1;	
 		}
-		PrintFinalReport(sequenceCount, targetCodonCount, targetCodon);
+		PrintFinalReport(sequenceCount, targetCodonCount, targetCodon);	    
 	}	
 	private static String GetCodon()
 	{
