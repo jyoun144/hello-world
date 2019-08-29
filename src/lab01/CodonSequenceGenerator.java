@@ -1,7 +1,7 @@
-package test;
+package lab01;
 import java.util.Random;
 
-public class HelloWorld {
+public class CodonSequenceGenerator {
 	private static Random random = new Random();
 	private static float aFreq = 0.25f;
 	private static float gFreq = 0.25f;
