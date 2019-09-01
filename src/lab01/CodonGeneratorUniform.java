@@ -1,7 +1,7 @@
 package lab01;
 import java.util.Random;
 
-public class CodonGenerator {		
+public class CodonGeneratorUniform {		
 
 	public static void main(String[] args) 
 	{		
