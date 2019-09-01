@@ -64,7 +64,12 @@ public class CodonGenerator {
 	}
 	private static void printFinalReport(int totalSequenceCount, int targetCodonCount, String targetCodon)
 	{
-		// Expected target codon count for 1000 trials is 15.625		
+		/* 1) How often would you expect to see this 3mer by chance?
+		 * The expected 3mer count (expected_count) for 1000 trials is 15.625:  expected_count = (1/4)^3 * 1000	
+		 * 
+		 * 2) Is Java's number close to the number you would expect?  
+		 * Yes, the 3mer count for 'AAA' was within the neighborhood of 15.625.
+		 */
 		 System.out.println("\n The target sequence " + "(" + targetCodon + ")" + 
 				 			" was generated " + targetCodonCount + " out of " + 
 				 			totalSequenceCount + " times.");
