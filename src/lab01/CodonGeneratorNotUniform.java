@@ -1,14 +1,14 @@
 package lab01;
 import java.util.Random;
 
-public class CodonGeneratorUniform {		
+public class CodonGeneratorNotUniform {		
 
 	public static void main(String[] args) 
 	{		
-		float aFreq = 0.25f;
-		float gFreq = 0.25f;
-		float tFreq = 0.25f;
-		float cFreq = 0.25f;		
+		float aFreq = 0.12f;
+		float gFreq = 0.38f;
+		float tFreq = 0.39f;
+		float cFreq = 0.11f;		
 		int inputSequenceCount = 1000;
 		String targetCodon = "AAA";		
 		int totalSequenceCount = 0;	
@@ -68,7 +68,7 @@ public class CodonGeneratorUniform {
 		 * The expected 3mer count (expected_count) for 1000 trials is 15.625:  expected_count = (1/4)^3 * 1000	
 		 * 
 		 * 2) Is Java's number close to the number you would expect?  
-		 * Yes, the 3mer count for 'AAA' was within the neighborhood of 15.625 after executing the program several times.
+		 * Yes, the 3mer count for 'AAA' was within the neighborhood of 15.625.
 		 */
 		 System.out.println("\n The target sequence " + "(" + targetCodon + ")" + 
 				 			" was generated " + targetCodonCount + " out of " + 
