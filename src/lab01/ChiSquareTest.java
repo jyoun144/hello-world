@@ -1,30 +1,34 @@
 package lab01;
 import java.util.Random;
 
-public class CodonGeneratorNotUniform {		
+public class ChiSquareTest {		
 
 	public static void main(String[] args) 
-	{		
-		float aFreq = 0.12f;
-		float gFreq = 0.38f;
-		float tFreq = 0.39f;
-		float cFreq = 0.11f;		
-		int inputSequenceCount = 1000;
+	{	double resulst = ChiSquareUtils.pochisq(0.0577367, 1);	
+		float aFreq = 0.25f;
+		float gFreq = 0.25f;
+		float tFreq = 0.25f;
+		float cFreq = 0.25f;		
+		int inputSequenceCount = 10000;
+		int inputTrialRuns = 10000;
 		String targetCodon = "AAA";		
 		int totalSequenceCount = 0;	
 	    int targetCodonCount = 0;
-	    Random random = new Random();
-	    
-		for(int i=0; i<inputSequenceCount; i++)
-		{
-	     String currentCodon = getCodon(random, aFreq, gFreq, tFreq, cFreq);
-	     System.out.println(currentCodon);
-	     if(currentCodon.equals(targetCodon))
-	     {
-	    	 targetCodonCount = targetCodonCount + 1;	    	    	 
-	     }		
-		 totalSequenceCount = totalSequenceCount + 1;	
-		}
+	    for(int h=0; h<inputTrialRuns; h++)
+	    {
+		    Random random = new Random();
+		    
+			for(int i=0; i<inputSequenceCount; i++)
+			{
+		     String currentCodon = getCodon(random, aFreq, gFreq, tFreq, cFreq);
+		     System.out.println(currentCodon);
+		     if(currentCodon.equals(targetCodon))
+		     {
+		    	 targetCodonCount = targetCodonCount + 1;	    	    	 
+		     }		
+			 totalSequenceCount = totalSequenceCount + 1;	
+			}
+	    }
 		printFinalReport(totalSequenceCount, targetCodonCount, targetCodon);	    
 	}	
 	private static String getCodon(Random random, float aFreq, float gFreq, float tFreq, float cFreq)
@@ -65,13 +69,16 @@ public class CodonGeneratorNotUniform {
 	private static void printFinalReport(int totalSequenceCount, int targetCodonCount, String targetCodon)
 	{
 		/* 1) How often would you expect to see this 3mer by chance?
-		 * The expected 3mer count (expected_count) for 1000 trials is 1.728:  expected_count = (0.12)^3 * 1000	
+		 * The expected 3mer count (expected_count) for 1000 trials is 15.625:  expected_count = (1/4)^3 * 1000	
 		 * 
 		 * 2) Is Java's number close to the number you would expect?  
-		 * Yes, the 3mer count for 'AAA' was within the neighborhood of 1.728 after executing the program several times.
+		 * Yes, the 3mer count for 'AAA' was within the neighborhood of 15.625 after executing the program several times.
 		 */
-		 System.out.println("\n The target sequence " + "(" + targetCodon + ")" + 
+		int nontargetSequence = totalSequenceCount - targetCodonCount;
+		 System.out.println("\nThe target sequence " + "(" + targetCodon + ")" + 
 				 			" was generated " + targetCodonCount + " out of " + 
-				 			totalSequenceCount + " times.");
+				 			totalSequenceCount + " times. \n" +
+				 			"Non-target sequences where generated " + nontargetSequence + " out of " + 
+						 			totalSequenceCount + " times.");
 	}	
 }
