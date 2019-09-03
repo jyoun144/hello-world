@@ -5,10 +5,10 @@ public class ChiSquareTest {
 
 	public static void main(String[] args) 
 	{	
-		float aFreq = 0.25f;
-		float gFreq = 0.25f;
-		float tFreq = 0.25f;
-		float cFreq = 0.25f;
+		float aFreq = 0.12f;
+		float cFreq = 0.38f;
+		float gFreq = 0.39f;
+		float tFreq = 0.11f;		
 		double significanceValue = 0.05;
 		int numOfCategories = 2;		
 		int inputSequenceCount = 10000;

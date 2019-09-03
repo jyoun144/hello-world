@@ -6,9 +6,10 @@ public class CodonGeneratorNotUniform {
 	public static void main(String[] args) 
 	{		
 		float aFreq = 0.12f;
-		float gFreq = 0.38f;
-		float tFreq = 0.39f;
-		float cFreq = 0.11f;		
+		float cFreq = 0.38f;
+		float gFreq = 0.39f;
+		float tFreq = 0.11f;
+				
 		int inputSequenceCount = 1000;
 		String targetCodon = "AAA";		
 		int totalSequenceCount = 0;	
