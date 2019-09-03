@@ -1,6 +1,5 @@
 package lab01;
 import java.util.Random;
-import java.math.*;
 
 public class ChiSquareTest {		
 
@@ -12,12 +11,11 @@ public class ChiSquareTest {
 		float cFreq = 0.25f;
 		double significanceValue = 0.05;
 		int numOfCategories = 2;		
-		int inputSequenceCount = 1000;
-		int inputTrialRuns = 1000;
-		String targetCodon = "AAA";		
+		int inputSequenceCount = 10000;
+		int inputTrialRuns = 10000;
+		String targetCodon = "AAA";		 
 		int totalSequenceCount = 0;	
-	    int targetCodonCount = 0;	    
-	    // printChiSquareTestResults(significanceValue, targetCodon, aFreq, gFreq, tFreq, cFreq,  1562202, 100000000, numOfCategories - 1);
+	    int targetCodonCount = 0;
 	    
 	    for(int h=0; h<inputTrialRuns; h++)
 	    {
@@ -33,8 +31,7 @@ public class ChiSquareTest {
 		     }		
 			 totalSequenceCount = totalSequenceCount + 1;	
 			}
-	    }
-		// printInitialSimulationResults(totalSequenceCount, targetCodonCount, targetCodon);
+	    }		
 	    printChiSquareTestResults(significanceValue, targetCodon, aFreq, gFreq, tFreq, cFreq,  targetCodonCount, totalSequenceCount, numOfCategories - 1);
 	}	
 	private static String getCodon(Random random, float aFreq, float gFreq, float tFreq, float cFreq)
@@ -71,22 +68,7 @@ public class ChiSquareTest {
 		}		
 		
 		return nucleotide;
-	}
-	private static void printInitialSimulationResults(int totalSequenceCount, int targetCodonCount, String targetCodon)
-	{
-		/* 1) How often would you expect to see this 3mer by chance?
-		 * The expected 3mer count (expected_count) for 1000 trials is 15.625:  expected_count = (1/4)^3 * 1000	
-		 * 
-		 * 2) Is Java's number close to the number you would expect?  
-		 * Yes, the 3mer count for 'AAA' was within the neighborhood of 15.625 after executing the program several times.
-		 */
-		int nontargetSequence = totalSequenceCount - targetCodonCount;
-		 System.out.println("\nThe target sequence " + "(" + targetCodon + ")" + 
-				 			" was generated " + targetCodonCount + " out of " + 
-				 			totalSequenceCount + " times. \n" +
-				 			"Non-target sequences where generated " + nontargetSequence + " out of " + 
-						 			totalSequenceCount + " times.");
-	}
+	}	
 	private static double getExpectedCodonFrequency(String codon, float aFreq, float gFreq, float tFreq, float cFreq )
 	{
 		int codonLength = codon.length();
@@ -127,19 +109,19 @@ public class ChiSquareTest {
 				                (Math.pow(actualNoncondonCount - expectedNoncondonCount, 2)/expectedNoncondonCount);
 		
 		double pValue = ChiSquareUtils.pochisq(chiSquareValue, degreesOfFreedom);	
-		 System.out.println("\nExpected count for target codon is " + expectedCodonCount + 
+		 System.out.println("\nExpected count for the target codon (" + codon + ") is " + expectedCodonCount + 
 				             "\nThe actual target codon count is " + actualTargetCodonCount +
 				            "\nThe expected non-target codon count is " + expectedNoncondonCount +
 				            "\nThe actual non-target codon count is " + actualNoncondonCount + 
-				            "\nInput value for chi square test is " + chiSquareValue +
+				            "\nChi squared value is " + chiSquareValue +
 				            "\nThe calculated p-Value is " + pValue);
 		 if(pValue >= significanceValue )
 		 {
-			 System.out.println("Since p-value of " + pValue + " is greater than significance value of " + significanceValue + " the null hypothesis cannot be rejected.");
+			 System.out.println("Since p-value of " + pValue + " is greater than the significance value of " + significanceValue + " the null hypothesis cannot be rejected.");
 		 }
 		 else
 		 {
-			 System.out.println("Since p-value of " + pValue + " is less than significance value of " + significanceValue + " the null hypothesis is rejected.");
+			 System.out.println("Since p-value of " + pValue + " is less than the significance value of " + significanceValue + " the null hypothesis is rejected.");
 		 }		
 	}	
 }
