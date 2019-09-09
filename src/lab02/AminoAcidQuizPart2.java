@@ -20,7 +20,7 @@ public class AminoAcidQuizPart2
 			"serine","threonine","tryptophan", 
 			"tyrosine", "valine"
 		};
-	private static float maxTestTimeSeconds;
+	private static float maxTestTimeSeconds;	
 	private static int maxTestQuestions;
 	private static boolean isMaxQuestionTest;
 	private static boolean isMaxTimeTest;
@@ -74,6 +74,38 @@ public class AminoAcidQuizPart2
 			
 		}while(isCorrectAnswer == true && isTargetTimeElapsed == false);	
 		return score;
+	}
+	private static void giveTest2(float totalTestTime, String [][] aminoAcidSet, Random random, long startTime)
+	{
+		
+		boolean isTargetTimeElapsed = false;
+		boolean hasAskedAllQuestions = false;
+		int answerBankSize = aminoAcidSet.length;
+		
+		int askedQuestionCount = 0;
+		
+		do {
+			int index = random.nextInt(answerBankSize);
+			String [][] target = new String[][] {{aminoAcidSet[index][0],aminoAcidSet[index][1]}};
+			System.out.println("Enter the single letter symbol for " + target[0][1] + ".");
+			String input = System.console().readLine().toUpperCase();
+			if(isMaxTimeTest)
+			{
+				if(hasTestTimeNotExpired(startTime))
+				{
+					
+				}
+				else
+				{
+					isTargetTimeElapsed = true;					
+				}
+			}
+		}while(!isTargetTimeElapsed || !hasAskedAllQuestions);
+		
+		
+		
+		
+		
 	}	
 	private static String [][] getAminoAcids()
 	{			
@@ -118,5 +150,13 @@ public class AminoAcidQuizPart2
 		isMaxQuestionTest = false;
 		maxTestTimeSeconds = 30f;
 		maxTestQuestions = 0;	
+	}
+	private static boolean hasTestTimeNotExpired(long startTime)
+	{
+		return ((startTime - System.currentTimeMillis())/1000f <= maxTestTimeSeconds);		
+	}
+	private static boolean hasNotExceededQuestionCount(int currentQuestionCount)
+	{
+		return currentQuestionCount <= maxTestQuestions;		
 	}
 }
