@@ -1,45 +1,48 @@
 package lab02;
 import java.util.Random;
 
-public class AminoAcidQuiz {	
+public class AminoAcidQuiz 
+{	
 	private final static String[] SHORT_NAMES = 
-		{ "A","R", "N", "D", "C", "Q", "E", 
-		"G",  "H", "I", "L", "K", "M", "F", 
-		"P", "S", "T", "W", "Y", "V" 
+		{ 	"A","R", "N", "D", "C", "Q", "E", 
+			"G",  "H", "I", "L", "K", "M", "F", 
+			"P", "S", "T", "W", "Y", "V" 
 		};
 
-		private static final String[] FULL_NAMES = 
+	private static final String[] FULL_NAMES = 
 		{
-		"alanine","arginine", "asparagine", 
-		"aspartic acid", "cysteine",
-		"glutamine",  "glutamic acid",
-		"glycine" ,"histidine","isoleucine",
-		"leucine",  "lysine", "methionine", 
-		"phenylalanine", "proline", 
-		"serine","threonine","tryptophan", 
-		"tyrosine", "valine"
+			"alanine","arginine", "asparagine", 
+			"aspartic acid", "cysteine",
+			"glutamine",  "glutamic acid",
+			"glycine" ,"histidine","isoleucine",
+			"leucine",  "lysine", "methionine", 
+			"phenylalanine", "proline", 
+			"serine","threonine","tryptophan", 
+			"tyrosine", "valine"
 		};	
 
 	public static void main(String[] args) 
 	{		
 		Random random = new Random();
-		int totalTestTimeInput = 30;
+		float totalTestTimeInput = 30;
 		long startTime = System.currentTimeMillis();
-		String [][] aminoAcidSet = getAminoAcids();	
+		String [][] aminoAcidSet = getAminoAcids();		
 		int testScore = giveTest(totalTestTimeInput, aminoAcidSet, random, startTime);	
-		System.out.println("\nTest ends with score of " + testScore);
+		System.out.println("\nTest ends with score of " + testScore + ".*******");
 	}	
-	private static int giveTest(int totalTestTime, String [][] aminoAcidSet, Random random, long startTime)
+	private static int giveTest(float totalTestTime, String [][] aminoAcidSet, Random random, long startTime)
 	{
 		boolean isCorrectAnswer = true;
 		boolean isTargetTimeElapsed = false;
 		int score = 0;
-		do {			
-			String [][] target = getTargetAminoAcid(random, aminoAcidSet);
+		int answerBankSize = aminoAcidSet.length;
+		do {
+			int index = random.nextInt(answerBankSize);
+			String [][] target = new String[][] {{aminoAcidSet[index][0],aminoAcidSet[index][1]}};
 			System.out.println("Enter the single letter symbol for " + target[0][1] + ".");
 			String input = System.console().readLine().toUpperCase();
 			float elapsedTime = (System.currentTimeMillis() - startTime)/1000f;	
-			if(elapsedTime <= 30f)
+			if(elapsedTime <= totalTestTime)
 			{
 				if(target[0][0].equals(input))
 				{
@@ -58,7 +61,7 @@ public class AminoAcidQuiz {
 				System.out.println("Exceeded test time of " + totalTestTime + " seconds.");
 			}
 			
-			}while(isCorrectAnswer == true && isTargetTimeElapsed == false);	
+		}while(isCorrectAnswer == true && isTargetTimeElapsed == false);	
 		return score;
 	}	
 	private static String [][] getAminoAcids()
@@ -71,11 +74,5 @@ public class AminoAcidQuiz {
 				aminoAcids[i][1] = FULL_NAMES[i];				
 			}
 			return aminoAcids;				
-	}	
-	private static String [][] getTargetAminoAcid(Random rand, String [][] aminoAcids)
-	{		
-		int index = rand.nextInt(aminoAcids.length);
-		String [][] target = new String[][] {{aminoAcids[index][0],aminoAcids[index][1]}};	;
-		return target;		
 	}	
 }
