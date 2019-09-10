@@ -36,76 +36,60 @@ public class AminoAcidQuizPart2
 		"isMaxQuestionTest = "  + isMaxQuestionTest + "\n" +
 		"maxTestTimeSeconds = " + maxTestTimeSeconds +"\n" +
 				"maxTestQuestions = " + maxTestQuestions );
-		// int testScore = giveTest(totalTestTimeInput, aminoAcidSet, random, startTime);	
-		// System.out.println("\nTest ends with score of " + testScore + ".*******");
+		giveTest(maxTestTimeSeconds, aminoAcidSet, random, startTime);	
+		getTestSummaryResults(aminoAcidSet);
 	}	
-	private static int giveTest(float totalTestTime, String [][] aminoAcidSet, Random random, long startTime)
-	{
-		boolean isCorrectAnswer = true;
+	private static void giveTest(float totalTestTime, String [][] aminoAcidSet, Random random, long startTime)
+	{		
 		boolean isTargetTimeElapsed = false;
-		int score = 0;
-		int answerBankSize = aminoAcidSet.length;
+		boolean hasAskedAllQuestions = false;
+		boolean hasAnsweredQuestionInTime = true;
+		boolean hasQuit = false;
+		int answerBankSize = aminoAcidSet.length;		
+		int askedQuestionCount = 0;		
 		do {
 			int index = random.nextInt(answerBankSize);
 			String [][] target = new String[][] {{aminoAcidSet[index][0],aminoAcidSet[index][1]}};
 			System.out.println("Enter the single letter symbol for " + target[0][1] + ".");
+			askedQuestionCount++;
 			String input = System.console().readLine().toUpperCase();
-			float elapsedTime = (System.currentTimeMillis() - startTime)/1000f;	
-			if(elapsedTime <= totalTestTime)
+			if(input.equals("QUIT"))
 			{
-				if(target[0][0].equals(input))
-				{
-					score++;
-					aminoAcidSet[index][3] = Integer.toString(Integer.parseInt(aminoAcidSet[index][3]) + 1);
-					 System.out.println("right.  Score=" + score + " ; " + "seconds= " + elapsedTime + " out of " + totalTestTime);
-				}
-				else
-				{
-					isCorrectAnswer = false;
-					aminoAcidSet[index][3] = Integer.toString(Integer.parseInt(aminoAcidSet[index][4]) + 1);
-					System.out.println("WRONG.  Correct answer is " + target[0][0] + ".");				
-				}
+				hasQuit = true;	
+				System.out.println("User has quit the current session");
 			}
 			else
 			{
-				isTargetTimeElapsed = true;
-				System.out.println("Exceeded test time of " + totalTestTime + " seconds.");
-			}
-			
-		}while(isCorrectAnswer == true && isTargetTimeElapsed == false);	
-		return score;
-	}
-	private static void giveTest2(float totalTestTime, String [][] aminoAcidSet, Random random, long startTime)
-	{
-		
-		boolean isTargetTimeElapsed = false;
-		boolean hasAskedAllQuestions = false;
-		int answerBankSize = aminoAcidSet.length;
-		
-		int askedQuestionCount = 0;
-		
-		do {
-			int index = random.nextInt(answerBankSize);
-			String [][] target = new String[][] {{aminoAcidSet[index][0],aminoAcidSet[index][1]}};
-			System.out.println("Enter the single letter symbol for " + target[0][1] + ".");
-			String input = System.console().readLine().toUpperCase();
-			if(isMaxTimeTest)
-			{
-				if(hasTestTimeNotExpired(startTime))
-				{
-					
+				if(isMaxTimeTest)
+				{					
+					isTargetTimeElapsed = ((System.currentTimeMillis() - startTime)/1000f > maxTestTimeSeconds);
+					if(isTargetTimeElapsed)
+					{
+						hasAnsweredQuestionInTime = false;
+						System.out.println("Exceeded test time of " + totalTestTime + " seconds.");					
+					}				
 				}
 				else
 				{
-					isTargetTimeElapsed = true;					
+					hasAskedAllQuestions = !(askedQuestionCount < maxTestQuestions);				
+				}
+				if(hasAnsweredQuestionInTime)
+				{
+					if(target[0][0].equals(input))
+					{
+						// Increment correct answer count for current amino acid
+						aminoAcidSet[index][2] = Integer.toString(Integer.parseInt(aminoAcidSet[index][2]) + 1);
+						 System.out.println("right.");
+					}
+					else
+					{
+						// Increment incorrect answer count for current amino acid
+						aminoAcidSet[index][3] = Integer.toString(Integer.parseInt(aminoAcidSet[index][3]) + 1);
+						System.out.println("WRONG.  Correct answer is " + target[0][0] + ".");	
+					}				
 				}
 			}
-		}while(!isTargetTimeElapsed || !hasAskedAllQuestions);
-		
-		
-		
-		
-		
+		}while(!hasQuit && ((isMaxTimeTest && !isTargetTimeElapsed) || (isMaxQuestionTest && !hasAskedAllQuestions)));		
 	}	
 	private static String [][] getAminoAcids()
 	{			
@@ -151,12 +135,16 @@ public class AminoAcidQuizPart2
 		maxTestTimeSeconds = 30f;
 		maxTestQuestions = 0;	
 	}
-	private static boolean hasTestTimeNotExpired(long startTime)
+	private static void getTestSummaryResults(String [][] aminoAcidSet)
 	{
-		return ((startTime - System.currentTimeMillis())/1000f <= maxTestTimeSeconds);		
-	}
-	private static boolean hasNotExceededQuestionCount(int currentQuestionCount)
-	{
-		return currentQuestionCount <= maxTestQuestions;		
-	}
+		int correctAnswers = 0;
+		int incorrectAnswers = 0;		
+		for(int i=0; i<aminoAcidSet.length; i++)
+		{
+			correctAnswers += Integer.parseInt(aminoAcidSet[i][2]);
+			incorrectAnswers += Integer.parseInt(aminoAcidSet[i][3]);			
+		}	
+		System.out.println("Correct Answers:  " + correctAnswers + "\n" +
+		                   "Incorrect Answers:  " + incorrectAnswers + "\n");
+	}	
 }
