@@ -26,21 +26,27 @@ public class AminoAcidQuizPart2
 	private static boolean isMaxTimeTest;
 /*
  * By passing in two parameters, user can configure two types of quiz modes:  timed or number of questions.
- * User can input 'quit' at any time to terminate the quiz
- * See the following examples to invoke each mode.
+ * User can input 'quit' at any time to terminate the quiz.
+ * See the following examples on how to invoke each mode.
  * 'java lab02.AminoAcidQuizPart2 t 30' (user will provide responses over 30 seconds)
  * java lab02.AminoAcidQuizPart2 q 10' (user will answer 10 questions)
  */
 	public static void main(String[] args) 
 	{	
-		Random random = new Random();	
-		long startTime = System.currentTimeMillis();
-		String [][] aminoAcidSet = getAminoAcids();	
-		setTestParameters(args);
-		Integer [][] tracker = getAnswerTracker(aminoAcidSet.length);		
-		giveTest(aminoAcidSet, random, startTime, tracker);	
-		getTestSummaryResults(tracker);
-		printFinalReport(aminoAcidSet, tracker);
+		if(maxTestTimeSeconds >= 1f || maxTestQuestions >= 1)
+		{
+			Random random = new Random();	
+			long startTime = System.currentTimeMillis();
+			String [][] aminoAcidSet = getAminoAcids();	
+			setTestParameters(args);
+			Integer [][] tracker = getAnswerTracker(aminoAcidSet.length);		
+			giveTest(aminoAcidSet, random, startTime, tracker);		
+			printFinalReport(aminoAcidSet, tracker);
+		}
+		else
+		{
+			System.out.printf("Time (T) or question (Q) parameters must be greater than or equal to 1.");			
+		}
 	}	
 	private static void giveTest(String [][] aminoAcidSet, Random random, long startTime, Integer [][] tracker)
 	{		
@@ -71,7 +77,7 @@ public class AminoAcidQuizPart2
 					if(isTargetTimeElapsed)
 					{
 						hasAnsweredQuestionInTime = false;
-						System.out.println("Exceeded test time of " + maxTestTimeSeconds + " seconds.");					
+						System.out.println("Exceeded test time of " + maxTestTimeSeconds + " seconds.\n");					
 					}				
 				}
 				else
@@ -150,19 +156,7 @@ public class AminoAcidQuizPart2
 		isMaxQuestionTest = false;
 		maxTestTimeSeconds = 30f;
 		maxTestQuestions = 0;	
-	}
-	private static void getTestSummaryResults(Integer [][] answerTracker)
-	{
-		int correctAnswers = 0;
-		int incorrectAnswers = 0;		
-		for(int i=0; i<answerTracker.length; i++)
-		{
-			correctAnswers += answerTracker[i][0];
-			incorrectAnswers += answerTracker[i][1];			
-		}	
-		System.out.println("Correct Answers:  " + correctAnswers + "\n" +
-		                   "Incorrect Answers:  " + incorrectAnswers + "\n");
-	}
+	}	
 	private static void printFinalReport(String[][] aminoAcidSet, Integer[][] answerTracker)
 	{	
 		int correctCount = 0;
@@ -178,6 +172,6 @@ public class AminoAcidQuizPart2
 		  }		
 	  }
 	  System.out.println("------------------------------");
-	  System.out.printf( "%-15s %10s %10s %n", "Total", correctCount, incorrectCount);
+	  System.out.printf("%-15s %10s %10s %n", "Total", correctCount, incorrectCount);
 	}
 }
