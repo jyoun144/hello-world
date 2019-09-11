@@ -27,25 +27,27 @@ public class AminoAcidQuizPart2
 /*
  * By passing in two parameters, user can configure two types of quiz modes:  timed or number of questions.
  * User can input 'quit' at any time to terminate the quiz.
+ * Default mode is a 30-second quiz.
  * See the following examples on how to invoke each mode.
  * 'java lab02.AminoAcidQuizPart2 t 30' (user will provide responses over 30 seconds)
- * java lab02.AminoAcidQuizPart2 q 10' (user will answer 10 questions)
+ * java lab02.AminoAcidQuizPart2 q 10' (user will provide responses to 10 questions)
+ * java lab02.AminoAcidQuizPart2' (default mode)
  */
 	public static void main(String[] args) 
-	{	
+	{
+		setTestParameters(args);
 		if(maxTestTimeSeconds >= 1f || maxTestQuestions >= 1)
 		{
 			Random random = new Random();	
 			long startTime = System.currentTimeMillis();
-			String [][] aminoAcidSet = getAminoAcids();	
-			setTestParameters(args);
+			String [][] aminoAcidSet = getAminoAcids();			
 			Integer [][] tracker = getAnswerTracker(aminoAcidSet.length);		
 			giveTest(aminoAcidSet, random, startTime, tracker);		
 			printFinalReport(aminoAcidSet, tracker);
 		}
 		else
 		{
-			System.out.printf("Time (T) or question (Q) parameters must be greater than or equal to 1.");			
+			System.out.printf("Time (T) or question (Q) parameter must be greater than or equal to 1.");			
 		}
 	}	
 	private static void giveTest(String [][] aminoAcidSet, Random random, long startTime, Integer [][] tracker)
@@ -57,13 +59,13 @@ public class AminoAcidQuizPart2
 		int answerBankSize = aminoAcidSet.length;		
 		int askedQuestionCount = 0;	
 		int score = 0;	
-		do {
-			float elapsedTimeInSeconds = (System.currentTimeMillis() - startTime)/1000f;
+		do {			
 			int index = random.nextInt(answerBankSize);
 			String [][] target = new String[][] {{aminoAcidSet[index][0],aminoAcidSet[index][1]}};
 			System.out.println("Enter the single letter symbol for " + target[0][1] + ".");
 			askedQuestionCount++;
 			String input = System.console().readLine().toUpperCase();
+			float elapsedTimeInSeconds = (System.currentTimeMillis() - startTime)/1000f;
 			if(input.equals("QUIT"))
 			{
 				hasQuit = true;	
@@ -93,7 +95,7 @@ public class AminoAcidQuizPart2
 						score++;
 						String message = isMaxTimeTest ?  "seconds= " + elapsedTimeInSeconds + " out of " + maxTestTimeSeconds : 
 							"completed " + askedQuestionCount + " out of " + maxTestQuestions + " questions";
-						 System.out.println("right.  " + "Score=" + score + " ; " + message + ".\n");
+						 System.out.println("RIGHT.  " + "Score=" + score + "; " + message + ".\n");
 					}
 					else
 					{

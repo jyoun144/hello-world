@@ -28,7 +28,7 @@ public class AminoAcidQuiz
 		long startTime = System.currentTimeMillis();
 		String [][] aminoAcidSet = getAminoAcids();		
 		int testScore = giveTest(totalTestTimeInput, aminoAcidSet, random, startTime);	
-		System.out.println("\nTest ends with score of " + testScore + ".*******");
+		System.out.println("\nTest ends with score of " + testScore + ".");
 	}	
 	private static int giveTest(float totalTestTime, String [][] aminoAcidSet, Random random, long startTime)
 	{
@@ -47,18 +47,18 @@ public class AminoAcidQuiz
 				if(target[0][0].equals(input))
 				{
 					score++;					
-					 System.out.println("right.  Score=" + score + " ; " + "seconds= " + elapsedTime + " out of " + totalTestTime);
+					 System.out.println("right.  Score=" + score + "; " + "seconds= " + elapsedTime + " out of " + totalTestTime + ".\n");
 				}
 				else
 				{
 					isCorrectAnswer = false;
-					System.out.println("WRONG.  Correct answer is " + target[0][0] + ".");				
+					System.out.println("WRONG.  Correct answer is " + target[0][0] + ".\n");				
 				}
 			}
 			else
 			{
 				isTargetTimeElapsed = true;
-				System.out.println("Exceeded test time of " + totalTestTime + " seconds.");
+				System.out.println("Exceeded test time of " + totalTestTime + " seconds.\n");
 			}
 			
 		}while(isCorrectAnswer == true && isTargetTimeElapsed == false);	
@@ -73,6 +73,6 @@ public class AminoAcidQuiz
 				aminoAcids[i][0] = SHORT_NAMES[i];
 				aminoAcids[i][1] = FULL_NAMES[i];				
 			}
-			return aminoAcids;				
+			return aminoAcids;
 	}	
 }
