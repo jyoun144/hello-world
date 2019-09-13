@@ -1,6 +1,7 @@
 package lab03;
 import java.util.regex.*;
 import java.io.*;
+import java.util.*;
 public class FastaRead
 {
 	public static void main(String[] args) throws Exception
@@ -23,17 +24,47 @@ public class FastaRead
 		String targetFile = "C:\\Users\\young\\Documents\\UNCC_Fall_2019\\Advance_Programming\\Labs\\Lab03\\FastaInput.txt";
 		Integer seqCount = 0;
 		BufferedReader reader = new BufferedReader(new FileReader(new File(targetFile)));
+		List<FastaObj> list = new ArrayList<FastaObj>();
+		FastaObj obj = null;
 		for(String nextLine = reader.readLine(); nextLine != null; nextLine = reader.readLine())
-		{
+		{	
 			if(nextLine.contains(">"))
 			{
-				System.out.println(nextLine);
+				var num = nextLine.indexOf(' ');				
+				obj = new FastaObj(nextLine.substring(1, num));
+				list.add(obj);				
+				System.out.println(nextLine.substring(1, num));
 				seqCount++;
 			}
-			// System.out.println(nextLine);
+			else
+			{				
+				for(int i=0; i<nextLine.length(); i++)
+				{
+					int aCount = 0;
+					int gCount = 0;
+					int tCount = 0;
+					int cCount = 0;
+					if(Character.toUpperCase(nextLine.charAt(i)) == 'A')
+					{
+						aCount++;
+					}
+					else if(Character.toUpperCase(nextLine.charAt(i)) == 'G')
+					{
+						gCount++;
+					}
+					else if(Character.toUpperCase(nextLine.charAt(i)) == 'T')
+					{
+						tCount++;
+					}
+					else if(Character.toUpperCase(nextLine.charAt(i)) == 'C')
+					{
+						cCount++;
+					}
+					obj.incrementCounts(aCount, gCount, tCount, cCount);
+				}				
+			}
 			
 		}
-		reader.close();
-		System.out.println("Seq line count is:  " + seqCount);
+		reader.close();			
 	}
 }
