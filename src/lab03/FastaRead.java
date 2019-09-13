@@ -21,11 +21,19 @@ public class FastaRead
 	private static void readFile() throws IOException
 	{
 		String targetFile = "C:\\Users\\young\\Documents\\UNCC_Fall_2019\\Advance_Programming\\Labs\\Lab03\\FastaInput.txt";
+		Integer seqCount = 0;
 		BufferedReader reader = new BufferedReader(new FileReader(new File(targetFile)));
 		for(String nextLine = reader.readLine(); nextLine != null; nextLine = reader.readLine())
 		{
-			System.out.println(nextLine);		
+			if(nextLine.contains(">"))
+			{
+				System.out.println(nextLine);
+				seqCount++;
+			}
+			// System.out.println(nextLine);
+			
 		}
 		reader.close();
+		System.out.println("Seq line count is:  " + seqCount);
 	}
 }
