@@ -7,16 +7,7 @@ public class FastaObj
 	private int gCount;
 	private int tCount;
 	private int cCount;
-	/*
-	public FastaObj(String sequenceId, int aCount, int gCount, int tCount, int cCount)
-	{
-		this.sequenceId = sequenceId;
-		this.aCount = aCount;
-		this.gCount = gCount;
-		this.tCount = tCount;
-		this.cCount = cCount;
-	}
-	*/
+	
 	public FastaObj(String sequenceId)
 	{
 		this.sequenceId = sequenceId;
@@ -30,7 +21,26 @@ public class FastaObj
 		this.aCount += aCount;
 		this.gCount += gCount;
 		this.tCount += tCount;
-		this.cCount += cCount;
-		
+		this.cCount += cCount;		
+	}
+	public String getSequenceId()
+	{
+		return this.sequenceId;
+	}
+	public int getACount()
+	{
+		return this.aCount;
+	}
+	public int getGCount()
+	{
+		return this.gCount;
+	}
+	public int getTCount()
+	{
+		return this.tCount;
+	}
+	public int getCCount()
+	{
+		return this.cCount;
 	}
 }

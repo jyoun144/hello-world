@@ -6,7 +6,11 @@ public class FastaRead
 {
 	public static void main(String[] args) throws Exception
 	{	
-		readFile();
+		// readFile();
+		String fastaFilePath = "C:\\Users\\young\\Documents\\UNCC_Fall_2019\\Advance_Programming\\Labs\\Lab03\\FastaInput.txt";
+		var fastaUtil = new FastaFileUtil();
+		var nucleotideCounts = fastaUtil.getDnaCountsFromFastaFile(fastaFilePath);
+		int j = 1;
 	}
 	private static void regExTester() 
 	{
