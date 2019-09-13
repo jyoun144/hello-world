@@ -7,10 +7,12 @@ public class FastaObj
 	private int gCount;
 	private int tCount;
 	private int cCount;
+	private StringBuilder sequence;
 	
 	public FastaObj(String sequenceId)
 	{
 		this.sequenceId = sequenceId;
+		sequence = new StringBuilder();
 		this.aCount = 0;
 		this.gCount = 0;
 		this.tCount = 0;
@@ -42,5 +44,16 @@ public class FastaObj
 	public int getCCount()
 	{
 		return this.cCount;
+	}
+	public String getSequence()
+	{
+		return sequence.toString();
+	}
+	public void appendSequence(String input)
+	{
+		if(input != null)
+		{
+			sequence.append(input);
+		}
 	}
 }

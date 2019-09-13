@@ -10,6 +10,8 @@ public class FastaRead
 		String fastaFilePath = "C:\\Users\\young\\Documents\\UNCC_Fall_2019\\Advance_Programming\\Labs\\Lab03\\FastaInput.txt";
 		var fastaUtil = new FastaFileUtil();
 		var nucleotideCounts = fastaUtil.getDnaCountsFromFastaFile(fastaFilePath);
+		fastaUtil.printDnaCounts(nucleotideCounts);
+		var printDate = fastaUtil.GetTabDelimitedData(nucleotideCounts);
 		int j = 1;
 	}
 	private static void regExTester() 

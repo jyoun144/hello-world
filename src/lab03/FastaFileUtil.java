@@ -8,6 +8,8 @@ import java.util.List;
 
 public class FastaFileUtil
 {
+	private final String tab = "\t";
+	private final String newline = "\n";
 	public List<FastaObj> getDnaCountsFromFastaFile(String filePath) throws IOException
 	{
 		List<FastaObj> list = new ArrayList<FastaObj>();		
@@ -22,11 +24,12 @@ public class FastaFileUtil
 				var num = nextLine.indexOf(' ');				
 				obj = new FastaObj(nextLine.substring(1, num));
 				list.add(obj);				
-				seqCount++;
+				seqCount++;				
 			}
 			else
 			{				
-				this.setCounts(nextLine, obj);		
+				this.setCounts(nextLine, obj);	
+				obj.appendSequence(nextLine);
 			}		
 		}
 		reader.close();	
@@ -34,11 +37,30 @@ public class FastaFileUtil
 	}
 	public void printDnaCounts(List<FastaObj> list)
 	{
-		System.out.println("sequenceID\tnumA\tnumC\tnumG\tnumT\tsequence\n");
+		System.out.println("sequenceID\tnumA\tnumC\tnumG\tnumT\tsequence");
 		for(int i=0;i<list.size();i++)
-		{
-			
+		{	
+			var obj = list.get(i);
+			System.out.println(obj.getSequenceId() + tab + obj.getACount() + tab + obj.getCCount() + 
+					           tab + obj.getGCount() + tab + obj.getCCount() + tab + obj.getSequence());			
 		}
+	}
+	public String GetTabDelimitedData(List<FastaObj> list)
+	{
+		StringBuilder str = new StringBuilder();
+		str.append("sequenceID" + tab + "numA" + tab + "numC" + tab + "numG" + tab + "numT" + tab + "sequence" + newline);
+		
+		for(int i=0;i<list.size();i++)
+		{	
+			var obj = list.get(i);
+			str.append(obj.getSequenceId() + tab + obj.getACount() + tab + obj.getCCount() + 
+			           tab + obj.getGCount() + tab + obj.getCCount() + tab + obj.getSequence() + newline);			
+		}
+		return str.toString();
+	}
+	public void writeTabDelimitedFile(List<FastaObj> list, String filePath)
+	{
+		
 	}
 	private void setCounts(String nextLine, FastaObj obj)
 	{
