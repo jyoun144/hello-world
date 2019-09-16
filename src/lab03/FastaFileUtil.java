@@ -13,15 +13,15 @@ import java.util.regex.Pattern;
 
 public class FastaFileUtil
 {
-	private final String tab = "\t";
-	private final String newline = "\n";
+	protected final String tab = "\t";
+	protected final String newline = "\n";
 	public void saveFastaSummaryReport(String sourceFilePath, String targetFilePath) throws IOException
 	{
 		List<FastaObj> summaryList = this.getDnaCountsFromFastaFile(sourceFilePath);
 		this.printDnaCounts(summaryList);
 		this.writeTabDelimitedFile(summaryList, targetFilePath);		
 	}	
-	private List<FastaObj> getDnaCountsFromFastaFile(String filePath) throws IOException
+	protected List<FastaObj> getDnaCountsFromFastaFile(String filePath) throws IOException
 	{
 		List<FastaObj> list = new ArrayList<FastaObj>();		
 		String targetFile = filePath;
@@ -43,14 +43,14 @@ public class FastaFileUtil
 				{					
 					this.setCounts(nextLine, obj);
 					// this.setCounts2(nextLine, obj);					
-					obj.appendSequence(nextLine);
+					obj.appendSequence(nextLine.trim());
 				}
 			}		
 		}
 		reader.close();	
 		return list;
 	}	
-	private String GetTabDelimitedData(List<FastaObj> list)
+	protected String GetTabDelimitedData(List<FastaObj> list)
 	{
 		StringBuilder str = new StringBuilder();
 		str.append("sequenceID" + tab + "numA" + tab + "numC" + tab + "numG" + tab + "numT" + tab + "sequence" + newline);
@@ -59,11 +59,11 @@ public class FastaFileUtil
 		{	
 			var obj = list.get(i);
 			str.append(obj.getSequenceId() + tab + obj.getACount() + tab + obj.getCCount() + 
-			           tab + obj.getGCount() + tab + obj.getCCount() + tab + obj.getSequence() + newline);			
+			           tab + obj.getGCount() + tab + obj.getTCount() + tab + obj.getSequence() + newline);			
 		}
 		return str.toString();
 	}
-	private void writeTabDelimitedFile(List<FastaObj> list, String filePath) throws IOException
+	protected void writeTabDelimitedFile(List<FastaObj> list, String filePath) throws IOException
 	{		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(filePath)));
 		String fileContents = this.GetTabDelimitedData(list);
@@ -71,7 +71,7 @@ public class FastaFileUtil
 		writer.flush();
 		writer.close();		
 	}
-	private void setCounts(String nextLine, FastaObj obj)
+	protected void setCounts(String nextLine, FastaObj obj)
 	{
 		for(int i=0; i<nextLine.length(); i++)
 		{
@@ -98,19 +98,8 @@ public class FastaFileUtil
 			}
 			obj.incrementCounts(aCount, gCount, tCount, cCount);
 		}		
-	}
-	private void setCounts2(String nextLine, FastaObj obj)
-	{
-		char[] cArray = nextLine.toUpperCase().toCharArray();
-		Arrays.sort(cArray);
-		String str = new String(cArray);
-		int aCount = (str.lastIndexOf('A') - str.indexOf('A')) + 1;
-		int gCount = (str.lastIndexOf('G') - str.indexOf('G')) + 1;
-		int tCount = (str.lastIndexOf('T') - str.indexOf('T')) + 1;
-		int cCount = (str.lastIndexOf('C') - str.indexOf('C')) + 1;	
-		obj.incrementCounts(aCount, gCount, tCount, cCount);		
-	}
-	private String getSequenceId(String singleFastaLine)
+	}	
+	protected String getSequenceId(String singleFastaLine)
 	{
 		String result = "";
 		Pattern p = Pattern.compile(">\\s*\\w+");
@@ -124,14 +113,14 @@ public class FastaFileUtil
 		return result;		
 	}
 	// This method is just used for testing purposes
-	private void printDnaCounts(List<FastaObj> list)
+	protected void printDnaCounts(List<FastaObj> list)
 	{
 		System.out.println("sequenceID\tnumA\tnumC\tnumG\tnumT\tsequence");
 		for(int i=0;i<list.size();i++)
 		{	
 			var obj = list.get(i);
 			System.out.println(obj.getSequenceId() + tab + obj.getACount() + tab + obj.getCCount() + 
-					           tab + obj.getGCount() + tab + obj.getCCount() + tab + obj.getSequence());			
+					           tab + obj.getGCount() + tab + obj.getTCount() + tab + obj.getSequence());			
 		}
 	}
 }
