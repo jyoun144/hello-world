@@ -16,7 +16,12 @@ public class FastaRead
 		int j = 1;
 		*/
 		// regExTester();
-		 getCounts();
+		//  getCounts();
+		// regCountTester();
+		//regTutorial();
+		 String s = "AAATTT";
+		 var result = s.replaceAll("A", "");
+		 System.out.println(result);
 	}
 	private static void getCounts()
 	{
@@ -51,6 +56,52 @@ public class FastaRead
 			System.out.println("End index: " + end);
 			System.out.println(s.substring(start + 1, end).trim());
 		}		
+	}
+	private static void regTutorial()
+	{
+		String stringToSearch = "Four score and seven years ago our fathers ...";
+
+	    // specify that we want to search for two groups in the string
+	    // Pattern p = Pattern.compile(" (\\S+or\\S+) .* (\\S+the\\S+).*");
+	    Pattern p = Pattern.compile(" (or) .* (the).*");
+	    Matcher m = p.matcher(stringToSearch);
+
+	    // if our pattern matches the string, we can try to extract our groups
+	    if (m.find())
+	    {
+	      // get the two groups we were looking for
+	      String group1 = m.group(1);
+	      String group2 = m.group(2);
+	      
+	      // print the groups, with a wee bit of formatting
+	      System.out.format("'%s', '%s'\n", group1, group2);
+	    }
+		
+	}
+	private static void regCountTester() 
+	{
+		//Pattern p = Pattern.compile("seq\\w*<");
+		//String s = "dfgdhdhseq22<";
+		//Pattern p = Pattern.compile(">\\s*\\w+");
+		Pattern p = Pattern.compile("A");
+		String s = "CCGGGATTATT";
+		Matcher matcher = p.matcher(s);		
+		
+		while(matcher.find())
+		{
+			int start =  matcher.start();
+			
+			int end = matcher.end();
+			//System.out.println("Start index: " + start);
+			System.out.println("Start index: " + start + " / " + "Group: " + matcher.group());
+			//System.out.println("Group count: " + matcher.groupCount());
+			//System.out.println("Group 0: " + matcher.group(0));
+			//System.out.println("Group 1: " + matcher.group(1));
+			
+			
+		}	
+	
+		
 	}
 	private static void readFile() throws IOException
 	{
