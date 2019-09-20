@@ -1,26 +1,26 @@
 package lab04;
 import java.util.Arrays;
+import java.io.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class FastaSequence implements iFastaSequence
 {
-	private String sequence;
+	private StringBuilder sequence;
 	private int aCount = 0;
 	private int gCount = 0;
 	private int tCount = 0;
 	private int cCount = 0;
 	
-	public FastaSequence(String sequence)
+	public FastaSequence()
 	{
-		this.sequence = sequence != null ? sequence : "";	
-		this.setCounts();
+		this.sequence = new StringBuilder();		
 	}
 	public String getHeader()
 	{
 		String result = "";					
 		Pattern p = Pattern.compile(">(\\s*\\w*)*\\n");		
-		Matcher matcher = p.matcher(this.sequence);
+		Matcher matcher = p.matcher(this.sequence);		
 		while(matcher.find())
 		{
 			int start =  matcher.start();			
@@ -32,20 +32,36 @@ public class FastaSequence implements iFastaSequence
 	}
 	public String getSequence()
 	{	
-		return this.sequence;		
+		return this.sequence.toString();		
 	}
 	public float getGCRatio()
 	{		
 		return (float)(gCount + cCount)/(float)(aCount + gCount + cCount + tCount);
-	}	
-	private void setCounts()
+	}
+	public void appendSequence(String sequence)
 	{
-		char[] cArray = sequence.toUpperCase().toCharArray();
-		Arrays.sort(cArray);
-		String str = new String(cArray);
-		this.aCount += str.contains("A") ? ((str.lastIndexOf('A') - str.indexOf('A')) + 1) : 0;
-		this.gCount += str.contains("G") ? (str.lastIndexOf('G') - str.indexOf('G')) + 1 : 0;
-		this.tCount += str.contains("T") ? (str.lastIndexOf('T') - str.indexOf('T')) + 1 : 0;
-		this.cCount = str.contains("C") ? (str.lastIndexOf('C') - str.indexOf('C')) + 1 : 0;		
+		if(sequence != null && !sequence.trim().equals(""))
+		{
+			this.sequence.append(sequence);
+			this.setCounts(sequence);
+		}
+	}
+	public static void writeUniquewriteUnique writeUnique (File inFile, File outFile)
+			throws Exception
+			{
+		
+			}
+	private void setCounts(String input)
+	{
+		if(input != null)
+		{
+			char[] cArray = input.toUpperCase().toCharArray();
+			Arrays.sort(cArray);
+			String str = new String(cArray);
+			this.aCount += str.contains("A") ? ((str.lastIndexOf('A') - str.indexOf('A')) + 1) : 0;
+			this.gCount += str.contains("G") ? (str.lastIndexOf('G') - str.indexOf('G')) + 1 : 0;
+			this.tCount += str.contains("T") ? (str.lastIndexOf('T') - str.indexOf('T')) + 1 : 0;
+			this.cCount += str.contains("C") ? (str.lastIndexOf('C') - str.indexOf('C')) + 1 : 0;
+		}
 	}	
 }
