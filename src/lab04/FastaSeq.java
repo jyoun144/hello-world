@@ -2,18 +2,18 @@ package lab04;
 import java.util.Arrays;
 import java.util.HashMap; 
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class FastaSeq {		
 
 	public static void main(String[] args) 
 	{	
-		//runHashMapTest();		
-		// setCounts("CGCCA");
-		int a = 1;
-		int b = 2;
-		int c = 3;
-		int d = 4;
-		System.out.println(((float)(a + b)/(float)(a + b + c + d)));
+		String seq1 = " > Seq1 This is a header line \n" + "ACGGGGGG";
+		String seq2 = " > f  \n" + "ACGGGGGG";
+		String seq3 = " >   \n" + "ACGGGGGG";
+		System.out.println(getHeader(seq1));
+		
 	}
 	private static void runHashMapTest()
 	{
@@ -33,19 +33,21 @@ public class FastaSeq {
 		{
 			System.out.println("Key: " + key + " / " + "Value:  " + map.get(key));
 		}
-	}
-	private static void setCounts(String nextLine)
+	}	
+	private static String getHeader(String singleFastaLine)
 	{
-		char[] cArray = nextLine.toUpperCase().toCharArray();
-		Arrays.sort(cArray);
-		String str = new String(cArray);
-		int aCount = str.contains("A") ? ((str.lastIndexOf('A') - str.indexOf('A')) + 1) : 0;
-		int gCount = str.contains("G") ? (str.lastIndexOf('G') - str.indexOf('G')) + 1 : 0;
-		int tCount = str.contains("T") ? (str.lastIndexOf('T') - str.indexOf('T')) + 1 : 0;
-		int cCount = str.contains("C") ? (str.lastIndexOf('C') - str.indexOf('C')) + 1 : 0;	
-		System.out.println("A count: " + aCount + "\n" + 
-				"G count: " + gCount + "\n" + 
-				"T count: " + tCount + "\n" +
-				"C count: " + cCount);
-	}
+		String result = "";
+		if(singleFastaLine != null)
+		{			
+			Pattern p = Pattern.compile(">(\\s*\\w*)*\\n");		
+			Matcher matcher = p.matcher(singleFastaLine);
+			while(matcher.find())
+			{
+				int start =  matcher.start();			
+				int end = matcher.end();			
+				result = singleFastaLine.substring(start + 1, end).trim();
+			}	
+		}		
+		return result;	
+	}	
 }

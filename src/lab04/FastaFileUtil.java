@@ -20,10 +20,13 @@ public class FastaFileUtil
 		Integer seqCount = 0;
 		BufferedReader reader = new BufferedReader(new FileReader(new File(targetFile)));		
 		FastaSequence obj = null;
+		StringBuilder sequence;
 		for(String nextLine = reader.readLine(); nextLine != null; nextLine = reader.readLine())
 		{	
 			if(nextLine.contains(">"))
 			{
+				sequence = new StringBuilder();
+				sequence.append(nextLine);
 				obj = new FastaSequence();
 				list.add(obj);				
 				seqCount++;				
