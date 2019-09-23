@@ -63,7 +63,7 @@ public class FastaSequence implements iFastaSequence
 	}
 	public String getSequence()
 	{	
-		return this.sequence.toString();		
+		return this.sequence.toString().replaceAll("\\s*", "");		
 	}
 	public float getGCRatio()
 	{		
