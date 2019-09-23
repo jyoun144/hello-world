@@ -1,5 +1,7 @@
 package lab04;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.io.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -7,25 +9,54 @@ import java.util.regex.Pattern;
 public class FastaSequence implements iFastaSequence
 {
 	private StringBuilder sequence;
+	private String header = null;
 	private int aCount = 0;
 	private int gCount = 0;
 	private int tCount = 0;
 	private int cCount = 0;
 	
-	public FastaSequence()
+	public static List<FastaSequence> readFastaFile(String filePath) throws IOException
 	{
+		List<FastaSequence> list = new ArrayList<FastaSequence>();		
+		String targetFile = filePath;
+		Integer seqCount = 0;
+		BufferedReader reader = new BufferedReader(new FileReader(new File(targetFile)));		
+		FastaSequence obj = null;		
+		for(String nextLine = reader.readLine(); nextLine != null; nextLine = reader.readLine())
+		{	
+			if(nextLine.contains(">"))
+			{				
+				obj = new FastaSequence(nextLine);				
+				list.add(obj);				
+				seqCount++;				
+			}
+			else
+			{
+				if(!nextLine.trim().equals(""))
+				{														
+					obj.appendSequence(nextLine);
+				}
+			}		
+		}
+		reader.close();	
+		return list;
+	}	
+	
+	public FastaSequence(String header)
+	{
+		this.header = header;
 		this.sequence = new StringBuilder();		
 	}
 	public String getHeader()
 	{
 		String result = "";					
-		Pattern p = Pattern.compile(">(\\s*\\w*)*\\n");		
-		Matcher matcher = p.matcher(this.sequence);		
+		Pattern p = Pattern.compile(">(\\s*\\w*)*");		
+		Matcher matcher = p.matcher(this.header);		
 		while(matcher.find())
 		{
 			int start =  matcher.start();			
 			int end = matcher.end();			
-			result = this.sequence.substring(start + 1, end).trim();
+			result = this.header.substring(start + 1, end).trim();
 		}	
 			
 	return result;	
@@ -46,11 +77,13 @@ public class FastaSequence implements iFastaSequence
 			this.setCounts(sequence);
 		}
 	}
+/*
 	public static void writeUniquewriteUnique writeUnique (File inFile, File outFile)
 			throws Exception
 			{
 		
 			}
+*/
 	private void setCounts(String input)
 	{
 		if(input != null)
