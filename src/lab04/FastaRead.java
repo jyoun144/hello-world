@@ -8,17 +8,17 @@ public class FastaRead
 	{	
 		String shortSequenceFilePath = ".\\src\\lab04\\FastaInput.txt";		
 		String resultShortSequenceFilePath = ".\\src\\lab04\\UniqueSequenceCountResult.txt";	
-		/*
+		
 		List<FastaSequence> fastaList = 
 				FastaSequence.readFastaFile(shortSequenceFilePath);
 				for( FastaSequence fs : fastaList)
 				{
 					System.out.println(fs.getHeader());
 					System.out.println(fs.getSequence().trim());
-					System.out.println("GC Ratio: " + fs.getGCRatio());
+					System.out.println(fs.getGCRatio());
 					System.out.println();
 				}
-				*/
+				
 FastaSequence.writeUniquewriteUnique(new File(shortSequenceFilePath), new File(resultShortSequenceFilePath));
 	}	
 }

@@ -52,8 +52,7 @@ public class FastaSequence implements iFastaSequence
 		HashMap<String, Integer>  map = new HashMap<>();
 		for(FastaSequence item : list)
 		{
-			String currentSequence = item.getSequence();
-			System.out.println(currentSequence);
+			String currentSequence = item.getSequence();			
 			Integer count = map.get(currentSequence);
 			if(count == null)
 			{
@@ -62,34 +61,9 @@ public class FastaSequence implements iFastaSequence
 			count++;
 			map.put(currentSequence, count);			
 		}
-		HashMap<String, Integer>  sortedMap = sortByValue(map);	
-		//printEntries(sortedMap);
+		HashMap<String, Integer>  sortedMap = sortByValue(map);		
 		writeSeqEntries(sortedMap, outFile.getAbsolutePath());
-	}
-	private static void writeSeqEntries(HashMap<String, Integer>  map, String filePath) throws IOException
-	{		
-		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(filePath)));
-		
-		for (Map.Entry<String, Integer> en : map.entrySet()) 
-		{ 
-			
-            System.out.println(">" + en.getValue() + "\n" + en.getKey() + "\n"); 
-            writer.write(">" + en.getValue() + "\n" + en.getKey() + "\n");
-        } 
-		
-		writer.flush();
-		writer.close();		
-	}
-	private static void printEntries(HashMap<String, Integer> hm) 
-	{
-		for (Map.Entry<String, Integer> en : hm.entrySet()) 
-		{ 
-            System.out.println("Key = " + en.getKey() +  
-                          ", Value = " + en.getValue()); 
-        } 
-		
-	}
-	
+	}	
 	public FastaSequence(String header)
 	{
 		this.header = header;
@@ -157,4 +131,16 @@ public class FastaSequence implements iFastaSequence
         } 
         return temp; 
     } 
+	private static void writeSeqEntries(HashMap<String, Integer>  map, String filePath) throws IOException
+	{		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(filePath)));
+		
+		for (Map.Entry<String, Integer> en : map.entrySet()) 
+		{ 			
+            System.out.println(">" + en.getValue() + "\n" + en.getKey()); 
+            writer.write(">" + en.getValue() + "\n" + en.getKey() + "\n");
+        } 		
+		writer.flush();
+		writer.close();		
+	}	
 }
