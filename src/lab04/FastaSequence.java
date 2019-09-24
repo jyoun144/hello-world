@@ -5,6 +5,8 @@ import java.util.List;
 import java.io.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.HashMap;
+import java.util.Map;
 
 public class FastaSequence implements iFastaSequence
 {
@@ -18,9 +20,8 @@ public class FastaSequence implements iFastaSequence
 	public static List<FastaSequence> readFastaFile(String filePath) throws IOException
 	{
 		List<FastaSequence> list = new ArrayList<FastaSequence>();		
-		String targetFile = filePath;
 		Integer seqCount = 0;
-		BufferedReader reader = new BufferedReader(new FileReader(new File(targetFile)));		
+		BufferedReader reader = new BufferedReader(new FileReader(new File(filePath)));		
 		FastaSequence obj = null;		
 		for(String nextLine = reader.readLine(); nextLine != null; nextLine = reader.readLine())
 		{	
@@ -41,6 +42,27 @@ public class FastaSequence implements iFastaSequence
 		reader.close();	
 		return list;
 	}	
+	public static void writeUniquewriteUnique (File inFile, File outFile) throws Exception			
+	{
+		List<FastaSequence> list = readFastaFile(inFile.getAbsolutePath());
+		HashMap<String, Integer>  map = new HashMap<>();
+		for(FastaSequence item : list)
+		{
+			String currentSequence = item.getSequence();
+			Integer obj = map.get(currentSequence);
+			if(obj == null)
+			{
+				map.put(currentSequence, 1);
+			}
+			else
+			{
+				map.put(currentSequence, obj++);
+			}
+			
+			
+		}
+		
+	}
 	
 	public FastaSequence(String header)
 	{
@@ -77,13 +99,6 @@ public class FastaSequence implements iFastaSequence
 			this.setCounts(sequence);
 		}
 	}
-/*
-	public static void writeUniquewriteUnique writeUnique (File inFile, File outFile)
-			throws Exception
-			{
-		
-			}
-*/
 	private void setCounts(String input)
 	{
 		if(input != null)

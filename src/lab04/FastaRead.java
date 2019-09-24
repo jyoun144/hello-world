@@ -15,7 +15,7 @@ public class FastaRead
 				{
 					System.out.println(fs.getHeader());
 					System.out.println(fs.getSequence().trim());
-					System.out.println(fs.getGCRatio());
+					System.out.println("GC Ratio: " + fs.getGCRatio());
 					System.out.println();
 				}
 	}	
