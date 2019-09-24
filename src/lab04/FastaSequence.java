@@ -8,9 +8,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.*;
-
-import lab03.FastaObj;
 
 public class FastaSequence implements iFastaSequence
 {
