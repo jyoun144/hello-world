@@ -1,14 +1,14 @@
 package lab04;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.io.File;
 
 public class FastaRead
 {
 	public static void main(String[] args) throws Exception
 	{	
 		String shortSequenceFilePath = ".\\src\\lab04\\FastaInput.txt";		
-		String resultShortSequenceFilePath = ".\\src\\lab04\\ShortSequenceResult.txt";		
+		String resultShortSequenceFilePath = ".\\src\\lab04\\UniqueSequenceCountResult.txt";	
+		/*
 		List<FastaSequence> fastaList = 
 				FastaSequence.readFastaFile(shortSequenceFilePath);
 				for( FastaSequence fs : fastaList)
@@ -18,5 +18,7 @@ public class FastaRead
 					System.out.println("GC Ratio: " + fs.getGCRatio());
 					System.out.println();
 				}
+				*/
+FastaSequence.writeUniquewriteUnique(new File(shortSequenceFilePath), new File(resultShortSequenceFilePath));
 	}	
 }
