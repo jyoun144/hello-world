@@ -1,6 +1,6 @@
 package lab04;
 
-public class FastaParse
+public class MainFastaParse
 {
 	private static final String defaultFilePath  = "C:\\Users\\young\\git\\hello-world\\src\\lab04\\FastaInput.txt";	
 	
@@ -11,7 +11,7 @@ public class FastaParse
 	}	
 	private static void navigateSequences(String targetFilePath) throws Exception
 	{
-		 FastaViewer2 view = new FastaViewer2(targetFilePath);
+		 FastaViewer view = new FastaViewer(targetFilePath);
 		 String input;
 		 do {
 		 System.out.println("Enter 'N' to view next FASTA sequence, or enter 'Q' to terminate program.\n");

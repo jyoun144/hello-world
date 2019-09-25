@@ -3,14 +3,16 @@ import java.io.*;
 
 public class FastaViewer 
 {	
-	private BufferedReader reader = null;	
+	private BufferedReader reader = null;
+	private String nextSequenceHeader = null;
+	private boolean hasRetrievedHeader = false;
 	
 	public FastaObj getNextSequence() throws IOException
 	{		
 		FastaObj obj = null;
-		boolean hasRetrievedHeader = false;		
+				
 		for(String nextLine = reader.readLine(); nextLine != null; nextLine = reader.readLine())
-		{					
+		{		
 			if(nextLine.contains(">"))
 			{
 				if(!hasRetrievedHeader)
@@ -19,17 +21,21 @@ public class FastaViewer
 					hasRetrievedHeader = true;
 				}
 				else
-				{					
-					reader.reset();
+				{
+					this.nextSequenceHeader = nextLine;					
 					break;
 				}
-			}
+			}			
 			else
 			{
+				if(this.nextSequenceHeader != null)
+				{
+					obj = new FastaObj(this.nextSequenceHeader);
+					this.nextSequenceHeader = null;					
+				}
 				if(!nextLine.trim().equals(""))
 				{														
-					obj.appendSequence(nextLine);
-					reader.mark(100);
+					obj.appendSequence(nextLine);					
 				}
 			}	
 		}

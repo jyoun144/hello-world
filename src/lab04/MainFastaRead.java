@@ -2,7 +2,7 @@ package lab04;
 import java.util.List;
 import java.io.File;
 
-public class FastaRead
+public class MainFastaRead
 {
 	public static void main(String[] args) throws Exception
 	{	
