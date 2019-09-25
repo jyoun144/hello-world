@@ -6,25 +6,14 @@ public class FastaParse
 {
 	public static void main(String[] args) throws Exception
 	{	
-		
-		runLab4Part1();
+		 String targetFilePath = ".\\src\\lab04\\FastaInput.txt";
+		for(int i = 0; i < 9; i++)
+		{
+			FastaViewer view = new FastaViewer(targetFilePath);
+			var sequence1 = view.getNextSequence();
+			System.out.println(sequence1.getHeader());
+			System.out.println(sequence1.getSequence());			
+		}		
 	}	
-	private static void runLab4Part1() throws Exception
-	{
-		// String targetFilePath = ".\\src\\lab04\\FastaInput.txt";	
-				String targetFilePath = ".\\src\\lab04\\CytBDNA.txt";		
-				String sequenceSummaryFilePath = ".\\src\\lab04\\UniqueSequenceCountResult.txt";	
-				
-				List<FastaSequence> fastaList = 
-						FastaSequence.readFastaFile(targetFilePath);
-						for( FastaSequence fs : fastaList)
-						{
-							System.out.println(fs.getHeader());
-							System.out.println(fs.getSequence().trim());
-							System.out.println(fs.getGCRatio());
-							System.out.println();
-						}
-						
-		FastaSequence.writeUniquewriteUnique(new File(targetFilePath), new File(sequenceSummaryFilePath));
-	}
+	
 }
