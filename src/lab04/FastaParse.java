@@ -1,19 +1,55 @@
 package lab04;
-import java.util.List;
-import java.io.File;
 
 public class FastaParse
 {
-	public static void main(String[] args) throws Exception
-	{	
-		 String targetFilePath = ".\\src\\lab04\\FastaInput.txt";
-		for(int i = 0; i < 9; i++)
-		{
-			FastaViewer view = new FastaViewer(targetFilePath);
-			var sequence1 = view.getNextSequence();
-			System.out.println(sequence1.getHeader());
-			System.out.println(sequence1.getSequence());			
-		}		
-	}	
+	private static final String defaultFilePath  = "C:\\Users\\young\\git\\hello-world\\src\\lab04\\FastaInput.txt";	
 	
+	public static void main(String[] args) throws Exception
+	{
+		String targetFilePath = getTargetFilePath(args);
+		navigateSequences(targetFilePath);			
+	}	
+	private static void navigateSequences(String targetFilePath) throws Exception
+	{
+		 FastaViewer2 view = new FastaViewer2(targetFilePath);
+		 String input;
+		 do {
+		 System.out.println("Enter 'N' to view next FASTA sequence, or enter 'Q' to terminate program.\n");
+		 input = System.console().readLine().toUpperCase();		
+		
+			if(input.equals("N"))
+			{
+				FastaObj sequence1 = view.getNextSequence();
+				if(sequence1 != null)
+				{
+					System.out.println(sequence1.getHeader());
+					System.out.println(sequence1.getSequence());
+					System.out.println();
+				}
+				else
+				{
+					System.out.println("Reached end of file.");
+					break;
+				}
+		 }
+			if(input.equals("Q"))
+			{
+				System.out.println("User has ended session.");
+			}
+		
+		 }while(!input.equals("Q"));	
+	}
+	private static String getTargetFilePath(String[] args)
+	{
+		String targetFilePath = null;
+		if(args.length == 1 && args[0].trim() != "")
+		 {
+			 targetFilePath = args[0];			 
+		 }
+		 else
+		 {
+			 targetFilePath = defaultFilePath;			 
+		 }
+		return targetFilePath;
+	}
 }

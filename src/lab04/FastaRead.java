@@ -6,10 +6,8 @@ public class FastaRead
 {
 	public static void main(String[] args) throws Exception
 	{	
-		// String targetFilePath = ".\\src\\lab04\\FastaInput.txt";	
-		String targetFilePath = ".\\src\\lab04\\CytBDNA.txt";		
-		String sequenceSummaryFilePath = ".\\src\\lab04\\UniqueSequenceCountResult.txt";	
-		
+		String targetFilePath = ".\\src\\lab04\\FastaInput.txt";			
+		String sequenceSummaryFilePath = ".\\src\\lab04\\UniqueSequenceCountResult.txt";		
 		List<FastaSequence> fastaList = 
 				FastaSequence.readFastaFile(targetFilePath);
 				for( FastaSequence fs : fastaList)

@@ -95,19 +95,32 @@ public class FastaSequence implements iFastaSequence
 			this.sequence.append(sequence);
 			this.setCounts(sequence);
 		}
-	}
+	}	
 	private void setCounts(String input)
 	{
 		if(input != null)
 		{
-			char[] cArray = input.toUpperCase().toCharArray();
-			Arrays.sort(cArray);
-			String str = new String(cArray);
-			this.aCount += str.contains("A") ? ((str.lastIndexOf('A') - str.indexOf('A')) + 1) : 0;
-			this.gCount += str.contains("G") ? (str.lastIndexOf('G') - str.indexOf('G')) + 1 : 0;
-			this.tCount += str.contains("T") ? (str.lastIndexOf('T') - str.indexOf('T')) + 1 : 0;
-			this.cCount += str.contains("C") ? (str.lastIndexOf('C') - str.indexOf('C')) + 1 : 0;
-		}
+			for(int i=0; i < input.length(); i++)
+			{
+				char currentCharacter = input.toUpperCase().charAt(i);
+				if(currentCharacter  == 'A')
+				{
+					this.aCount++;
+				}
+				else if(currentCharacter  == 'G')
+				{
+					this.gCount++;
+				}
+				else if(currentCharacter  == 'T')
+				{
+					this.tCount++;
+				}
+				else if(currentCharacter  == 'C')
+				{
+					this.cCount++;
+				}				
+			}
+		}	
 	}
 	// Code obtained from https://www.geeksforgeeks.org/sorting-a-hashmap-according-to-values/
 	private static HashMap<String, Integer> sortByValue(HashMap<String, Integer> hm) 
