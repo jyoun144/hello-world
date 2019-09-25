@@ -4,6 +4,11 @@ public class MainFastaParse
 {
 	private static final String defaultFilePath  = "C:\\Users\\young\\git\\hello-world\\src\\lab04\\FastaInput.txt";	
 	
+	/*
+	 * Invoke this program via command line using the following syntax
+	 * java lab04.MainFastaParse absolute_FASTA_file_path
+	 * example:  "java lab04.MainFastaParse C:\Users\young\git\hello-world\src\lab04\FastaInput.txt"
+	 */
 	public static void main(String[] args) throws Exception
 	{
 		String targetFilePath = getTargetFilePath(args);
@@ -13,31 +18,30 @@ public class MainFastaParse
 	{
 		 FastaViewer view = new FastaViewer(targetFilePath);
 		 String input;
+		 FastaObj sequence = null;
 		 do {
 		 System.out.println("Enter 'N' to view next FASTA sequence, or enter 'Q' to terminate program.\n");
-		 input = System.console().readLine().toUpperCase();		
-		
-			if(input.equals("N"))
+		 input = System.console().readLine().toUpperCase();			
+		 if(input.equals("N"))
 			{
-				FastaObj sequence1 = view.getNextSequence();
-				if(sequence1 != null)
+				sequence = view.getNextSequence();
+				if(sequence != null)
 				{
-					System.out.println(sequence1.getHeader());
-					System.out.println(sequence1.getSequence());
+					System.out.println(sequence.getHeader());
+					System.out.println(sequence.getSequence());
 					System.out.println();
 				}
 				else
 				{
-					System.out.println("Reached end of file.");
-					break;
+					System.out.println("Reached end of file.");				
 				}
-		 }
+			}
 			if(input.equals("Q"))
 			{
 				System.out.println("User has ended session.");
 			}
 		
-		 }while(!input.equals("Q"));	
+		 }while(!input.equals("Q") && sequence != null);	
 	}
 	private static String getTargetFilePath(String[] args)
 	{

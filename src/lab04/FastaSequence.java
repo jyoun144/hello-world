@@ -1,6 +1,5 @@
 package lab04;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.*;
 import java.io.*;
@@ -43,7 +42,7 @@ public class FastaSequence implements iFastaSequence
 		reader.close();	
 		return list;
 	}	
-	public static void writeUniquewriteUnique (File inFile, File outFile) throws Exception			
+	public static void writeUnique (File inFile, File outFile) throws Exception			
 	{
 		List<FastaSequence> list = readFastaFile(inFile.getAbsolutePath());
 		HashMap<String, Integer>  map = new HashMap<>();
