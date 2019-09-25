@@ -16,32 +16,34 @@ public class MainFastaParse
 	}	
 	private static void navigateSequences(String targetFilePath) throws Exception
 	{
-		 FastaViewer view = new FastaViewer(targetFilePath);
-		 String input;
-		 FastaObj sequence = null;
-		 do {
-		 System.out.println("Enter 'N' to view next FASTA sequence, or enter 'Q' to terminate program.\n");
-		 input = System.console().readLine().toUpperCase();			
-		 if(input.equals("N"))
-			{
-				sequence = view.getNextSequence();
-				if(sequence != null)
+		 try(FastaViewer view = new FastaViewer(targetFilePath))
+		 {
+			 String input;
+			 FastaObj sequence = null;
+			 do {
+			 System.out.println("Enter 'N' to view next FASTA sequence, or enter 'Q' to terminate program.\n");
+			 input = System.console().readLine().toUpperCase();			
+			 if(input.equals("N"))
 				{
-					System.out.println(sequence.getHeader());
-					System.out.println(sequence.getSequence());
-					System.out.println();
+					sequence = view.getNextSequence();
+					if(sequence != null)
+					{
+						System.out.println(sequence.getHeader());
+						System.out.println(sequence.getSequence());
+						System.out.println();
+					}
+					else
+					{
+						System.out.println("Reached end of file.");				
+					}
 				}
-				else
+				if(input.equals("Q"))
 				{
-					System.out.println("Reached end of file.");				
+					System.out.println("User has ended session.");
 				}
-			}
-			if(input.equals("Q"))
-			{
-				System.out.println("User has ended session.");
-			}
-		
-		 }while(!input.equals("Q") && sequence != null);	
+			
+			 }while(!input.equals("Q") && sequence != null);	
+		 }
 	}
 	private static String getTargetFilePath(String[] args)
 	{

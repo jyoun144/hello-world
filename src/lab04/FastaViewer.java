@@ -1,7 +1,7 @@
 package lab04;
 import java.io.*;
 
-public class FastaViewer 
+public class FastaViewer implements Closeable
 {	
 	private BufferedReader reader = null;
 	private String nextSequenceHeader = null;
@@ -45,5 +45,15 @@ public class FastaViewer
 	public FastaViewer(String filePath) throws IOException
 	{		
 		this.reader = new BufferedReader(new FileReader(new File(filePath)));		
+	}
+	@Override
+	public void close(
+	) throws IOException
+	{
+		if(this.reader != null)
+		{
+			this.reader.close();
+			System.out.println("Closed BufferedReader");
+		}		
 	}	
 }
