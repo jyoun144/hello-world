@@ -2,14 +2,19 @@ package Review1;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.List;
-import java.util.Arrays;
 import java.util.*;
 public class MainReview
 {
-
 	public static void main(String[] args) throws IOException
 	{	
-		sortSequenceAlpha();		
+		System.out.println("**********Sort Alphabetically**********");
+		sortSequenceAlpha();
+		System.out.println();
+		System.out.println("**********Sort By Header**********");	
+		sortSequenceAlphaHeader();
+		System.out.println();
+		System.out.println("**********Sort By GC Ratio**********");	
+		sortSequenceGCRatio();
 	}
 	private static void sortSequenceAlpha() throws IOException
 	{
@@ -19,6 +24,32 @@ public class MainReview
 			public int compare(iFastaSequence o1, iFastaSequence o2) 
 			{				
 				return o1.getSequence().compareTo(o2.getSequence());			
+			}			
+		};
+		Collections.sort(list, fastaComparator);
+		printFastaList(list);		
+	}
+	private static void sortSequenceAlphaHeader() throws IOException
+	{
+		List<iFastaSequence> list = GetFastaSequences();
+		Comparator<iFastaSequence> fastaComparator = new Comparator<>()
+		{
+			public int compare(iFastaSequence o1, iFastaSequence o2) 
+			{				
+				return o1.getHeader().compareTo(o2.getHeader());			
+			}			
+		};
+		Collections.sort(list, fastaComparator);
+		printFastaList(list);		
+	}
+	private static void sortSequenceGCRatio() throws IOException
+	{
+		List<iFastaSequence> list = GetFastaSequences();
+		Comparator<iFastaSequence> fastaComparator = new Comparator<>()
+		{
+			public int compare(iFastaSequence o1, iFastaSequence o2) 
+			{				
+				return Float.compare(o1.getGCRatio(), o2.getGCRatio());			
 			}			
 		};
 		Collections.sort(list, fastaComparator);
@@ -41,7 +72,7 @@ public class MainReview
 	{				
 		for(iFastaSequence sequence : fastaList)
 		{			
-			System.out.println(sequence.getHeader() + "\n" + sequence.getSequence());
+			System.out.println(sequence.getHeader() + "\n" + sequence.getSequence() + "\n" + sequence.getGCRatio());
 		}
 	}
 	private static void printShapes()
