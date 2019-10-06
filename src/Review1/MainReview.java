@@ -2,11 +2,17 @@ package Review1;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.List;
+import java.util.Arrays;
 import java.util.*;
 public class MainReview
 {
 	public static void main(String[] args) throws IOException
 	{	
+		runFastaTests();
+		
+	}
+	private static void runFastaTests() throws IOException
+	{
 		System.out.println("**********Sort Alphabetically**********");
 		sortSequenceAlpha();
 		System.out.println();
@@ -15,10 +21,13 @@ public class MainReview
 		System.out.println();
 		System.out.println("**********Sort By GC Ratio**********");	
 		sortSequenceGCRatio();
+		System.out.println();
+		System.out.println("**********Sort By Legal Character Count**********");	
+		sortSequenceByLegalCharacters();
 	}
 	private static void sortSequenceAlpha() throws IOException
 	{
-		List<iFastaSequence> list = GetFastaSequences();
+		List<FastaSequence> list = GetFastaSequences();
 		Comparator<iFastaSequence> fastaComparator = new Comparator<>()
 		{
 			public int compare(iFastaSequence o1, iFastaSequence o2) 
@@ -31,7 +40,7 @@ public class MainReview
 	}
 	private static void sortSequenceAlphaHeader() throws IOException
 	{
-		List<iFastaSequence> list = GetFastaSequences();
+		List<FastaSequence> list = GetFastaSequences();
 		Comparator<iFastaSequence> fastaComparator = new Comparator<>()
 		{
 			public int compare(iFastaSequence o1, iFastaSequence o2) 
@@ -44,7 +53,7 @@ public class MainReview
 	}
 	private static void sortSequenceGCRatio() throws IOException
 	{
-		List<iFastaSequence> list = GetFastaSequences();
+		List<FastaSequence> list = GetFastaSequences();
 		Comparator<iFastaSequence> fastaComparator = new Comparator<>()
 		{
 			public int compare(iFastaSequence o1, iFastaSequence o2) 
@@ -55,26 +64,46 @@ public class MainReview
 		Collections.sort(list, fastaComparator);
 		printFastaList(list);		
 	}
-	private static void processFastaFile() throws IOException
+	private static void sortSequenceByLegalCharacters() throws IOException
 	{
-		List<iFastaSequence> fastaList = FastaSequence.readFastaFile("./src/Review1/FastaInput.txt");			
-		for(iFastaSequence sequence : fastaList)
-		{
-			
-			System.out.println(sequence.getHeader() + "\n" + sequence.getSequence());
-		}
-	}
-	private static List<iFastaSequence> GetFastaSequences() throws IOException
+		  List<FastaSequence> list = GetFastaSequences();			
+		  Collections.sort(list);
+		  /*
+		  Collections.sort(list, new Comparator<FastaSequence>()
+				  {
+			  public int compare(FastaSequence o1, FastaSequence o2)
+			  {
+				  return Integer.compare(o1.getLegalCharacterCount(), o2.getLegalCharacterCount());
+			  }			  
+				  });
+		*/
+		  
+		 //list.sort((o1, o2) -> o1.getLegalCharacterCount() -  o2.getLegalCharacterCount());
+		/*
+	    Collections.sort(list, new Comparator<iFastaSequence>()
+	    		{
+	    			public int compare(iFastaSequence o1, iFastaSequence o2)
+	    			{
+	    				return (o1.getLegalCharacterCount() - o2.getLegalCharacterCount());
+	    			}	    	
+	    		});
+	    		
+		*/
+		printFastaList(list);		
+	}	
+	private static List<FastaSequence> GetFastaSequences() throws IOException
 	{
 		return FastaSequence.readFastaFile("./src/Review1/FastaInput.txt");		
 	}
-	private static void printFastaList(List<iFastaSequence> fastaList)
+	private static void printFastaList(List<FastaSequence> fastaList)
 	{				
 		for(iFastaSequence sequence : fastaList)
 		{			
-			System.out.println(sequence.getHeader() + "\n" + sequence.getSequence() + "\n" + sequence.getGCRatio());
+			System.out.println(sequence.getHeader() + "\n" + sequence.getSequence() + 
+								"\n" + "GC Ratio: " + sequence.getGCRatio() + "\n" + "Sequence Length: " + 
+					           sequence.getSequence().trim().length());
 		}
-	}
+	}	
 	private static void printShapes()
 	{
 		List<iShape> list = new ArrayList<>();

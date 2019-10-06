@@ -1,14 +1,10 @@
 package Review1;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.*;
 import java.io.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.HashMap;
-import java.util.Map;
 
-public class FastaSequence implements iFastaSequence
+public class FastaSequence implements iFastaSequence, Comparable<FastaSequence>
 {
 	private StringBuilder sequence;
 	private String header = null;
@@ -16,10 +12,19 @@ public class FastaSequence implements iFastaSequence
 	private int gCount = 0;
 	private int tCount = 0;
 	private int cCount = 0;
+	private int iCount = 0;
 	
-	public static List<iFastaSequence> readFastaFile(String filePath) throws IOException
+	@Override
+	public int compareTo(FastaSequence s)
 	{
-		List<iFastaSequence> list = new ArrayList<>();		
+		//return this.getSequence().length() - s.getSequence().length();
+		
+		return ((this.getLegalCharacterCount() + this.getIllegalCharacterCount()) - 
+			   ( s.getLegalCharacterCount() + s.getIllegalCharacterCount()));
+	}	
+	public static List<FastaSequence> readFastaFile(String filePath) throws IOException
+	{
+		List<FastaSequence> list = new ArrayList<>();		
 		Integer seqCount = 0;
 		BufferedReader reader = new BufferedReader(new FileReader(new File(filePath)));		
 		FastaSequence obj = null;		
@@ -39,12 +44,12 @@ public class FastaSequence implements iFastaSequence
 				}
 			}		
 		}
-		reader.close();	
+		reader.close();		
 		return list;
 	}	
 	public static void writeUnique (File inFile, File outFile) throws Exception			
 	{
-		List<iFastaSequence> list = readFastaFile(inFile.getAbsolutePath());
+		List<FastaSequence> list = readFastaFile(inFile.getAbsolutePath());
 		HashMap<String, Integer>  map = new HashMap<>();
 		for(iFastaSequence item : list)
 		{
@@ -87,6 +92,14 @@ public class FastaSequence implements iFastaSequence
 	{		
 		return (float)(gCount + cCount)/(float)(aCount + gCount + cCount + tCount);
 	}
+	public int getIllegalCharacterCount()
+	{
+		return this.iCount;
+	}
+	public int getLegalCharacterCount()
+	{
+		return (this.aCount + this.gCount + this.cCount + this.tCount);
+	}
 	public void appendSequence(String sequence)
 	{
 		if(sequence != null && !sequence.trim().equals(""))
@@ -99,6 +112,7 @@ public class FastaSequence implements iFastaSequence
 	{
 		if(input != null)
 		{
+			input = input.trim();
 			for(int i=0; i < input.length(); i++)
 			{
 				char currentCharacter = input.toUpperCase().charAt(i);
@@ -117,7 +131,11 @@ public class FastaSequence implements iFastaSequence
 				else if(currentCharacter  == 'C')
 				{
 					this.cCount++;
-				}				
+				}
+				else
+				{
+					this.iCount++;
+				}
 			}
 		}	
 	}
