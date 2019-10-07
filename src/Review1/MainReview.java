@@ -7,9 +7,46 @@ import java.util.*;
 public class MainReview
 {
 	public static void main(String[] args) throws IOException
-	{	
-		runFastaTests();
+	{
 		
+		
+	Square s = new Square(4);
+	System.out.println(s.toString());
+		
+		
+		
+	}
+	private static void skipEveryOther(String s)
+	{
+		for(int i = 0; (2*i) < s.length(); i++)
+		{
+			System.out.println(s.charAt(2*i));
+		}
+	}
+	private static int numGCs(String s)
+	{
+		int gCount = 0;
+		int cCount = 0;
+		if(s != null)
+		{
+			s = s.toUpperCase();
+			for(int i = 0; i < s.length(); i++)
+			{
+				if(s.charAt(i) == 'G')
+				{
+					gCount++;					
+				}
+				else if(s.charAt(i) == 'C')
+				{
+					cCount++;
+				}
+			}
+		}
+		return (gCount + cCount);
+	}
+	private static int bothPositive(int a, int b)
+	{
+		return (a > 0 && b > 0) ? 1 : 0;
 	}
 	private static void runFastaTests() throws IOException
 	{
