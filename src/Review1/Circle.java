@@ -20,4 +20,22 @@ public class Circle implements iShape
 	{
 		return this.name;		
 	}
+	@Override
+	public boolean equals(Object obj)
+	{
+		Circle circ = (Circle)obj;
+		return circ.radius == this.radius;
+	}
+	@Override
+	public int hashCode()
+	{	
+		long bits = Double.doubleToLongBits(this.radius);
+		return (int)(bits ^ (bits >>> 32));
+		// return new Double(this.radius).hashCode();		
+	}
+	@Override 
+	public String toString()
+	{
+		return "radius(" + this.radius +")";
+	}
 }

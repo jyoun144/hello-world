@@ -8,11 +8,57 @@ public class MainReview
 {
 	public static void main(String[] args) throws IOException
 	{
-		runOptionsToIterateThroughAnArrayList();		
+		String a = "Jack";
+		String b = "Jack";
+		System.out.println(a.hashCode());
+		System.out.println(b.hashCode());
+		
+		//runFullyOverriddenCircleClass();
+		
+		
 	}
+	private static void runFullyOverriddenCircleClass()
+	{
+		Set<Circle> set = new HashSet<Circle>();
+		Circle c1 = new Circle(5);
+		Circle c2 = new Circle(5);
+		System.out.println(c1.equals(c2));
+		set.add(c1);
+		set.add(c2);
+		System.out.println("Size: " + set.size());
+		System.out.println("toString() method output:  " + c1.toString());
+	}
+	private static void runReverseArray()
+	{
+		//float[] a = new float[]{1,2,3};
+				float[] arr = new float[3];
+				arr[0] = 1;
+				arr[1] = 2;
+				arr[2] = 3;
+				reverseArray(arr);
+				for(float f : arr)
+				{
+					System.out.println(f);
+				}		
+	}
+	private static void reverseArray(float[] a)
+	{		
+		float[] tmp = a.clone();
+		int index = 0;
+		for(int i = (a.length - 1); i>= 0; i--)
+		{
+			a[index] = tmp[i];	
+			index++;
+		}	
+	}
+
 	private static void runOptionsToIterateThroughAnArrayList()
 	{
-		List<String> list = Arrays.asList("one", "two", "three");
+		// List<String> list = Arrays.asList("one", "two", "three");
+		List<String> list = new ArrayList<String>();
+		list.add("one");
+		list.add("two");
+		list.add("three");
 		// Option 1:  Iterator
 		System.out.println("Option 1");
 		Iterator<String> itr = list.iterator();
