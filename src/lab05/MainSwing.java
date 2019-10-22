@@ -8,8 +8,7 @@ public class MainSwing
 	)
 	{
 		SwingConsole.run(new Button1(), 500, 500);
-		// TODO Auto-generated method stub
-
-	}
+		//SwingConsole.run(new BorderLayout1(), 500, 500);
+		}
 
 }
