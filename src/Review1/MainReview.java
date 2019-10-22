@@ -4,18 +4,62 @@ import java.text.NumberFormat;
 import java.util.List;
 import java.util.Arrays;
 import java.util.*;
+import java.math.*;
 public class MainReview
 {
+	
 	public static void main(String[] args) throws IOException
 	{
-		String a = "Jack";
-		String b = "Jack";
-		System.out.println(a.hashCode());
-		System.out.println(b.hashCode());
+		List<Integer> list = new ArrayList<>();
+		list.add(1);
+		list.add(2);
 		
-		//runFullyOverriddenCircleClass();
+		for(int i : list)
+		{
+			System.out.println(i);
+		}
 		
 		
+
+		
+	
+	
+		
+		
+	}
+	private static void putHashMap()
+	{
+		HashMap<String, Integer> hm = new HashMap<>();
+		hm.put("one", 1);
+		hm.put("one", 1);
+		System.out.println(hm.size()); // output:  1
+	}
+	private static List<Integer> getEvenNumbers( List<Integer> inList )	
+	{	
+		inList = inList != null ? inList : Arrays.asList(1, 6, 7, 9, 14, 22, 23);
+		List<Integer> result = new ArrayList<>();
+		for(Integer i : inList)
+		{
+			if(i % 2 == 0)
+			{
+				result.add(i);
+			}
+		}
+		return result;		
+	}
+	private static void runBigDecimalRoundingTest()
+	{
+		BigDecimal a = new BigDecimal(new BigInteger("1"));
+		BigDecimal b = new BigDecimal(new BigInteger("9"));
+		BigDecimal c = new BigDecimal("0.10");
+		BigDecimal result = a.subtract(b.multiply(c));
+		System.out.println( result);		
+		
+		BigDecimal a1 = new BigDecimal("1");
+		BigDecimal b1 = new BigDecimal("9");
+		BigDecimal c1 = new BigDecimal("0.10");
+		BigDecimal result1 = a1.subtract(b1.multiply(c1));
+		System.out.println( result1);
 	}
 	private static void runFullyOverriddenCircleClass()
 	{
