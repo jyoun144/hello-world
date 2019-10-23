@@ -18,12 +18,8 @@ public class FileMenuFactory
 		JMenuItem openMenuItem = new JMenuItem("Open");	
 		openMenuItem.setMnemonic('O');
 		openMenuItem.addActionListener((ae) ->
-		{
-			int dialogResult = showConfirmDialog(frame, txtArea);	
-			if(dialogResult == JOptionPane.YES_OPTION)
-			{
-				FileUtility.loadFromFile(frame, txtArea);
-			}
+		{		
+			FileUtility.loadFromFile(frame, txtArea);			
 		});
 		JMenuItem newMenuItem = new JMenuItem("New");	
 		newMenuItem.setMnemonic('N');
@@ -35,15 +31,13 @@ public class FileMenuFactory
 		fileMenu.add(openMenuItem);	
 		fileMenu.add(newMenuItem);	
 		return menuBar;
-	}
-	
-	private static int showConfirmDialog(JFrame frame, JTextArea txtArea)
+	}	
+	private static void showConfirmDialog(JFrame frame, JTextArea txtArea)
 	{
 		 int dialogResult = JOptionPane.showConfirmDialog(frame,"Are you sure?  Existing text will be permanently deleted.");
 		 if(dialogResult == JOptionPane.YES_OPTION)
 			{
 				txtArea.setText("");
-			}
-		 return dialogResult;
+			}	 
 	}
 }
