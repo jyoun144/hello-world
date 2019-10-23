@@ -1,8 +1,5 @@
 package lab05;
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionListener;
-import java.awt.event.*;
 
 public class FileMenuFactory
 {
@@ -20,6 +17,10 @@ public class FileMenuFactory
 		saveItem.setMnemonic('S');
 		JMenuItem openMenuItem = new JMenuItem("Open");	
 		openMenuItem.setMnemonic('O');
+		openMenuItem.addActionListener((ae) ->
+		{
+			FileUtility.loadFromFile(frame, txtArea);		
+		});
 		fileMenu.add(saveItem);
 		fileMenu.add(openMenuItem);		
 		return menuBar;
