@@ -46,7 +46,8 @@ public class Button1 extends JFrame
 		this.add(b1);
 		this.add(b2);
 		this.add(cb);		
-		this.add(new JScrollPane(txt));
+		this.add(new JScrollPane(txt));		
 		this.setSize(400,300);
+		
 	}
 }
