@@ -33,7 +33,7 @@ public class Button1 extends JFrame
 					}
 					txt.append(currentText + "\n");					
 				}
-			};
+			};  
 	public Button1()
 	{		
 		for(String item : lst)	
