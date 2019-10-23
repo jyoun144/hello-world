@@ -6,7 +6,7 @@ import java.awt.event.*;
 
 public class FileMenuFactory
 {
-	public static JMenuBar getBasicMenuBar()
+	public static JMenuBar getBasicMenuBar(JFrame frame)
 	{
 		JMenuBar jb = new JMenuBar();		
 		JMenu fileMenu = new JMenu("File");

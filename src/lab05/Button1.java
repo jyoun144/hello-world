@@ -36,7 +36,7 @@ public class Button1 extends JFrame
 		this.add(new JScrollPane(txt), BorderLayout.CENTER);
 		this.add(this.getBottomPanel(), BorderLayout.SOUTH);				
 		this.setSize(400,300);
-		this.setJMenuBar(FileMenuFactory.getBasicMenuBar());		
+		this.setJMenuBar(FileMenuFactory.getBasicMenuBar(this));		
 	}
 	private JPanel getBottomPanel()
 	{
