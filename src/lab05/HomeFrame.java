@@ -7,28 +7,43 @@ public class HomeFrame extends JFrame
 	private static final long serialVersionUID = -2082381602987081784L;	
 	private static final String newLine = "\n";
 	private JComboBox<String> cb = new JComboBox<>();	
-	private String[] lst = new String[] {"Punch:Jab", "Punch:Cross", "Punch:Hook", "Punch:Upper Cut", "Punch:Overhand",
+	private String[] lst = new String[] {"---Select Strike Type---", "Punch:Jab", "Punch:Cross", "Punch:Hook", "Punch:Upper Cut", "Punch:Overhand",
 											"Kick:Round", "Kick:Front", "Kick:Side", "Kick:Reverse", "Kick:Switch"};
 	private JButton	
-	b1 = new JButton("Add Strike"),
-	b2 = new JButton("Add Separator");
+	btnAddStrike = new JButton("Add Strike"),
+	btnAddSeparator = new JButton("Add Separator");
 
 	private JTextArea txt = new JTextArea(20,40);
 	
 	public HomeFrame()
-	{		
+	{	
+		this.setButtonsState(false);		
 		for(String item : lst)	
 		{
 			cb.addItem(item);
 		}		
-		b1.addActionListener((ae) ->
+		cb.addActionListener((ae) ->
 		{
-			txt.append(cb.getSelectedItem().toString() + newLine);			
+			
+		if(cb.getSelectedIndex() == 0)
+		{
+			this.setButtonsState(false);
+		}
+		else
+		{
+			this.setButtonsState(true);					
+		}
+		});
+		btnAddStrike.addActionListener((ae) ->
+		{
+			txt.append(cb.getSelectedItem().toString() + newLine);
+			cb.setSelectedIndex(0);
 		});
 		
-		b2.addActionListener((ae) ->
+		btnAddSeparator.addActionListener((ae) ->
 		{
-			txt.append("***********************" + newLine);			
+			txt.append("***********************" + newLine);
+			// cb.setSelectedIndex(0);
 		});
 		this.setLayout(new BorderLayout());
 		this.add(new JScrollPane(txt), BorderLayout.CENTER);
@@ -40,9 +55,13 @@ public class HomeFrame extends JFrame
 	{
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(1,3));
-		panel.add(b1);
+		panel.add(btnAddStrike);
 		panel.add(cb);
-		panel.add(b2);
+		panel.add(btnAddSeparator);
 		return panel;
+	}
+	private void setButtonsState(Boolean isEnabled)
+	{
+		btnAddStrike.setEnabled(isEnabled);					
 	}
 }
