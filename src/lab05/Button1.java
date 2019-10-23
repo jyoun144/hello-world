@@ -7,47 +7,44 @@ import java.awt.event.*;
 public class Button1 extends JFrame
 {	
 	private static final long serialVersionUID = -2082381602987081784L;	
-	private JComboBox<String> cb = new JComboBox<>();
-	private static String STRIKE_TITLE = "Add Strike";
-	private static String SEPARATOR_TITLE = "Add Separator";
-	private static String SEPARATOR = "***********************";
+	private static final String newLine = "\n";
+	private JComboBox<String> cb = new JComboBox<>();	
 	private String[] lst = new String[] {"Punch:Jab", "Punch:Cross", "Punch:Hook", "Punch:Upper Cut", "Punch:Overhand",
 											"Kick:Round", "Kick:Front", "Kick:Side", "Kick:Reverse", "Kick:Switch"};
 	private JButton	
-	b1 = new JButton(STRIKE_TITLE),
-	b2 = new JButton(SEPARATOR_TITLE);
+	b1 = new JButton("Add Strike"),
+	b2 = new JButton("Add Separator");
 
 	private JTextArea txt = new JTextArea(20,40);
-	private ActionListener al = new ActionListener()
-			{
-				public void actionPerformed(ActionEvent e)
-				{
-					String currentText;
-					if(((JButton)e.getSource()).getText().equals(STRIKE_TITLE))
-					{
-						currentText = cb.getSelectedItem().toString();
-					}
-					else
-					{
-						currentText = SEPARATOR;
-					}
-					txt.append(currentText + "\n");					
-				}
-			};  
+	
 	public Button1()
 	{		
 		for(String item : lst)	
 		{
 			cb.addItem(item);
 		}		
-		b1.addActionListener(al);
-		b2.addActionListener(al);
-		this.setLayout(new FlowLayout());
-		this.add(b1);
-		this.add(b2);
-		this.add(cb);		
-		this.add(new JScrollPane(txt));		
-		this.setSize(400,300);
+		b1.addActionListener((ae) ->
+		{
+			txt.append(cb.getSelectedItem().toString() + newLine);			
+		});
 		
+		b2.addActionListener((ae) ->
+		{
+			txt.append("***********************" + newLine);			
+		});
+		this.setLayout(new BorderLayout());
+		this.add(new JScrollPane(txt), BorderLayout.CENTER);
+		this.add(this.getBottomPanel(), BorderLayout.SOUTH);				
+		this.setSize(400,300);
+		this.setJMenuBar(FileMenuFactory.getBasicMenuBar());		
+	}
+	private JPanel getBottomPanel()
+	{
+		JPanel panel = new JPanel();
+		panel.setLayout(new GridLayout(1,3));
+		panel.add(b1);
+		panel.add(cb);
+		panel.add(b2);
+		return panel;
 	}
 }
