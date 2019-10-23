@@ -1,5 +1,6 @@
 package lab05;
 import javax.swing.*;
+
 public class SwingConsole
 {
 	public static void run(final JFrame f, final int width, final int height)

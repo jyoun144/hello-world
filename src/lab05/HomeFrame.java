@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.*;
 
-public class Button1 extends JFrame
+public class HomeFrame extends JFrame
 {	
 	private static final long serialVersionUID = -2082381602987081784L;	
 	private static final String newLine = "\n";
@@ -17,7 +17,7 @@ public class Button1 extends JFrame
 
 	private JTextArea txt = new JTextArea(20,40);
 	
-	public Button1()
+	public HomeFrame()
 	{		
 		for(String item : lst)	
 		{
@@ -36,7 +36,7 @@ public class Button1 extends JFrame
 		this.add(new JScrollPane(txt), BorderLayout.CENTER);
 		this.add(this.getBottomPanel(), BorderLayout.SOUTH);				
 		this.setSize(400,300);
-		this.setJMenuBar(FileMenuFactory.getBasicMenuBar(this));		
+		this.setJMenuBar(FileMenuFactory.getBasicMenuBar(this, txt));		
 	}
 	private JPanel getBottomPanel()
 	{

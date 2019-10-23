@@ -6,19 +6,23 @@ import java.awt.event.*;
 
 public class FileMenuFactory
 {
-	public static JMenuBar getBasicMenuBar(JFrame frame)
+	public static JMenuBar getBasicMenuBar(JFrame frame, JTextArea txtArea)
 	{
-		JMenuBar jb = new JMenuBar();		
+		JMenuBar menuBar = new JMenuBar();		
 		JMenu fileMenu = new JMenu("File");
-		jb.add(fileMenu);
 		fileMenu.setMnemonic('F');
-		JMenuItem newMenuItem = new JMenuItem("Save");
-		newMenuItem.setMnemonic('N');
+		menuBar.add(fileMenu);		
+		JMenuItem saveItem = new JMenuItem("Save");
+		saveItem.addActionListener((ae) ->
+		{
+			FileUtility.saveToFile(frame, txtArea);		
+		});
+		saveItem.setMnemonic('S');
 		JMenuItem openMenuItem = new JMenuItem("Open");	
 		openMenuItem.setMnemonic('O');
-		fileMenu.add(newMenuItem);
+		fileMenu.add(saveItem);
 		fileMenu.add(openMenuItem);		
-		return jb;
+		return menuBar;
 	}
 
 }
