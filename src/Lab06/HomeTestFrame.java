@@ -48,7 +48,12 @@ public class HomeTestFrame extends JFrame
 		{			
 			
 		});				
-		
+		txtAnswer.addActionListener((ae) ->
+		{
+			lblQuestion.setText(lblTimeRemaining.getText());
+		}
+				
+				);
 		this.setLayout(new GridLayout(4,1));
 		this.add(this.getTopPanel());
 		this.add(this.getQuestionPanel());
