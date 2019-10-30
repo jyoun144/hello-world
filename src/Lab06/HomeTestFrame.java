@@ -2,7 +2,6 @@ package Lab06;
 import javax.swing.*;
 import java.awt.*;
 import javax.swing.JLabel;
-import javax.swing.border.Border;
 import java.awt.Dimension;
 // import java.awt.font.*;
 import javax.swing.Timer;
@@ -41,50 +40,28 @@ public class HomeTestFrame extends JFrame
 		setFrameLayout();
 		btnStartQuiz.addActionListener((ae) ->
 		{
-			
+			timer.start();
+			this.clearFields();
+			this.toggleQuizButtons(false);			
 		});
 		
 		btnCancelQuiz.addActionListener((ae) ->
-		{			
-			
+		{
+			this.toggleQuizButtons(true);
+			timer.stop();			
 		});				
 		txtAnswer.addActionListener((ae) ->
 		{
 			lblQuestion.setText(lblTimeRemaining.getText());
-		}
-				
-				);
+			txtAnswer.setText("");
+		});
+		
 		this.setLayout(new GridLayout(4,1));
 		this.add(this.getTopPanel());
 		this.add(this.getQuestionPanel());
 		this.add(this.getCenterPanel());
-		this.add(this.getBottomPanel());
-		timer.start();
-	}
-	private void setFrameLayout()
-	{
-		lblCorrectAnswers.setText(ZERO_TEXT);
-		lblWrongAnswers.setText(ZERO_TEXT);
-		lblTimeRemaining.setText(QUIZ_TOTAL_TIME);
-		lblCorrectAnswers.setHorizontalAlignment(SwingConstants.CENTER);
-		lblCorrectAnswers.setPreferredSize(new Dimension(100, 50));
-		lblWrongAnswers.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTimeRemaining.setHorizontalAlignment(SwingConstants.CENTER);
-		txtAnswer.setColumns(5);		
-		txtAnswer.setHorizontalAlignment(SwingConstants.CENTER);
-		txtAnswer.setFont(new Font("SansSerif", Font.BOLD, 30));
-		txtAnswer.setPreferredSize(new Dimension(30, 50));		
-		lblWrongAnswers.setPreferredSize(new Dimension(100, 50));
-		lblTimeRemaining.setPreferredSize(new Dimension(100, 50));	
-		lblCorrectAnswers.setBorder(BorderFactory.createLineBorder(Color.GREEN, 5));
-		lblWrongAnswers.setBorder(BorderFactory.createLineBorder(Color.RED, 5));
-		lblTimeRemaining.setBorder(BorderFactory.createLineBorder(Color.BLUE, 5));
-		lblQuestion.setPreferredSize(new Dimension(500, 70));
-		lblQuestion.setBorder(BorderFactory.createLineBorder(Color.YELLOW, 5));
-		lblQuestion.setHorizontalAlignment(SwingConstants.CENTER);
-		lblQuestion.setFont(new Font("SansSerif", Font.BOLD, 35));		
-		this.setButtonsState(false);		
-	}
+		this.add(this.getBottomPanel());		
+	}	
 	private JPanel getBottomPanel()
 	{
 		JPanel panel = new JPanel();		
@@ -115,12 +92,41 @@ public class HomeTestFrame extends JFrame
 		panel.setLayout(new FlowLayout());
 		panel.add(lblQuestion);		
 		return panel;
-	}
-	
-	private void setButtonsState(Boolean isEndingQuiz)
+	}	
+	private void toggleQuizButtons(Boolean isReadyState)
 	{
-		btnStartQuiz.setEnabled(!isEndingQuiz);	
-		btnCancelQuiz.setEnabled(isEndingQuiz);
+		btnStartQuiz.setEnabled(isReadyState);	
+		btnCancelQuiz.setEnabled(!isReadyState);
+	}
+	private void clearFields()
+	{
+		lblCorrectAnswers.setText(ZERO_TEXT);
+		lblWrongAnswers.setText(ZERO_TEXT);
+		lblTimeRemaining.setText(QUIZ_TOTAL_TIME);		
+	}
+	private void setFrameLayout()
+	{
+		lblCorrectAnswers.setText(ZERO_TEXT);
+		lblWrongAnswers.setText(ZERO_TEXT);
+		lblTimeRemaining.setText(QUIZ_TOTAL_TIME);
+		lblCorrectAnswers.setHorizontalAlignment(SwingConstants.CENTER);
+		lblCorrectAnswers.setPreferredSize(new Dimension(100, 50));
+		lblWrongAnswers.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTimeRemaining.setHorizontalAlignment(SwingConstants.CENTER);
+		txtAnswer.setColumns(5);		
+		txtAnswer.setHorizontalAlignment(SwingConstants.CENTER);
+		txtAnswer.setFont(new Font("SansSerif", Font.BOLD, 30));
+		txtAnswer.setPreferredSize(new Dimension(30, 50));		
+		lblWrongAnswers.setPreferredSize(new Dimension(100, 50));
+		lblTimeRemaining.setPreferredSize(new Dimension(100, 50));	
+		lblCorrectAnswers.setBorder(BorderFactory.createLineBorder(Color.GREEN, 5));
+		lblWrongAnswers.setBorder(BorderFactory.createLineBorder(Color.RED, 5));
+		lblTimeRemaining.setBorder(BorderFactory.createLineBorder(Color.BLUE, 5));
+		lblQuestion.setPreferredSize(new Dimension(500, 70));
+		lblQuestion.setBorder(BorderFactory.createLineBorder(Color.YELLOW, 5));
+		lblQuestion.setHorizontalAlignment(SwingConstants.CENTER);
+		lblQuestion.setFont(new Font("SansSerif", Font.BOLD, 35));		
+		this.toggleQuizButtons(true);		
 	}
 	
 
