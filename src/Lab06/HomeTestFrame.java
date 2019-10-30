@@ -4,11 +4,14 @@ import java.awt.*;
 import javax.swing.JLabel;
 import javax.swing.border.Border;
 import java.awt.Dimension;
-import java.awt.font.*;
+// import java.awt.font.*;
+import javax.swing.Timer;
 
 public class HomeTestFrame extends JFrame
 {		
-	private static final long serialVersionUID = -858003067748243711L;	
+	private static final long serialVersionUID = -858003067748243711L;
+	private static final String QUIZ_TOTAL_TIME = "30";
+	private static final String ZERO_TEXT = "0";
 	private JButton	
 	btnStartQuiz = new JButton("Start Quiz"),
 	btnCancelQuiz = new JButton("Cancel");
@@ -18,9 +21,23 @@ public class HomeTestFrame extends JFrame
 	lblTimeRemaining = new JLabel(),
 	lblQuestion = new JLabel("Full Amino Acid Name");
 	private JTextField txtAnswer = new JTextField();
+	private Timer timer = new Timer(1000, null);
 	
 	public HomeTestFrame()
 	{	
+		timer.addActionListener((ae)   ->
+		{
+			int remainingTime = Integer.parseInt(lblTimeRemaining.getText()) - 1;
+			if(remainingTime >= 0)
+			{
+				lblTimeRemaining.setText(Integer.toString(remainingTime));
+			}	
+			else
+			{
+				timer.stop();
+			}
+		}
+				);
 		setFrameLayout();
 		btnStartQuiz.addActionListener((ae) ->
 		{
@@ -36,13 +53,14 @@ public class HomeTestFrame extends JFrame
 		this.add(this.getTopPanel());
 		this.add(this.getQuestionPanel());
 		this.add(this.getCenterPanel());
-		this.add(this.getBottomPanel());			
+		this.add(this.getBottomPanel());
+		timer.start();
 	}
 	private void setFrameLayout()
 	{
-		lblCorrectAnswers.setText("0");
-		lblWrongAnswers.setText("0");
-		lblTimeRemaining.setText("30");
+		lblCorrectAnswers.setText(ZERO_TEXT);
+		lblWrongAnswers.setText(ZERO_TEXT);
+		lblTimeRemaining.setText(QUIZ_TOTAL_TIME);
 		lblCorrectAnswers.setHorizontalAlignment(SwingConstants.CENTER);
 		lblCorrectAnswers.setPreferredSize(new Dimension(100, 50));
 		lblWrongAnswers.setHorizontalAlignment(SwingConstants.CENTER);
@@ -99,4 +117,6 @@ public class HomeTestFrame extends JFrame
 		btnStartQuiz.setEnabled(!isEndingQuiz);	
 		btnCancelQuiz.setEnabled(isEndingQuiz);
 	}
+	
+
 }
