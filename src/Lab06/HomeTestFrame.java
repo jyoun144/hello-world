@@ -21,6 +21,10 @@ public class HomeTestFrame extends JFrame
 	lblQuestion = new JLabel("Full Amino Acid Name");
 	private JTextField txtAnswer = new JTextField();
 	private Timer timer = new Timer(1000, null);
+	static
+	{
+		
+	}
 	
 	public HomeTestFrame()
 	{	
