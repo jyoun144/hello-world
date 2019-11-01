@@ -6,11 +6,6 @@ public class AminoAcidSource
 {
 	private String singleLetterSym;
 	private String fullName;
-	private AminoAcidSource(String singleLetterSym, String fullName)
-	{
-		this.singleLetterSym = singleLetterSym;
-		this.fullName = fullName;
-	}
 	private static final String[] SHORT_NAMES = 
 		{ 	"A","R", "N", "D", "C", "Q", "E", 
 			"G",  "H", "I", "L", "K", "M", "F", 
@@ -28,7 +23,11 @@ public class AminoAcidSource
 			"serine","threonine","tryptophan", 
 			"tyrosine", "valine"
 		};	
-	
+	private AminoAcidSource(String singleLetterSym, String fullName)
+	{
+		this.singleLetterSym = singleLetterSym;
+		this.fullName = fullName;
+	}
 	public static List<AminoAcidSource> getAminoAcids()
 	{
 		List<AminoAcidSource> list = new ArrayList<>();
@@ -39,4 +38,13 @@ public class AminoAcidSource
 		
 		return list;	
 	}
+	public String getSingLetterSym()
+	{
+		return this.singleLetterSym;
+	}
+	public String getFullName()
+	{
+		return this.fullName;
+	}	
+	
 }

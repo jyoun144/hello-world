@@ -3,14 +3,23 @@ import javax.swing.*;
 import java.awt.*;
 import javax.swing.JLabel;
 import java.awt.Dimension;
-// import java.awt.font.*;
+import java.util.List;
 import javax.swing.Timer;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.util.Random;
 
 public class HomeTestFrame extends JFrame
 {		
 	private static final long serialVersionUID = -858003067748243711L;
 	private static final String QUIZ_TOTAL_TIME = "30";
 	private static final String ZERO_TEXT = "0";
+	private static final String ANSWER_PLACE_HOLDER_TEXT = "Symbol";
+	private static final String EMPTY_STRING = "";
+	private static final List<AminoAcidSource> aminoAcidList = AminoAcidSource.getAminoAcids();
+	private static final int aminoAcideListSize = aminoAcidList.size();
+	private int currentIndex;
+	private final Random random = new Random();
 	private JButton	
 	btnStartQuiz = new JButton("Start Quiz"),
 	btnCancelQuiz = new JButton("Cancel");
@@ -18,54 +27,24 @@ public class HomeTestFrame extends JFrame
 	lblCorrectAnswers = new JLabel(),
 	lblWrongAnswers = new JLabel(),
 	lblTimeRemaining = new JLabel(),
-	lblQuestion = new JLabel("Full Amino Acid Name");
-	private JTextField txtAnswer = new JTextField();
-	private Timer timer = new Timer(1000, null);
-	static
-	{
-		
-	}
+	lblQuestion = new JLabel("Press 'Start Quiz' button");
+	private JTextField txtAnswer = new JTextField(ANSWER_PLACE_HOLDER_TEXT);		
+	private Timer timer = new Timer(1000, null);	
 	
 	public HomeTestFrame()
 	{	
-		timer.addActionListener((ae)   ->
-		{
-			int remainingTime = Integer.parseInt(lblTimeRemaining.getText()) - 1;
-			if(remainingTime >= 0)
-			{
-				lblTimeRemaining.setText(Integer.toString(remainingTime));
-			}	
-			else
-			{
-				timer.stop();
-			}
-		}
-				);
 		setFrameLayout();
-		btnStartQuiz.addActionListener((ae) ->
-		{
-			timer.start();
-			this.clearFields();
-			this.toggleQuizButtons(false);			
-		});
-		
-		btnCancelQuiz.addActionListener((ae) ->
-		{
-			this.toggleQuizButtons(true);
-			timer.stop();			
-		});				
-		txtAnswer.addActionListener((ae) ->
-		{
-			lblQuestion.setText(lblTimeRemaining.getText());
-			txtAnswer.setText("");
-		});
-		
+		setListeners();		
+		setPageLayout();		
+	}	
+	private void setPageLayout()
+	{
 		this.setLayout(new GridLayout(4,1));
 		this.add(this.getTopPanel());
 		this.add(this.getQuestionPanel());
 		this.add(this.getCenterPanel());
-		this.add(this.getBottomPanel());		
-	}	
+		this.add(this.getBottomPanel());	
+	}
 	private JPanel getBottomPanel()
 	{
 		JPanel panel = new JPanel();		
@@ -77,7 +56,7 @@ public class HomeTestFrame extends JFrame
 	private JPanel getCenterPanel()
 	{
 		JPanel panel = new JPanel();		
-		panel.setLayout(new FlowLayout());
+		panel.setLayout(new FlowLayout());	
 		panel.add(txtAnswer);			
 		return panel;
 	}
@@ -108,6 +87,60 @@ public class HomeTestFrame extends JFrame
 		lblWrongAnswers.setText(ZERO_TEXT);
 		lblTimeRemaining.setText(QUIZ_TOTAL_TIME);		
 	}
+	private void setListeners()
+	{
+		timer.addActionListener((ae)   ->
+		{
+			int remainingTime = Integer.parseInt(lblTimeRemaining.getText()) - 1;
+			if(remainingTime >= 0)
+			{
+				lblTimeRemaining.setText(Integer.toString(remainingTime));
+			}	
+			else
+			{
+				timer.stop();
+				txtAnswer.setEnabled(false);
+				txtAnswer.setText(EMPTY_STRING);
+			}
+		}
+				);
+		
+		btnStartQuiz.addActionListener((ae) ->
+		{			
+			timer.start();
+			txtAnswer.setEnabled(true);			
+			this.clearFields();
+			this.toggleQuizButtons(false);
+			lblQuestion.setText(getRandomAminoAcid());
+		});
+		
+		btnCancelQuiz.addActionListener((ae) ->
+		{
+			this.toggleQuizButtons(true);
+			timer.stop();	
+			txtAnswer.setEnabled(false);
+			txtAnswer.setText("");
+		});				
+		txtAnswer.addActionListener((ae) ->
+		{
+			String parsedText = txtAnswer.getText().trim();
+			if(!parsedText.contentEquals(EMPTY_STRING))
+			{
+				this.accessAnswer(txtAnswer.getText());
+				txtAnswer.setText(EMPTY_STRING);
+				lblQuestion.setText(getRandomAminoAcid());		
+			}
+		});
+		
+		txtAnswer.addFocusListener(new FocusListener() {
+		      public void focusGained(FocusEvent e) {
+		        if(txtAnswer.getText().equals(ANSWER_PLACE_HOLDER_TEXT))
+		        {
+		        	txtAnswer.setText(EMPTY_STRING);
+		        } }
+		      public void focusLost(FocusEvent e) {}
+		});		
+	}
 	private void setFrameLayout()
 	{
 		lblCorrectAnswers.setText(ZERO_TEXT);
@@ -121,6 +154,7 @@ public class HomeTestFrame extends JFrame
 		txtAnswer.setHorizontalAlignment(SwingConstants.CENTER);
 		txtAnswer.setFont(new Font("SansSerif", Font.BOLD, 30));
 		txtAnswer.setPreferredSize(new Dimension(30, 50));		
+		txtAnswer.setEnabled(false);
 		lblWrongAnswers.setPreferredSize(new Dimension(100, 50));
 		lblTimeRemaining.setPreferredSize(new Dimension(100, 50));	
 		lblCorrectAnswers.setBorder(BorderFactory.createLineBorder(Color.GREEN, 5));
@@ -132,6 +166,21 @@ public class HomeTestFrame extends JFrame
 		lblQuestion.setFont(new Font("SansSerif", Font.BOLD, 35));		
 		this.toggleQuizButtons(true);		
 	}
-	
-
+	private String getRandomAminoAcid()
+	{		
+		currentIndex = random.nextInt(aminoAcideListSize);
+		return aminoAcidList.get(currentIndex).getFullName();		
+	}
+	private void accessAnswer(String answer)
+	{
+		String parsedInput = answer.trim().toUpperCase();
+		if(aminoAcidList.get(currentIndex).getSingLetterSym().equals(parsedInput))
+			{
+				lblCorrectAnswers.setText(Integer.toString(Integer.parseInt(lblCorrectAnswers.getText()) + 1));				
+			}
+		else
+		{
+			lblWrongAnswers.setText(Integer.toString(Integer.parseInt(lblWrongAnswers.getText()) + 1));			
+		}		
+	}
 }
