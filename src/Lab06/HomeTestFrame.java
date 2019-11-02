@@ -2,7 +2,6 @@ package Lab06;
 import javax.swing.*;
 import java.awt.*;
 import javax.swing.JLabel;
-import java.awt.Dimension;
 import java.util.List;
 import javax.swing.Timer;
 import java.awt.event.FocusEvent;
@@ -27,7 +26,7 @@ public class HomeTestFrame extends JFrame
 	lblCorrectAnswers = new JLabel(),
 	lblWrongAnswers = new JLabel(),
 	lblTimeRemaining = new JLabel(),
-	lblQuestion = new JLabel("Press 'Start Quiz' button");
+	lblQuestion = new JLabel("*****Start Quiz*****");
 	private JTextField txtAnswer = new JTextField(ANSWER_PLACE_HOLDER_TEXT);		
 	private Timer timer = new Timer(1000, null);	
 	
@@ -89,7 +88,7 @@ public class HomeTestFrame extends JFrame
 	}
 	private void setListeners()
 	{
-		timer.addActionListener((ae)   ->
+		timer.addActionListener((ae) ->
 		{
 			int remainingTime = Integer.parseInt(lblTimeRemaining.getText()) - 1;
 			if(remainingTime >= 0)
@@ -101,6 +100,10 @@ public class HomeTestFrame extends JFrame
 				timer.stop();
 				txtAnswer.setEnabled(false);
 				txtAnswer.setText(EMPTY_STRING);
+				txtAnswer.setBackground(Color.RED);
+				txtAnswer.setText(ANSWER_PLACE_HOLDER_TEXT);
+				lblQuestion.setText("*****TIME EXPIRED*****");
+				this.toggleQuizButtons(true);						
 			}
 		}
 				);
@@ -112,14 +115,17 @@ public class HomeTestFrame extends JFrame
 			this.clearFields();
 			this.toggleQuizButtons(false);
 			lblQuestion.setText(getRandomAminoAcid());
+			txtAnswer.setBackground(Color.GREEN);
 		});
 		
 		btnCancelQuiz.addActionListener((ae) ->
 		{
 			this.toggleQuizButtons(true);
 			timer.stop();	
-			txtAnswer.setEnabled(false);
-			txtAnswer.setText("");
+			txtAnswer.setEnabled(false);			
+			txtAnswer.setBackground(Color.RED);
+			txtAnswer.setText(ANSWER_PLACE_HOLDER_TEXT);
+			lblQuestion.setText("*****QUIZ CANCELLED*****");
 		});				
 		txtAnswer.addActionListener((ae) ->
 		{
@@ -155,6 +161,7 @@ public class HomeTestFrame extends JFrame
 		txtAnswer.setFont(new Font("SansSerif", Font.BOLD, 30));
 		txtAnswer.setPreferredSize(new Dimension(30, 50));		
 		txtAnswer.setEnabled(false);
+		txtAnswer.setBackground(Color.RED);
 		lblWrongAnswers.setPreferredSize(new Dimension(100, 50));
 		lblTimeRemaining.setPreferredSize(new Dimension(100, 50));	
 		lblCorrectAnswers.setBorder(BorderFactory.createLineBorder(Color.GREEN, 5));

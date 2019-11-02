@@ -46,5 +46,4 @@ public class AminoAcidSource
 	{
 		return this.fullName;
 	}	
-	
 }
