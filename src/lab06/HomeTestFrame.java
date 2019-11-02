@@ -1,4 +1,4 @@
-package Lab06;
+package lab06;
 import javax.swing.*;
 import java.awt.*;
 import javax.swing.JLabel;

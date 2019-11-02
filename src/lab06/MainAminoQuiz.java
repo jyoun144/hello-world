@@ -1,4 +1,4 @@
-package Lab06;
+package lab06;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
