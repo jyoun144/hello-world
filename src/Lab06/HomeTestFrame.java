@@ -15,10 +15,10 @@ public class HomeTestFrame extends JFrame
 	private static final String ZERO_TEXT = "0";
 	private static final String ANSWER_PLACE_HOLDER_TEXT = "Symbol";
 	private static final String EMPTY_STRING = "";
-	private static final List<AminoAcidSource> aminoAcidList = AminoAcidSource.getAminoAcids();
-	private static final int aminoAcideListSize = aminoAcidList.size();
-	private int currentIndex;
-	private final Random random = new Random();
+	private static List<AminoAcidSource> aminoAcidList;
+	private static int aminoAcideListSize;
+	private Random random = new Random();
+	private int currentIndex;	
 	private JButton	
 	btnStartQuiz = new JButton("Start Quiz"),
 	btnCancelQuiz = new JButton("Cancel");
@@ -28,14 +28,21 @@ public class HomeTestFrame extends JFrame
 	lblTimeRemaining = new JLabel(),
 	lblQuestion = new JLabel("*****Start Quiz*****");
 	private JTextField txtAnswer = new JTextField(ANSWER_PLACE_HOLDER_TEXT);		
-	private Timer timer = new Timer(1000, null);	
+	private Timer timer = new Timer(1000, null);
 	
-	public HomeTestFrame()
-	{	
+	static
+	{
+		aminoAcidList = AminoAcidSource.getAminoAcids();
+		aminoAcideListSize = aminoAcidList.size();		
+	}
+	
+	public HomeTestFrame(){}	
+	public void initializeFrame()
+	{
 		setFrameLayout();
 		setListeners();		
 		setPageLayout();		
-	}	
+	}
 	private void setPageLayout()
 	{
 		this.setLayout(new GridLayout(4,1));

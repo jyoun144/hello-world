@@ -20,15 +20,16 @@ public class MainAminoQuiz
 		f.setSize(width, height);
 		f.setVisible(true);	
 		f.setLocationRelativeTo(null);
+		((HomeTestFrame)f).initializeFrame();
 		displayInitialMessage(f);
 	}
 	private static void displayInitialMessage(final JFrame f)
 	{
 		JOptionPane.showMessageDialog(f,
-			    "Press 'Start Quiz' button to begin the 30-second amino acid quiz.\n" +
-		         "Press 'Cancel' button to terminate the quiz.\n" +
-			     "Input single letter symbol into the 'Symbol' text field for the respective amino acid name.\n" +
-		         "Press 'Enter' keyboard button to submit your answer for each amino acid name.");		
+			    "1.  Click 'Start Quiz' button to begin the 30-second amino acid quiz.\n" +
+		         "2.  Click 'Cancel' button to terminate the quiz.\n" +
+			     "3.  Input single letter symbol into the 'Symbol' text field for the respective amino acid name.\n" +
+		         "4.  Press 'Enter' keyboard button to submit your symbol answer for each amino acid name.");		
 	}
 
 }
