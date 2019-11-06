@@ -12,23 +12,12 @@ public class HomeSwingFrame extends JFrame
 {
 	private static final long serialVersionUID = 8284044802749048904L;
 	private static final String ANSWER_PLACE_HOLDER_TEXT = "Symbol";
-	private static final String EMPTY_STRING = "";
-	private static List<AminoAcidSource> aminoAcidList;
-	private static int aminoAcideListSize;
-	private Random random = new Random();
-	private int currentIndex;	
+	private static final String EMPTY_STRING = "";	
 	private JButton	
 	btnStartQuiz = new JButton("Start Quiz"),
 	btnCancelQuiz = new JButton("Cancel");
-	private JLabel  lblQuestion = new JLabel("*****Start Quiz*****");
-	private JTextField txtAnswer = new JTextField(ANSWER_PLACE_HOLDER_TEXT);		
-	private Timer timer = new Timer(1000, null);
-	
-	static
-	{
-		aminoAcidList = AminoAcidSource.getAminoAcids();
-		aminoAcideListSize = aminoAcidList.size();		
-	}
+	public static final JLabel  lblQuestion = new JLabel("*****Start Quiz*****");
+	private JTextField txtAnswer = new JTextField(ANSWER_PLACE_HOLDER_TEXT);	
 	
 	public HomeSwingFrame(){}	
 	public void initializeFrame()
@@ -76,17 +65,15 @@ public class HomeSwingFrame extends JFrame
 		
 		btnStartQuiz.addActionListener((ae) ->
 		{			
-			timer.start();
 			txtAnswer.setEnabled(true);			
 			this.toggleQuizButtons(false);
-			lblQuestion.setText(getRandomAminoAcid());
+			lblQuestion.setText("Place Holder");
 			txtAnswer.setBackground(Color.GREEN);
 		});
 		
 		btnCancelQuiz.addActionListener((ae) ->
 		{
-			this.toggleQuizButtons(true);
-			timer.stop();	
+			this.toggleQuizButtons(true);			
 			txtAnswer.setEnabled(true);			
 			txtAnswer.setBackground(Color.RED);
 			txtAnswer.setText(ANSWER_PLACE_HOLDER_TEXT);
@@ -98,7 +85,7 @@ public class HomeSwingFrame extends JFrame
 			if(!parsedText.contentEquals(EMPTY_STRING))
 			{				
 				txtAnswer.setText(EMPTY_STRING);
-				lblQuestion.setText(getRandomAminoAcid());		
+				lblQuestion.setText("Place Holder");		
 			}
 		});
 		
@@ -124,10 +111,5 @@ public class HomeSwingFrame extends JFrame
 		lblQuestion.setHorizontalAlignment(SwingConstants.CENTER);
 		lblQuestion.setFont(new Font("SansSerif", Font.BOLD, 35));		
 		this.toggleQuizButtons(true);		
-	}
-	private String getRandomAminoAcid()
-	{		
-		currentIndex = random.nextInt(aminoAcideListSize);
-		return aminoAcidList.get(currentIndex).getFullName();		
-	}
+	}	
 }
