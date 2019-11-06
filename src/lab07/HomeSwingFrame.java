@@ -16,10 +16,14 @@ public class HomeSwingFrame extends JFrame
 	private JButton	
 	btnStartQuiz = new JButton("Start Quiz"),
 	btnCancelQuiz = new JButton("Cancel");
-	public static final JLabel  lblQuestion = new JLabel("*****Start Quiz*****");
+	private final JLabel  lblQuestion = new JLabel("*****Start Quiz*****");
 	private JTextField txtAnswer = new JTextField(ANSWER_PLACE_HOLDER_TEXT);	
 	
 	public HomeSwingFrame(){}	
+	public void appendMessage(String msg)
+	{
+		lblQuestion.setText(msg);
+	}
 	public void initializeFrame()
 	{
 		setFrameLayout();
