@@ -3,7 +3,6 @@ package lab07;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-import lab06.HomeTestFrame;
 
 public class MainThreading
 {

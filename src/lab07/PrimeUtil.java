@@ -1,6 +1,7 @@
 package lab07;
 import javax.swing.SwingWorker;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicLong;
 
 
@@ -16,17 +17,19 @@ public class PrimeUtil extends SwingWorker<Long, Long>
 	
 	@Override
     protected Long doInBackground() {
+		  
 		startTime = System.currentTimeMillis();
-		for(long i=2; i <= this.maxPrimeNumber; i++)
+		
+		for(Long i=2L; i <= 50; i++)
 		{
-			if(isNumberPrime(i))
-			{
-				totalPrimeNumCount.getAndIncrement();
-				this.publish(i);
-			}
+			publish(i);
+			
+			
 			
 		}
+		
 			
+		
 		return 1L;	
 	}	
 	@Override
@@ -38,7 +41,11 @@ public class PrimeUtil extends SwingWorker<Long, Long>
 	}	
 	@Override
     protected void process(List<Long> list) {
-		Long i = 1L;		
+		
+		for(Long item : list)
+		{
+		frame.appendMessage(item.toString() + "\n");		
+		}
 	}	
 	public PrimeUtil(long maxPrimeNumber, HomeSwingFrame frame)
 	{

@@ -1,9 +1,7 @@
 package lab07;
 import javax.swing.*;
 import java.awt.*;
-import javax.swing.JLabel;
 import java.util.List;
-import javax.swing.Timer;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.Random;
@@ -15,14 +13,15 @@ public class HomeSwingFrame extends JFrame
 	private static final String EMPTY_STRING = "";	
 	private JButton	
 	btnStartQuiz = new JButton("Start Quiz"),
-	btnCancelQuiz = new JButton("Cancel");
-	private final JLabel  lblQuestion = new JLabel("*****Start Quiz*****");
-	private JTextField txtAnswer = new JTextField(ANSWER_PLACE_HOLDER_TEXT);	
+	btnCancelQuiz = new JButton("Cancel");	
+	private JTextField txtAnswer = new JTextField(EMPTY_STRING);	
+	private JTextArea txtOutput = new JTextArea(20,40);
+	private PrimeUtil util = null;
 	
 	public HomeSwingFrame(){}	
 	public void appendMessage(String msg)
 	{
-		lblQuestion.setText(msg);
+		txtOutput.append(msg);
 	}
 	public void initializeFrame()
 	{
@@ -33,7 +32,7 @@ public class HomeSwingFrame extends JFrame
 	private void setPageLayout()
 	{
 		this.setLayout(new GridLayout(3,1));		
-		this.add(this.getQuestionPanel());
+		this.add(this.getTopPanel());
 		this.add(this.getCenterPanel());
 		this.add(this.getBottomPanel());	
 	}
@@ -45,18 +44,20 @@ public class HomeSwingFrame extends JFrame
 		panel.add(btnCancelQuiz);
 		return panel;
 	}
+	private JPanel getTopPanel()
+	{
+		JPanel panel = new JPanel();
+		panel.setLayout(new FlowLayout());
+		txtOutput.setEditable(false);
+		panel.add(new JScrollPane(txtOutput));
+		return panel;
+		
+	}
 	private JPanel getCenterPanel()
 	{
 		JPanel panel = new JPanel();		
 		panel.setLayout(new FlowLayout());	
-		panel.add(txtAnswer);			
-		return panel;
-	}	
-	private JPanel getQuestionPanel()
-	{		
-		JPanel panel = new JPanel();		
-		panel.setLayout(new FlowLayout());
-		panel.add(lblQuestion);		
+		panel.add(txtAnswer);		
 		return panel;
 	}	
 	private void toggleQuizButtons(Boolean isReadyState)
@@ -70,9 +71,11 @@ public class HomeSwingFrame extends JFrame
 		btnStartQuiz.addActionListener((ae) ->
 		{			
 			txtAnswer.setEnabled(true);			
-			this.toggleQuizButtons(false);
-			lblQuestion.setText("Place Holder");
+			this.toggleQuizButtons(false);			
 			txtAnswer.setBackground(Color.GREEN);
+			util = new PrimeUtil(100, this);
+			util.execute();
+			
 		});
 		
 		btnCancelQuiz.addActionListener((ae) ->
@@ -80,16 +83,14 @@ public class HomeSwingFrame extends JFrame
 			this.toggleQuizButtons(true);			
 			txtAnswer.setEnabled(true);			
 			txtAnswer.setBackground(Color.RED);
-			txtAnswer.setText(ANSWER_PLACE_HOLDER_TEXT);
-			lblQuestion.setText("*****QUIZ CANCELLED*****");
+			txtAnswer.setText(EMPTY_STRING);			
 		});				
 		txtAnswer.addActionListener((ae) ->
 		{
 			String parsedText = txtAnswer.getText().trim();
 			if(!parsedText.contentEquals(EMPTY_STRING))
 			{				
-				txtAnswer.setText(EMPTY_STRING);
-				lblQuestion.setText("Place Holder");		
+				txtAnswer.setText(EMPTY_STRING);				
 			}
 		});
 		
@@ -110,10 +111,6 @@ public class HomeSwingFrame extends JFrame
 		txtAnswer.setPreferredSize(new Dimension(30, 50));		
 		txtAnswer.setEnabled(true);
 		txtAnswer.setBackground(Color.RED);		
-		lblQuestion.setPreferredSize(new Dimension(500, 70));
-		lblQuestion.setBorder(BorderFactory.createLineBorder(Color.YELLOW, 5));
-		lblQuestion.setHorizontalAlignment(SwingConstants.CENTER);
-		lblQuestion.setFont(new Font("SansSerif", Font.BOLD, 35));		
 		this.toggleQuizButtons(true);		
 	}	
 }
