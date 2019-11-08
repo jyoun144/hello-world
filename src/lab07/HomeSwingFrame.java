@@ -73,10 +73,24 @@ public class HomeSwingFrame extends JFrame
 			txtAnswer.setEnabled(true);			
 			this.toggleQuizButtons(false);			
 			txtAnswer.setBackground(Color.GREEN);
-			util = new PrimeUtil(100, this);
-			util.execute();
-			
-		});
+			 txtOutput.append("Processing.......\n");
+			 
+			 Thread worker = new Thread(() -> {
+				 
+				 try {
+                     Thread.sleep(5000);
+                 } catch (InterruptedException ex) {}
+                  
+                 // Report the result using invokeLater().
+                 SwingUtilities.invokeLater(new Runnable() {
+                     public void run() {
+                    	 txtOutput.append("Processing is complete......\n");                         
+                     }
+                 });
+				    
+				});
+			  worker.start(); 
+			  });
 		
 		btnCancelQuiz.addActionListener((ae) ->
 		{

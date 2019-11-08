@@ -6,36 +6,54 @@ import java.util.concurrent.atomic.AtomicLong;
 
 
 
-public class PrimeUtil extends SwingWorker<Long, Long> 
+public class PrimeUtil extends SwingWorker<Float, Long> 
 {
 	private static final long LONG_NUM_2 = 2;
 	private static final long LONG_NUM_0 = 0;
 	private final long maxPrimeNumber;
 	private final HomeSwingFrame frame;	
 	private final AtomicLong totalPrimeNumCount = new AtomicLong(0);
-	private long startTime;
+	
 	
 	@Override
-    protected Long doInBackground() {
+    protected Float doInBackground() {
 		  
-		startTime = System.currentTimeMillis();
+		long startTime = System.currentTimeMillis();
+		List<Long> list = new ArrayList<Long>();
 		
-		for(Long i=2L; i <= 50; i++)
+		for(Long i=2L; i <= 100000; i++)
 		{
-			publish(i);
-			
-			
-			
-		}
+			try
+			{
+		  this.wait(1000);
+			}
+			catch(Exception ex)
+			{
+				
+			}
+		}		
 		
-			
+		float elapsedTime = (System.currentTimeMillis() - startTime)/1000f;
 		
-		return 1L;	
+		return elapsedTime;	
 	}	
 	@Override
     protected void done() {
-		float elapsedTime = (System.currentTimeMillis() - startTime)/1000f;
-		frame.appendMessage(Float.toString(elapsedTime));
+		
+		//f;
+		try
+		{
+			Float result = this.get();
+			
+				frame.appendMessage(Float.toString(result) + "\n");
+				
+			
+			
+		}
+		catch(Exception ex)
+		{
+			
+		}
 		
 		
 	}	
