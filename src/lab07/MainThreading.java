@@ -3,20 +3,15 @@ package lab07;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-
 public class MainThreading
 {
-
-	public static void main(
-			String[] args
-	)
-	{
-		 SwingUtilities.invokeLater(new Runnable() {
+	public static void main(String[] args)
+	{		 
+		SwingUtilities.invokeLater(new Runnable() {
 	            public void run() {	            	
 	                createAndShowGUI(new HomeSwingFrame(), 600, 600, "Amino Acid Quiz");
 	            }
 	        });
-
 	}
 	private static void createAndShowGUI(final JFrame f, final int width, final int height, String title) 
 	{
@@ -27,5 +22,4 @@ public class MainThreading
 		f.setLocationRelativeTo(null);
 		((HomeSwingFrame)f).initializeFrame();		
 	}
-
 }

@@ -18,17 +18,17 @@ public class SwingWorker extends Thread
 	 public void run(){
 		long count = 0;
 		long startTime = System.currentTimeMillis();
-		long lastTime = (System.currentTimeMillis() - startTime)/1000L;	    
+		long currentTime = (System.currentTimeMillis() - startTime)/1000L;	
+		long lastTime = currentTime;		
 	    	 try
-	    	 {
-	    			 
+	    	 {	    			 
 	    		 for(long i = 2; i <= this.maxPrimeNumber; i++)
 	    	     {
 	    			 if(this.isInterrupted())
 	    			 {
 	    				 break;
 	    			 }
-	    			  long currentTime = (System.currentTimeMillis() - startTime)/2000L;
+	    			 
 	    			 if(lastTime != currentTime)	    			
 	    			 {
 	    				 lastTime = currentTime;
@@ -38,9 +38,10 @@ public class SwingWorker extends Thread
 	    			 if(this.isNumberPrime(i))
 	    			 {			    	 
 			    		 count++;
-	    			 }			    	 
+	    			 }	
+	    			 currentTime = (System.currentTimeMillis() - startTime)/1000L;
 	    	     }
-	    		 this.appendText("Final count is: " + Long.toString(count));
+	    		 this.appendText("Final count is: " + Long.toString(count) + "\n" + "Total run time (seconds): " + Float.toString((System.currentTimeMillis() - startTime)/1000F));
 	    	 }
 	    	 catch(Exception ex)
 	    	 {
@@ -65,7 +66,7 @@ public class SwingWorker extends Thread
 	{
 		SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-            	txtArea.append(text + "\n");                         
+            	txtArea.setText(text + "\n");                         
             }
         });
 	}

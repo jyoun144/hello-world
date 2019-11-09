@@ -15,15 +15,10 @@ public class HomeSwingFrame extends JFrame
 	btnStartQuiz = new JButton("Start Quiz"),
 	btnCancelQuiz = new JButton("Cancel");	
 	private JTextField txtMaxNumber = new JTextField(EMPTY_STRING);	
-	private JTextArea txtOutput = new JTextArea(20,40);
-	private PrimeUtil util = null;
+	private JTextArea txtOutput = new JTextArea(20,40);	
 	private SwingWorker worker = null;
 	
-	public HomeSwingFrame()
-	{
-		// this.worker = new SwingWorker(txtOutput);
-		
-	}	
+	public HomeSwingFrame(){}	
 	public void appendMessage(String msg)
 	{
 		txtOutput.append(msg);
@@ -36,7 +31,7 @@ public class HomeSwingFrame extends JFrame
 	}
 	private void setPageLayout()
 	{
-		this.setLayout(new GridLayout(3,1));		
+		this.setLayout(new GridLayout(3,2));		
 		this.add(this.getTopPanel());
 		this.add(this.getCenterPanel());
 		this.add(this.getBottomPanel());	
@@ -71,8 +66,7 @@ public class HomeSwingFrame extends JFrame
 		btnCancelQuiz.setEnabled(!isReadyState);
 	}	
 	private void setListeners()
-	{	
-		
+	{		
 		btnStartQuiz.addActionListener((ae) ->
 		{			
 			txtMaxNumber.setEnabled(true);			
@@ -89,11 +83,7 @@ public class HomeSwingFrame extends JFrame
 			{
 			txtOutput.append("NOT A NUMBER\n");
 			this.toggleQuizButtons(true);
-			}			
-			  });
-			  
-		
-		
+			}});		
 		btnCancelQuiz.addActionListener((ae) ->
 		{
 			this.worker.interrupt();
@@ -122,7 +112,7 @@ public class HomeSwingFrame extends JFrame
 	}
 	private void setFrameLayout()
 	{		
-		txtMaxNumber.setColumns(5);		
+		txtMaxNumber.setColumns(10);		
 		txtMaxNumber.setHorizontalAlignment(SwingConstants.CENTER);
 		txtMaxNumber.setFont(new Font("SansSerif", Font.BOLD, 30));
 		txtMaxNumber.setPreferredSize(new Dimension(30, 50));		
