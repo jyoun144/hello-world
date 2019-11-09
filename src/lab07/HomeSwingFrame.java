@@ -14,11 +14,16 @@ public class HomeSwingFrame extends JFrame
 	private JButton	
 	btnStartQuiz = new JButton("Start Quiz"),
 	btnCancelQuiz = new JButton("Cancel");	
-	private JTextField txtAnswer = new JTextField(EMPTY_STRING);	
+	private JTextField txtMaxNumber = new JTextField(EMPTY_STRING);	
 	private JTextArea txtOutput = new JTextArea(20,40);
 	private PrimeUtil util = null;
+	private SwingWorker worker = null;
 	
-	public HomeSwingFrame(){}	
+	public HomeSwingFrame()
+	{
+		// this.worker = new SwingWorker(txtOutput);
+		
+	}	
 	public void appendMessage(String msg)
 	{
 		txtOutput.append(msg);
@@ -57,7 +62,7 @@ public class HomeSwingFrame extends JFrame
 	{
 		JPanel panel = new JPanel();		
 		panel.setLayout(new FlowLayout());	
-		panel.add(txtAnswer);		
+		panel.add(txtMaxNumber);		
 		return panel;
 	}	
 	private void toggleQuizButtons(Boolean isReadyState)
@@ -70,61 +75,59 @@ public class HomeSwingFrame extends JFrame
 		
 		btnStartQuiz.addActionListener((ae) ->
 		{			
-			txtAnswer.setEnabled(true);			
+			txtMaxNumber.setEnabled(true);			
 			this.toggleQuizButtons(false);			
-			txtAnswer.setBackground(Color.GREEN);
+			txtMaxNumber.setBackground(Color.GREEN);
+			String inputNumber = txtMaxNumber.getText().trim();
+			if(inputNumber.matches("\\d+") )
+			{
 			 txtOutput.append("Processing.......\n");
-			 
-			 Thread worker = new Thread(() -> {
-				 
-				 try {
-                     Thread.sleep(5000);
-                 } catch (InterruptedException ex) {}
-                  
-                 // Report the result using invokeLater().
-                 SwingUtilities.invokeLater(new Runnable() {
-                     public void run() {
-                    	 txtOutput.append("Processing is complete......\n");                         
-                     }
-                 });
-				    
-				});
-			  worker.start(); 
+			  this.worker = new SwingWorker(txtOutput, Long.parseLong(inputNumber));
+			 this.worker.start();
+			}
+			else
+			{
+			txtOutput.append("NOT A NUMBER\n");
+			this.toggleQuizButtons(true);
+			}			
 			  });
+			  
+		
 		
 		btnCancelQuiz.addActionListener((ae) ->
 		{
+			this.worker.interrupt();
 			this.toggleQuizButtons(true);			
-			txtAnswer.setEnabled(true);			
-			txtAnswer.setBackground(Color.RED);
-			txtAnswer.setText(EMPTY_STRING);			
+			txtMaxNumber.setEnabled(true);			
+			txtMaxNumber.setBackground(Color.RED);
+			txtMaxNumber.setText(EMPTY_STRING);			
 		});				
-		txtAnswer.addActionListener((ae) ->
+		txtMaxNumber.addActionListener((ae) ->
 		{
-			String parsedText = txtAnswer.getText().trim();
+			String parsedText = txtMaxNumber.getText().trim();
 			if(!parsedText.contentEquals(EMPTY_STRING))
 			{				
-				txtAnswer.setText(EMPTY_STRING);				
+				txtMaxNumber.setText(EMPTY_STRING);				
 			}
 		});
 		
-		txtAnswer.addFocusListener(new FocusListener() {
+		txtMaxNumber.addFocusListener(new FocusListener() {
 		      public void focusGained(FocusEvent e) {
-		        if(txtAnswer.getText().equals(ANSWER_PLACE_HOLDER_TEXT))
+		        if(txtMaxNumber.getText().equals(ANSWER_PLACE_HOLDER_TEXT))
 		        {
-		        	txtAnswer.setText(EMPTY_STRING);
+		        	txtMaxNumber.setText(EMPTY_STRING);
 		        } }
 		      public void focusLost(FocusEvent e) {}
 		});		
 	}
 	private void setFrameLayout()
 	{		
-		txtAnswer.setColumns(5);		
-		txtAnswer.setHorizontalAlignment(SwingConstants.CENTER);
-		txtAnswer.setFont(new Font("SansSerif", Font.BOLD, 30));
-		txtAnswer.setPreferredSize(new Dimension(30, 50));		
-		txtAnswer.setEnabled(true);
-		txtAnswer.setBackground(Color.RED);		
+		txtMaxNumber.setColumns(5);		
+		txtMaxNumber.setHorizontalAlignment(SwingConstants.CENTER);
+		txtMaxNumber.setFont(new Font("SansSerif", Font.BOLD, 30));
+		txtMaxNumber.setPreferredSize(new Dimension(30, 50));		
+		txtMaxNumber.setEnabled(true);
+		txtMaxNumber.setBackground(Color.RED);		
 		this.toggleQuizButtons(true);		
 	}	
 }
