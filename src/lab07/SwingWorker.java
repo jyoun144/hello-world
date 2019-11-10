@@ -42,12 +42,16 @@ public class SwingWorker extends Thread
 	    			 }	
 	    			 currentTime = (System.currentTimeMillis() - startTime)/1000L;
 	    	     }
-	    		 this.setOutputMessage("Final count is: " + Long.toString(count) + "\n" + "Total run time (seconds): " + Float.toString((System.currentTimeMillis() - startTime)/1000F));
+	    		 this.setOutputMessage("Prime Number Count [2, "+  this.maxPrimeNumber + "]: " + Long.toString(count) + "\n" + "Processing Time (seconds): " + Float.toString((System.currentTimeMillis() - startTime)/1000F));
 	    		 this.toggleRunButtons(true);
+	    		 this.setMaxNumberIsEnabled(true);
+	    		 
+	    		 
 	    	 }
 	    	 catch(Exception ex)
 	    	 {
-	    		 this.setOutputMessage("ERROR*****************");	    		 
+	    		 this.setOutputMessage("ERROR*****************");	
+	    		 this.setMaxNumberIsEnabled(true);
 	    	 }     
 	   }
 	private boolean isNumberPrime(long n)
@@ -68,7 +72,8 @@ public class SwingWorker extends Thread
 	{
 		SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-            	frame.setMessage(text + "\n");                         
+            	frame.setMessage(text + "\n");   
+            	frame.clearMaxNumTxt();
             }
         });
 	}
@@ -80,4 +85,13 @@ public class SwingWorker extends Thread
             }
         });
 	}
+	private void setMaxNumberIsEnabled(boolean isEnabled)
+	{
+		SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+            	frame.setMaxNumberEnabled(isEnabled);  
+            	frame.setFocusToInputNum();   
+            }
+        });
+	}	
 }

@@ -20,14 +20,17 @@ public class HomeSwingFrame extends JFrame
 	private final JTextArea txtOutput = new JTextArea(10,20);	
 	private SwingWorker worker = null;
 	
-	public HomeSwingFrame(){}	
+	public HomeSwingFrame()	{}	
+	
 	public void setMessage(String msg)
 	{
 		txtOutput.setText(msg);
 	}	
+	
 	public void initializeFrame()
 	{
 		this.setGridBagLayout();
+		setNumberInput();
 		this.setListeners();
 		this.txtMaxNumber.requestFocus();
 	}
@@ -41,18 +44,12 @@ public class HomeSwingFrame extends JFrame
 		GridBagConstraints c = this.getConstraints(0, 0, 4, 1, 0, FILL_CONSTRAINT_HORIZONTAL);		
 		txtOutput.setEditable(false);
 		txtOutput.setText("Input a large whole number into \nthe blue-bordered text box \nand then click the start button.");
-		this.add(new JScrollPane(txtOutput), c);
-		
-		
-		setNumberInput();
+		this.add(new JScrollPane(txtOutput), c);		
 		GridBagConstraints d = this.getConstraints(1, 1, 2, 1, 10, FILL_CONSTRAINT_NONE);			
-		this.add(txtMaxNumber, d);
-		
-		GridBagConstraints e = this.getConstraints(0, 2, 4, 1, 10, FILL_CONSTRAINT_HORIZONTAL);		
-			
+		this.add(txtMaxNumber, d);		
+		GridBagConstraints e = this.getConstraints(0, 2, 4, 1, 10, FILL_CONSTRAINT_HORIZONTAL);			
 		this.add(btnStartQuiz, e);
-		GridBagConstraints f = this.getConstraints(0, 3, 4, 1, 10, FILL_CONSTRAINT_HORIZONTAL);
-		
+		GridBagConstraints f = this.getConstraints(0, 3, 4, 1, 10, FILL_CONSTRAINT_HORIZONTAL);		
 		this.add(btnCancelQuiz, f);
 	}	
 	private GridBagConstraints getConstraints(int gridX, int gridY, int gridWidth, int gridHeight, int insetTopValue, int fillConstraint)
@@ -65,8 +62,7 @@ public class HomeSwingFrame extends JFrame
 		c.fill = fillConstraint;
 		c.insets = new Insets(insetTopValue, 0, 0, 0);
 		return c;		
-	}	
-	 
+	}	 
 	public void toggleRunButtons(Boolean isReadyState)
 	{
 		btnStartQuiz.setEnabled(isReadyState);	
@@ -75,22 +71,25 @@ public class HomeSwingFrame extends JFrame
 	private void setListeners()
 	{		
 		btnStartQuiz.addActionListener((ae) ->
-		{			
-			//txtMaxNumber.setEnabled(true);			
-			//this.toggleQuizButtons(false);			
-			txtMaxNumber.setBackground(Color.GREEN);
+		{				
+			
 			String inputNumber = txtMaxNumber.getText().trim();
 			if(inputNumber.matches("\\d+") )
 			{
-				this.toggleRunButtons(false);		
+				txtMaxNumber.setBackground(Color.GREEN);
+				this.toggleRunButtons(false);	
+				this.setMaxNumberEnabled(false);
 				txtOutput.setText("Processing.......\n");
 				this.worker = new SwingWorker(this, Long.parseLong(inputNumber));
 				this.worker.start();
 			}
 			else
 			{				
-				txtOutput.setText("NOT A VALID WHOLE NUMBER\n");
+				txtOutput.setText(inputNumber + " IS NOT A VALID WHOLE NUMBER\n");
+				txtMaxNumber.setBackground(Color.RED);
+				this.setMaxNumberEnabled(true);			
 				this.toggleRunButtons(true);
+				this.setFocusToInputNum();
 			}});		
 		btnCancelQuiz.addActionListener((ae) ->
 		{
@@ -107,15 +106,6 @@ public class HomeSwingFrame extends JFrame
 			{				
 				txtMaxNumber.setText(EMPTY_STRING);				
 			}
-		});
-		
-		txtMaxNumber.addFocusListener(new FocusListener() {
-		      public void focusGained(FocusEvent e) {
-		        if(txtMaxNumber.getText().equals(ANSWER_PLACE_HOLDER_TEXT))
-		        {
-		        	txtMaxNumber.setText(EMPTY_STRING);
-		        } }
-		      public void focusLost(FocusEvent e) {}
 		});		
 	}
 	private void setNumberInput()
@@ -125,9 +115,19 @@ public class HomeSwingFrame extends JFrame
 		txtMaxNumber.setFont(new Font("SansSerif", Font.BOLD, 30));
 		txtMaxNumber.setPreferredSize(new Dimension(30, 50));		
 		txtMaxNumber.setEnabled(true);
-		txtMaxNumber.setBorder(BorderFactory.createLineBorder(Color.BLUE, 5));
-		// txtMaxNumber.setBackground(Color.RED);		
+		txtMaxNumber.setBorder(BorderFactory.createLineBorder(Color.BLUE, 5));		
 		this.toggleRunButtons(true);		
 	}	
-	
+	public void setMaxNumberEnabled(boolean isEnabled)
+	{
+		txtMaxNumber.setEnabled(isEnabled);		
+	}	
+	public void setFocusToInputNum()
+	{
+		txtMaxNumber.requestFocus();	
+	}	
+	public void clearMaxNumTxt()
+	{
+		txtMaxNumber.setText(EMPTY_STRING);
+	}
 }
