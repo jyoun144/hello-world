@@ -4,14 +4,15 @@ import javax.swing.SwingUtilities;
 
 public class SwingWorker extends Thread
 {
-	private final JTextArea txtArea;
+	//private final JTextArea txtArea;
 	private final long LONG_NUM_2 = 2;
 	private final long LONG_NUM_0 = 0;
 	private final long maxPrimeNumber;	
+	private final HomeSwingFrame frame;
 	
-	public SwingWorker(JTextArea txtArea, long maxPrimeNumber)
+	public SwingWorker(HomeSwingFrame frame, long maxPrimeNumber)
 	{		
-		this.txtArea = txtArea;
+		this.frame = frame;
 		this.maxPrimeNumber = maxPrimeNumber;		
 	}
 	@Override
@@ -32,7 +33,7 @@ public class SwingWorker extends Thread
 	    			 if(lastTime != currentTime)	    			
 	    			 {
 	    				 lastTime = currentTime;
-	    				 this.appendText("Intermediate Count: " + Long.toString(count));
+	    				 this.setOutputMessage("Intermediate Count: " + Long.toString(count));
 	    				 
 	    			 }
 	    			 if(this.isNumberPrime(i))
@@ -41,11 +42,12 @@ public class SwingWorker extends Thread
 	    			 }	
 	    			 currentTime = (System.currentTimeMillis() - startTime)/1000L;
 	    	     }
-	    		 this.appendText("Final count is: " + Long.toString(count) + "\n" + "Total run time (seconds): " + Float.toString((System.currentTimeMillis() - startTime)/1000F));
+	    		 this.setOutputMessage("Final count is: " + Long.toString(count) + "\n" + "Total run time (seconds): " + Float.toString((System.currentTimeMillis() - startTime)/1000F));
+	    		 this.toggleRunButtons(true);
 	    	 }
 	    	 catch(Exception ex)
 	    	 {
-	    		 this.appendText("ERROR*****************");	    		 
+	    		 this.setOutputMessage("ERROR*****************");	    		 
 	    	 }     
 	   }
 	private boolean isNumberPrime(long n)
@@ -62,11 +64,19 @@ public class SwingWorker extends Thread
 		}
 		return result;
 	}
-	private void appendText(String text)
+	private void setOutputMessage(String text)
 	{
 		SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-            	txtArea.setText(text + "\n");                         
+            	frame.setMessage(text + "\n");                         
+            }
+        });
+	}
+	private void toggleRunButtons(boolean isReadyState)
+	{
+		SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+            	frame.toggleRunButtons(isReadyState);                         
             }
         });
 	}

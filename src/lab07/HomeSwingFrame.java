@@ -9,58 +9,65 @@ import java.util.Random;
 public class HomeSwingFrame extends JFrame
 {
 	private static final long serialVersionUID = 8284044802749048904L;
-	private static final String ANSWER_PLACE_HOLDER_TEXT = "Symbol";
+	private static final String ANSWER_PLACE_HOLDER_TEXT = "Input a large whole number";
 	private static final String EMPTY_STRING = "";	
-	private JButton	
+	private static final int FILL_CONSTRAINT_HORIZONTAL = GridBagConstraints.HORIZONTAL;
+	private static final int FILL_CONSTRAINT_NONE = GridBagConstraints.HORIZONTAL;
+	private final JButton	
 	btnStartQuiz = new JButton("Start Quiz"),
 	btnCancelQuiz = new JButton("Cancel");	
-	private JTextField txtMaxNumber = new JTextField(EMPTY_STRING);	
-	private JTextArea txtOutput = new JTextArea(20,40);	
+	private final JTextField txtMaxNumber = new JTextField(EMPTY_STRING);	
+	private final JTextArea txtOutput = new JTextArea(10,20);	
 	private SwingWorker worker = null;
 	
 	public HomeSwingFrame(){}	
-	public void appendMessage(String msg)
+	public void setMessage(String msg)
 	{
-		txtOutput.append(msg);
-	}
+		txtOutput.setText(msg);
+	}	
 	public void initializeFrame()
 	{
-		setFrameLayout();
-		setListeners();		
-		setPageLayout();		
+		this.setGridBagLayout();
+		this.setListeners();
+		this.txtMaxNumber.requestFocus();
 	}
-	private void setPageLayout()
+	public void requestFocusTxt()
 	{
-		this.setLayout(new GridLayout(3,2));		
-		this.add(this.getTopPanel());
-		this.add(this.getCenterPanel());
-		this.add(this.getBottomPanel());	
+		txtMaxNumber.requestFocus();
 	}
-	private JPanel getBottomPanel()
+	private void setGridBagLayout()
 	{
-		JPanel panel = new JPanel();		
-		panel.setLayout(new FlowLayout());
-		panel.add(btnStartQuiz);		
-		panel.add(btnCancelQuiz);
-		return panel;
-	}
-	private JPanel getTopPanel()
-	{
-		JPanel panel = new JPanel();
-		panel.setLayout(new FlowLayout());
+		this.setLayout(new GridBagLayout());
+		GridBagConstraints c = this.getConstraints(0, 0, 4, 1, 0, FILL_CONSTRAINT_HORIZONTAL);		
 		txtOutput.setEditable(false);
-		panel.add(new JScrollPane(txtOutput));
-		return panel;
+		txtOutput.setText("Input a large whole number into \nthe blue-bordered text box \nand then click the start button.");
+		this.add(new JScrollPane(txtOutput), c);
 		
-	}
-	private JPanel getCenterPanel()
-	{
-		JPanel panel = new JPanel();		
-		panel.setLayout(new FlowLayout());	
-		panel.add(txtMaxNumber);		
-		return panel;
+		
+		setNumberInput();
+		GridBagConstraints d = this.getConstraints(1, 1, 2, 1, 10, FILL_CONSTRAINT_NONE);			
+		this.add(txtMaxNumber, d);
+		
+		GridBagConstraints e = this.getConstraints(0, 2, 4, 1, 10, FILL_CONSTRAINT_HORIZONTAL);		
+			
+		this.add(btnStartQuiz, e);
+		GridBagConstraints f = this.getConstraints(0, 3, 4, 1, 10, FILL_CONSTRAINT_HORIZONTAL);
+		
+		this.add(btnCancelQuiz, f);
 	}	
-	private void toggleQuizButtons(Boolean isReadyState)
+	private GridBagConstraints getConstraints(int gridX, int gridY, int gridWidth, int gridHeight, int insetTopValue, int fillConstraint)
+	{
+		GridBagConstraints c = new GridBagConstraints();
+		c.gridx = gridX;
+		c.gridy = gridY;
+		c.gridwidth = gridWidth;
+		c.gridheight = gridHeight;			
+		c.fill = fillConstraint;
+		c.insets = new Insets(insetTopValue, 0, 0, 0);
+		return c;		
+	}	
+	 
+	public void toggleRunButtons(Boolean isReadyState)
 	{
 		btnStartQuiz.setEnabled(isReadyState);	
 		btnCancelQuiz.setEnabled(!isReadyState);
@@ -69,25 +76,26 @@ public class HomeSwingFrame extends JFrame
 	{		
 		btnStartQuiz.addActionListener((ae) ->
 		{			
-			txtMaxNumber.setEnabled(true);			
-			this.toggleQuizButtons(false);			
+			//txtMaxNumber.setEnabled(true);			
+			//this.toggleQuizButtons(false);			
 			txtMaxNumber.setBackground(Color.GREEN);
 			String inputNumber = txtMaxNumber.getText().trim();
 			if(inputNumber.matches("\\d+") )
 			{
-			 txtOutput.append("Processing.......\n");
-			  this.worker = new SwingWorker(txtOutput, Long.parseLong(inputNumber));
-			 this.worker.start();
+				this.toggleRunButtons(false);		
+				txtOutput.setText("Processing.......\n");
+				this.worker = new SwingWorker(this, Long.parseLong(inputNumber));
+				this.worker.start();
 			}
 			else
-			{
-			txtOutput.append("NOT A NUMBER\n");
-			this.toggleQuizButtons(true);
+			{				
+				txtOutput.setText("NOT A VALID WHOLE NUMBER\n");
+				this.toggleRunButtons(true);
 			}});		
 		btnCancelQuiz.addActionListener((ae) ->
 		{
 			this.worker.interrupt();
-			this.toggleQuizButtons(true);			
+			this.toggleRunButtons(true);			
 			txtMaxNumber.setEnabled(true);			
 			txtMaxNumber.setBackground(Color.RED);
 			txtMaxNumber.setText(EMPTY_STRING);			
@@ -110,14 +118,16 @@ public class HomeSwingFrame extends JFrame
 		      public void focusLost(FocusEvent e) {}
 		});		
 	}
-	private void setFrameLayout()
+	private void setNumberInput()
 	{		
 		txtMaxNumber.setColumns(10);		
 		txtMaxNumber.setHorizontalAlignment(SwingConstants.CENTER);
 		txtMaxNumber.setFont(new Font("SansSerif", Font.BOLD, 30));
 		txtMaxNumber.setPreferredSize(new Dimension(30, 50));		
 		txtMaxNumber.setEnabled(true);
-		txtMaxNumber.setBackground(Color.RED);		
-		this.toggleQuizButtons(true);		
+		txtMaxNumber.setBorder(BorderFactory.createLineBorder(Color.BLUE, 5));
+		// txtMaxNumber.setBackground(Color.RED);		
+		this.toggleRunButtons(true);		
 	}	
+	
 }

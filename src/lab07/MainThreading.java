@@ -9,7 +9,7 @@ public class MainThreading
 	{		 
 		SwingUtilities.invokeLater(new Runnable() {
 	            public void run() {	            	
-	                createAndShowGUI(new HomeSwingFrame(), 600, 600, "Amino Acid Quiz");
+	                createAndShowGUI(new HomeSwingFrame(), 600, 600, "Prime Number Counter");
 	            }
 	        });
 	}
