@@ -8,16 +8,14 @@ import java.util.Random;
 
 public class HomeSwingFrame extends JFrame
 {
-	private static final long serialVersionUID = 8284044802749048904L;
-	private static final String ANSWER_PLACE_HOLDER_TEXT = "Input a large whole number";
+	private static final long serialVersionUID = 8284044802749048904L;	
 	private static final String EMPTY_STRING = "";	
-	private static final int FILL_CONSTRAINT_HORIZONTAL = GridBagConstraints.HORIZONTAL;
-	private static final int FILL_CONSTRAINT_NONE = GridBagConstraints.HORIZONTAL;
+	private static final int FILL_CONSTRAINT_HORIZONTAL = GridBagConstraints.HORIZONTAL;	
 	private final JButton	
-	btnStartQuiz = new JButton("Start Quiz"),
+	btnStartQuiz = new JButton("Start"),
 	btnCancelQuiz = new JButton("Cancel");	
 	private final JTextField txtMaxNumber = new JTextField(EMPTY_STRING);	
-	private final JTextArea txtOutput = new JTextArea(10,20);	
+	private final JTextArea txtOutput = new JTextArea(10,30);	
 	private SwingWorker worker = null;
 	
 	public HomeSwingFrame()	{}	
@@ -26,47 +24,47 @@ public class HomeSwingFrame extends JFrame
 	{
 		txtOutput.setText(msg);
 	}	
-	
 	public void initializeFrame()
 	{
-		this.setGridBagLayout();
-		setNumberInput();
 		this.setListeners();
+		this.setGridBagLayout();
+		setNumberInput();		
 		this.txtMaxNumber.requestFocus();
 	}
 	public void requestFocusTxt()
 	{
 		txtMaxNumber.requestFocus();
 	}
+	public void setMaxNumberEnabled(boolean isEnabled)
+	{
+		txtMaxNumber.setEnabled(isEnabled);		
+	}	
+	public void setFocusToInputNum()
+	{
+		txtMaxNumber.requestFocus();	
+	}	
+	public void clearMaxNumTxt()
+	{
+		txtMaxNumber.setText(EMPTY_STRING);
+	}
+	public void toggleRunButtons(Boolean isReadyState)
+	{
+		btnStartQuiz.setEnabled(isReadyState);	
+		btnCancelQuiz.setEnabled(!isReadyState);
+	}	
 	private void setGridBagLayout()
 	{
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints c = this.getConstraints(0, 0, 4, 1, 0, FILL_CONSTRAINT_HORIZONTAL);		
 		txtOutput.setEditable(false);
-		txtOutput.setText("Input a large whole number into \nthe blue-bordered text box \nand then click the start button.");
-		this.add(new JScrollPane(txtOutput), c);		
-		GridBagConstraints d = this.getConstraints(1, 1, 2, 1, 10, FILL_CONSTRAINT_NONE);			
+		txtOutput.setText("1. Input a whole number between 2 and 9223372036854775807 \n into the blue-bordered text box.  \n\n2. Click the 'Start' button to calculate the number of prime \nnumbers between 2 and the input number.");		
+		this.add(txtOutput, c);
+		GridBagConstraints d = this.getConstraints(0, 1, 4, 1, 10, FILL_CONSTRAINT_HORIZONTAL);			
 		this.add(txtMaxNumber, d);		
 		GridBagConstraints e = this.getConstraints(0, 2, 4, 1, 10, FILL_CONSTRAINT_HORIZONTAL);			
 		this.add(btnStartQuiz, e);
 		GridBagConstraints f = this.getConstraints(0, 3, 4, 1, 10, FILL_CONSTRAINT_HORIZONTAL);		
 		this.add(btnCancelQuiz, f);
-	}	
-	private GridBagConstraints getConstraints(int gridX, int gridY, int gridWidth, int gridHeight, int insetTopValue, int fillConstraint)
-	{
-		GridBagConstraints c = new GridBagConstraints();
-		c.gridx = gridX;
-		c.gridy = gridY;
-		c.gridwidth = gridWidth;
-		c.gridheight = gridHeight;			
-		c.fill = fillConstraint;
-		c.insets = new Insets(insetTopValue, 0, 0, 0);
-		return c;		
-	}	 
-	public void toggleRunButtons(Boolean isReadyState)
-	{
-		btnStartQuiz.setEnabled(isReadyState);	
-		btnCancelQuiz.setEnabled(!isReadyState);
 	}	
 	private void setListeners()
 	{		
@@ -80,8 +78,29 @@ public class HomeSwingFrame extends JFrame
 				this.toggleRunButtons(false);	
 				this.setMaxNumberEnabled(false);
 				txtOutput.setText("Processing.......\n");
-				this.worker = new SwingWorker(this, Long.parseLong(inputNumber));
-				this.worker.start();
+				Long inputValue;
+				try
+				{
+					inputValue = Long.parseLong(inputNumber);
+					if(inputValue >= 2L && inputValue <= Long.MAX_VALUE)
+					{
+						this.worker = new SwingWorker(this, inputValue);
+						this.worker.start();
+					}
+					else
+					{
+						// TODO:  Add logic here
+					}
+					
+				}
+				catch(NumberFormatException ne)
+				{
+					System.out.println("Number Format Exception");
+				}
+				catch(Exception ex)
+				{					
+					
+				}				
 			}
 			else
 			{				
@@ -111,23 +130,21 @@ public class HomeSwingFrame extends JFrame
 	private void setNumberInput()
 	{		
 		txtMaxNumber.setColumns(10);		
-		txtMaxNumber.setHorizontalAlignment(SwingConstants.CENTER);
-		txtMaxNumber.setFont(new Font("SansSerif", Font.BOLD, 30));
-		txtMaxNumber.setPreferredSize(new Dimension(30, 50));		
+		txtMaxNumber.setFont(new Font("SansSerif", Font.BOLD, 20));
+		txtMaxNumber.setPreferredSize(new Dimension(20, 50));		
 		txtMaxNumber.setEnabled(true);
 		txtMaxNumber.setBorder(BorderFactory.createLineBorder(Color.BLUE, 5));		
 		this.toggleRunButtons(true);		
 	}	
-	public void setMaxNumberEnabled(boolean isEnabled)
+	private GridBagConstraints getConstraints(int gridX, int gridY, int gridWidth, int gridHeight, int insetTopValue, int fillConstraint)
 	{
-		txtMaxNumber.setEnabled(isEnabled);		
+		GridBagConstraints c = new GridBagConstraints();
+		c.gridx = gridX;
+		c.gridy = gridY;
+		c.gridwidth = gridWidth;
+		c.gridheight = gridHeight;			
+		c.fill = fillConstraint;
+		c.insets = new Insets(insetTopValue, 0, 0, 0);
+		return c;		
 	}	
-	public void setFocusToInputNum()
-	{
-		txtMaxNumber.requestFocus();	
-	}	
-	public void clearMaxNumTxt()
-	{
-		txtMaxNumber.setText(EMPTY_STRING);
-	}
 }

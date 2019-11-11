@@ -6,7 +6,7 @@ import javax.swing.SwingUtilities;
 public class MainThreading
 {
 	public static void main(String[] args)
-	{		 
+	{		
 		SwingUtilities.invokeLater(new Runnable() {
 	            public void run() {	            	
 	                createAndShowGUI(new HomeSwingFrame(), 600, 600, "Prime Number Counter");
