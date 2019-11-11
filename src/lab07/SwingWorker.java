@@ -8,8 +8,7 @@ public class SwingWorker extends Thread
 	private final long LONG_NUM_0 = 0;
 	private final long maxPrimeNumber;	
 	private final HomeSwingFrame frame;
-	private static final String MSG_PREFIX_CANCELLED = "************PROCESSING CANCELLED************\n";
-	
+	private static final String MSG_PREFIX_CANCELLED = "************PROCESSING CANCELLED************\n";	
 	
 	public SwingWorker(HomeSwingFrame frame, long maxPrimeNumber)
 	{		
@@ -17,15 +16,16 @@ public class SwingWorker extends Thread
 		this.maxPrimeNumber = maxPrimeNumber;		
 	}
 	@Override
-	 public void run(){
-		long count = 0;
-		long startTime = System.currentTimeMillis();
-		long currentTime = (System.currentTimeMillis() - startTime)/2000L;	
-		long lastTime = currentTime;
-		boolean isCancelled = false;
-		long i;
+	 public void run(){	
 	    	 try
-	    	 {	    			 
+	    	 {
+    			long count = 0;
+    			long startTime = System.currentTimeMillis();
+    			long currentTime = (System.currentTimeMillis() - startTime)/2000L;	
+    			long lastTime = currentTime;
+    			boolean isCancelled = false;
+    			long i;
+    			
 	    		 for(i = 2; i <= this.maxPrimeNumber; i++)
 	    	     {
 	    			 if(this.isInterrupted())
@@ -45,13 +45,12 @@ public class SwingWorker extends Thread
 	    			 currentTime = (System.currentTimeMillis() - startTime)/2000L;		    		
 	    	     }
 	    		 this.setOutputMessage(this.getUpdateMessage(startTime, !isCancelled ? i-1 : i, this.maxPrimeNumber, count, isCancelled));
-	    		 this.toggleRunButtons(true);
-	    		 this.setMaxNumberIsEnabled(true);	    		
+	    		 this.toggleRunButtons(true);	    		  		
 	    	 }
 	    	 catch(Exception ex)
 	    	 {
-	    		 this.setOutputMessage("An exception occurred within the worker thread: " + ex.getMessage());	    		
-	    		 this.setMaxNumberIsEnabled(true);
+	    		 this.setOutputMessage("An exception occurred within the worker thread: " + ex.getMessage());    		
+	    		 this.toggleRunButtons(true);
 	    	 }     
 	   }
 	private boolean isNumberPrime(long n)
@@ -83,15 +82,6 @@ public class SwingWorker extends Thread
             	frame.toggleRunButtons(isReadyState);                         
             }
         });
-	}
-	private void setMaxNumberIsEnabled(boolean isEnabled)
-	{
-		SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-            	frame.setMaxNumberEnabled(isEnabled);  
-            	frame.setFocusToInputNum();   
-            }
-        });
 	}	
 	private String getUpdateMessage(long startTime, long currentPrime, long maxPrime, long count, boolean isCancelled)
 	{
@@ -101,16 +91,16 @@ public class SwingWorker extends Thread
 			sb.append(MSG_PREFIX_CANCELLED);
 		}
 		sb.append("Prime Number Count [2, ").
+		   append("(").
 		   append(currentPrime).
 		   append("/").
 		   append(maxPrime).
+		   append(")").
 		   append("]: ").
 		   append(count).
 		   append("\n").
 		   append("Processing Time (seconds): ").
-		   append(Float.toString((System.currentTimeMillis() - startTime)/1000F));
-		
-		
+		   append(Float.toString((System.currentTimeMillis() - startTime)/1000F));	
 		return sb.toString();
 	}
 }

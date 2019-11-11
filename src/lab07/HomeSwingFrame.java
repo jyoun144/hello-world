@@ -1,10 +1,6 @@
 package lab07;
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.util.Random;
 
 public class HomeSwingFrame extends JFrame
 {
@@ -30,14 +26,6 @@ public class HomeSwingFrame extends JFrame
 		this.setGridBagLayout();
 		setNumberInput();		
 		this.txtMaxNumber.requestFocus();
-	}
-	public void requestFocusTxt()
-	{
-		txtMaxNumber.requestFocus();
-	}
-	public void setMaxNumberEnabled(boolean isEnabled)
-	{
-		txtMaxNumber.setEnabled(isEnabled);		
 	}	
 	public void setFocusToInputNum()
 	{
@@ -51,6 +39,11 @@ public class HomeSwingFrame extends JFrame
 	{
 		btnStartQuiz.setEnabled(isReadyState);	
 		btnCancelQuiz.setEnabled(!isReadyState);
+		txtMaxNumber.setEnabled(isReadyState);	
+		if(isReadyState)
+		{
+			txtMaxNumber.requestFocus(isReadyState);
+		}
 	}	
 	private void setGridBagLayout()
 	{
@@ -69,14 +62,12 @@ public class HomeSwingFrame extends JFrame
 	private void setListeners()
 	{		
 		btnStartQuiz.addActionListener((ae) ->
-		{				
-			
+		{		
 			String inputNumber = txtMaxNumber.getText().trim();
 			if(inputNumber.matches("\\d+") )
 			{
 				txtMaxNumber.setBackground(Color.GREEN);
-				this.toggleRunButtons(false);	
-				this.setMaxNumberEnabled(false);
+				this.toggleRunButtons(false);				
 				txtOutput.setText("Processing.......\n");
 				Long inputValue;
 				try
@@ -105,8 +96,7 @@ public class HomeSwingFrame extends JFrame
 			else
 			{				
 				txtOutput.setText(inputNumber + " IS NOT A VALID WHOLE NUMBER\n");
-				txtMaxNumber.setBackground(Color.RED);
-				this.setMaxNumberEnabled(true);			
+				txtMaxNumber.setBackground(Color.RED);						
 				this.toggleRunButtons(true);
 				this.setFocusToInputNum();
 			}});		
