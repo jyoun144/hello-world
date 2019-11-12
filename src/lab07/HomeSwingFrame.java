@@ -1,6 +1,16 @@
 package lab07;
-import javax.swing.*;
-import java.awt.*;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 public class HomeSwingFrame extends JFrame
 {
@@ -10,12 +20,12 @@ public class HomeSwingFrame extends JFrame
 	private static final String ERROR_MSG_NUM_FORMAT = "******NUMBER FORMAT EXCEPTION*****\n*****ENTER A VALID WHOLE NUMBER*****";
 	private static final String ERROR_MSG_GENERAL = "******GENERAL SYSTEM EXCEPTION*****\n*****ENTER A VALID WHOLE NUMBER*****";
 	private static final String ERROR_MSG_INVALID_RANGE = "******INVALID NUMBER ENTRY*****\n*****ENTER A WHOLE NUMBER BETWEEN 2 AND 9223372036854775807*****";
-	private static final String INFO_MSG_INITIAL = "1. Input a whole number between 2 and 9223372036854775807 \n into the blue-bordered text box.  \n\n2. Click the 'Start' button to calculate the number of prime \nnumbers between 2 and the input number.";
+	private static final String INFO_MSG_INITIAL = "1. Input a whole number between 2 and 9,223,372,036,854,775,807 \n into the text box with a blue border.  \n\n2. Click the 'Start' button to calculate the number of prime \nnumbers between 2 and the input whole number.";
 	private final JButton	
 	btnStartQuiz = new JButton("Start"),
 	btnCancelQuiz = new JButton("Cancel");	
 	private final JTextField txtMaxNumber = new JTextField(EMPTY_STRING);	
-	private final JTextArea txtOutput = new JTextArea(10,30);	
+	private final JTextArea txtOutput = new JTextArea(5,30);	
 	private SwingWorker worker = null;
 	
 	public HomeSwingFrame()	{}	
@@ -28,7 +38,9 @@ public class HomeSwingFrame extends JFrame
 	{
 		this.setListeners();
 		this.setGridBagLayout();
-		setNumberInput();		
+		this.setNumberInput();	
+		this.setCalculationOutput();
+		this.toggleRunButtons(true);
 		this.txtMaxNumber.requestFocus();
 	}	
 	public void toggleRunButtons(Boolean isReadyState)
@@ -43,9 +55,9 @@ public class HomeSwingFrame extends JFrame
 	private void setGridBagLayout()
 	{
 		this.setLayout(new GridBagLayout());
-		GridBagConstraints c = this.getConstraints(0, 0, 4, 1, 0, FILL_CONSTRAINT_HORIZONTAL);		
-		txtOutput.setEditable(false);
-		txtOutput.setText(INFO_MSG_INITIAL);		
+		GridBagConstraints c = this.getConstraints(0, 0, 4, 1, 0, FILL_CONSTRAINT_HORIZONTAL);
+		c.ipady = 50;
+		c.ipadx = 50;
 		this.add(txtOutput, c);
 		GridBagConstraints d = this.getConstraints(0, 1, 4, 1, 10, FILL_CONSTRAINT_HORIZONTAL);			
 		this.add(txtMaxNumber, d);		
@@ -80,10 +92,12 @@ public class HomeSwingFrame extends JFrame
 				catch(NumberFormatException ne)
 				{					
 					this.setMessage(ERROR_MSG_NUM_FORMAT); 
+					 this.toggleRunButtons(true);
 				}
 				catch(Exception ex)
 				{
-					this.setMessage(ERROR_MSG_GENERAL); 				
+					this.setMessage(ERROR_MSG_GENERAL);
+					 this.toggleRunButtons(true);
 				}					
 			}
 			else
@@ -105,9 +119,14 @@ public class HomeSwingFrame extends JFrame
 		txtMaxNumber.setFont(new Font("SansSerif", Font.BOLD, 20));
 		txtMaxNumber.setPreferredSize(new Dimension(20, 50));		
 		txtMaxNumber.setEnabled(true);
-		txtMaxNumber.setBorder(BorderFactory.createLineBorder(Color.BLUE, 5));		
-		this.toggleRunButtons(true);		
+		txtMaxNumber.setBorder(BorderFactory.createLineBorder(Color.BLUE, 5));				
 	}	
+	private void setCalculationOutput()
+	{		
+		txtOutput.setEditable(false);
+		txtOutput.setText(INFO_MSG_INITIAL);		
+		txtOutput.setFont(new Font("SansSerif", Font.PLAIN, 15));
+	}
 	private GridBagConstraints getConstraints(int gridX, int gridY, int gridWidth, int gridHeight, int insetTopValue, int fillConstraint)
 	{
 		GridBagConstraints c = new GridBagConstraints();

@@ -4,15 +4,14 @@ import java.lang.StringBuilder;
 
 public class SwingWorker extends Thread
 {
-	private final long LONG_NUM_2 = 2;
-	private final long LONG_NUM_0 = 0;
-	private final long maxPrimeNumber;	
-	private final HomeSwingFrame frame;
+	private static final long LONG_NUM_2 = 2;
+	private static final long LONG_NUM_0 = 0;
 	private static final String MSG_PREFIX_CANCELLED = "************PROCESSING CANCELLED************\n";
 	private static final String MSG_PREFIX_PROCESSING = "************CALCULATIONS IN PROGRESS************\n";
 	private static final String MSG_PREFIX_COMPLETED = "************PROCESSING COMPLETED************\n";
-	private static final String MSG_PREFIX_INITIAL = "*******PERFORMING INITIAL CALCULATIONS*******\n";
-	
+	private static final String MSG_PREFIX_INITIAL = "*******PERFORMING INITIAL CALCULATIONS*******\n";	
+	private final long maxPrimeNumber;	
+	private final HomeSwingFrame frame;	
 	
 	public SwingWorker(HomeSwingFrame frame, long maxPrimeNumber)
 	{		
@@ -114,7 +113,7 @@ public class SwingWorker extends Thread
 		   append(count).
 		   append("\n").
 		   append("Processing Time (seconds): ").
-		   append(Float.toString((System.currentTimeMillis() - startTime)/1000F));	
+		   append( String.format("%.2f", (System.currentTimeMillis() - startTime)/1000F));	
 		return sb.toString();
 	}
 	private enum ProcessState {INPROGRESS, CANCELLED, COMPLETED}
