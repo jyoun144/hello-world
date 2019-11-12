@@ -7,6 +7,10 @@ public class HomeSwingFrame extends JFrame
 	private static final long serialVersionUID = 8284044802749048904L;	
 	private static final String EMPTY_STRING = "";	
 	private static final int FILL_CONSTRAINT_HORIZONTAL = GridBagConstraints.HORIZONTAL;	
+	private static final String ERROR_MSG_NUM_FORMAT = "******NUMBER FORMAT EXCEPTION*****\n*****ENTER A VALID WHOLE NUMBER*****";
+	private static final String ERROR_MSG_GENERAL = "******GENERAL SYSTEM EXCEPTION*****\n*****ENTER A VALID WHOLE NUMBER*****";
+	private static final String ERROR_MSG_INVALID_RANGE = "******INVALID NUMBER ENTRY*****\n*****ENTER A WHOLE NUMBER BETWEEN 2 AND 9223372036854775807*****";
+	private static final String INFO_MSG_INITIAL = "1. Input a whole number between 2 and 9223372036854775807 \n into the blue-bordered text box.  \n\n2. Click the 'Start' button to calculate the number of prime \nnumbers between 2 and the input number.";
 	private final JButton	
 	btnStartQuiz = new JButton("Start"),
 	btnCancelQuiz = new JButton("Cancel");	
@@ -27,14 +31,6 @@ public class HomeSwingFrame extends JFrame
 		setNumberInput();		
 		this.txtMaxNumber.requestFocus();
 	}	
-	public void setFocusToInputNum()
-	{
-		txtMaxNumber.requestFocus();	
-	}	
-	public void clearMaxNumTxt()
-	{
-		txtMaxNumber.setText(EMPTY_STRING);
-	}
 	public void toggleRunButtons(Boolean isReadyState)
 	{
 		btnStartQuiz.setEnabled(isReadyState);	
@@ -49,7 +45,7 @@ public class HomeSwingFrame extends JFrame
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints c = this.getConstraints(0, 0, 4, 1, 0, FILL_CONSTRAINT_HORIZONTAL);		
 		txtOutput.setEditable(false);
-		txtOutput.setText("1. Input a whole number between 2 and 9223372036854775807 \n into the blue-bordered text box.  \n\n2. Click the 'Start' button to calculate the number of prime \nnumbers between 2 and the input number.");		
+		txtOutput.setText(INFO_MSG_INITIAL);		
 		this.add(txtOutput, c);
 		GridBagConstraints d = this.getConstraints(0, 1, 4, 1, 10, FILL_CONSTRAINT_HORIZONTAL);			
 		this.add(txtMaxNumber, d);		
@@ -77,25 +73,26 @@ public class HomeSwingFrame extends JFrame
 					}
 					else
 					{
-						// TODO:  Add logic here
+						this.setMessage(ERROR_MSG_INVALID_RANGE);
 					}
-					
+					txtMaxNumber.requestFocus();
 				}
 				catch(NumberFormatException ne)
-				{
-					System.out.println("Number Format Exception");
+				{					
+					this.setMessage(ERROR_MSG_NUM_FORMAT); 
 				}
 				catch(Exception ex)
-				{					
-					
-				}				
+				{
+					this.setMessage(ERROR_MSG_GENERAL); 				
+				}					
 			}
 			else
-			{				
-				txtOutput.setText(inputNumber + " IS NOT A VALID WHOLE NUMBER\n");								
+			{
+				this.setMessage("******" + inputNumber + " IS NOT A VALID WHOLE NUMBER*****\n");												
 				this.toggleRunButtons(true);
-				this.setFocusToInputNum();
-			}});		
+				txtMaxNumber.requestFocus();
+			}});
+		
 		btnCancelQuiz.addActionListener((ae) ->
 		{
 			this.worker.interrupt();
