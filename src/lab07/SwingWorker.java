@@ -1,6 +1,7 @@
 package lab07;
-import javax.swing.SwingUtilities;
+
 import java.lang.StringBuilder;
+import javax.swing.SwingUtilities;
 
 public class SwingWorker extends Thread
 {
@@ -18,13 +19,15 @@ public class SwingWorker extends Thread
 		this.frame = frame;
 		this.maxPrimeNumber = maxPrimeNumber;		
 	}
+	
 	@Override
 	 public void run(){	
 	    	 try
 	    	 {
-	    		 ProcessState processState = ProcessState.INPROGRESS;
+	    		ProcessState processState = ProcessState.INPROGRESS;
     			long count = 0;
     			long startTime = System.currentTimeMillis();
+    			// set output for every two seconds
     			long currentTime = (System.currentTimeMillis() - startTime)/2000L;
     			long lastTime = currentTime;    			
     			long i;
@@ -46,6 +49,7 @@ public class SwingWorker extends Thread
 	    			 {			    	 
 			    		 count++;
 	    			 }	
+	    			// set output for every two seconds
 	    			 currentTime = (System.currentTimeMillis() - startTime)/2000L;		    		
 	    	     }
 	    		 processState = processState.equals(ProcessState.INPROGRESS) ? ProcessState.COMPLETED : processState;
@@ -109,12 +113,13 @@ public class SwingWorker extends Thread
 		   append("/").
 		   append(maxPrime).
 		   append(")").
-		   append("]: ").
+		   append("] ---> ").
 		   append(count).
 		   append("\n").
-		   append("Processing Time (seconds): ").
+		   append("Processing Time (seconds) ---> ").
 		   append( String.format("%.2f", (System.currentTimeMillis() - startTime)/1000F));	
 		return sb.toString();
 	}
+	
 	private enum ProcessState {INPROGRESS, CANCELLED, COMPLETED}
 }
