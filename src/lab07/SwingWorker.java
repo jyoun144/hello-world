@@ -8,7 +8,11 @@ public class SwingWorker extends Thread
 	private final long LONG_NUM_0 = 0;
 	private final long maxPrimeNumber;	
 	private final HomeSwingFrame frame;
-	private static final String MSG_PREFIX_CANCELLED = "************PROCESSING CANCELLED************\n";	
+	private static final String MSG_PREFIX_CANCELLED = "************PROCESSING CANCELLED************\n";
+	private static final String MSG_PREFIX_PROCESSING = "************CALCULATIONS IN PROGRESS************\n";
+	private static final String MSG_PREFIX_COMPLETED = "************PROCESSING COMPLETED************\n";
+	private static final String MSG_PREFIX_INITIAL = "*******PERFORMING INITIAL CALCULATIONS*******\n";
+	
 	
 	public SwingWorker(HomeSwingFrame frame, long maxPrimeNumber)
 	{		
@@ -19,24 +23,25 @@ public class SwingWorker extends Thread
 	 public void run(){	
 	    	 try
 	    	 {
+	    		 ProcessState processState = ProcessState.INPROGRESS;
     			long count = 0;
     			long startTime = System.currentTimeMillis();
-    			long currentTime = (System.currentTimeMillis() - startTime)/2000L;	
-    			long lastTime = currentTime;
-    			boolean isCancelled = false;
+    			long currentTime = (System.currentTimeMillis() - startTime)/2000L;
+    			long lastTime = currentTime;    			
     			long i;
+    			this.setOutputMessage(MSG_PREFIX_INITIAL);
     			
 	    		 for(i = 2; i <= this.maxPrimeNumber; i++)
 	    	     {
 	    			 if(this.isInterrupted())
 	    			 {
-	    				 isCancelled = true;
+	    				 processState = ProcessState.CANCELLED;
 	    				 break;
 	    			 }	    			 
 	    			 if(lastTime != currentTime)	    			
 	    			 {
 	    				 lastTime = currentTime;	    				 
-	    				 this.setOutputMessage(this.getUpdateMessage(startTime, i, this.maxPrimeNumber, count, isCancelled));
+	    				 this.setOutputMessage(this.getUpdateMessage(startTime, i, this.maxPrimeNumber, count, processState));
 	    			 }
 	    			 if(this.isNumberPrime(i))
 	    			 {			    	 
@@ -44,7 +49,8 @@ public class SwingWorker extends Thread
 	    			 }	
 	    			 currentTime = (System.currentTimeMillis() - startTime)/2000L;		    		
 	    	     }
-	    		 this.setOutputMessage(this.getUpdateMessage(startTime, !isCancelled ? i-1 : i, this.maxPrimeNumber, count, isCancelled));
+	    		 processState = processState.equals(ProcessState.INPROGRESS) ? ProcessState.COMPLETED : processState;
+	    		 this.setOutputMessage(this.getUpdateMessage(startTime, !processState.equals(ProcessState.CANCELLED) ? i-1 : i, this.maxPrimeNumber, count, processState));
 	    		 this.toggleRunButtons(true);	    		  		
 	    	 }
 	    	 catch(Exception ex)
@@ -72,7 +78,7 @@ public class SwingWorker extends Thread
 		SwingUtilities.invokeLater(new Runnable() {
             public void run() {
             	frame.setMessage(text + "\n");   
-            	frame.clearMaxNumTxt();            }
+            }
         });
 	}
 	private void toggleRunButtons(boolean isReadyState)
@@ -83,12 +89,20 @@ public class SwingWorker extends Thread
             }
         });
 	}	
-	private String getUpdateMessage(long startTime, long currentPrime, long maxPrime, long count, boolean isCancelled)
+	private String getUpdateMessage(long startTime, long currentPrime, long maxPrime, long count, ProcessState processState)
 	{
 		StringBuilder sb = new StringBuilder();
-		if(isCancelled)
+		if(processState.equals(ProcessState.CANCELLED))
 		{
 			sb.append(MSG_PREFIX_CANCELLED);
+		}
+		else if(processState.equals(ProcessState.INPROGRESS))
+		{
+			sb.append(MSG_PREFIX_PROCESSING);
+		}
+		else
+		{
+			sb.append(MSG_PREFIX_COMPLETED);			
 		}
 		sb.append("Prime Number Count [2, ").
 		   append("(").
@@ -103,4 +117,5 @@ public class SwingWorker extends Thread
 		   append(Float.toString((System.currentTimeMillis() - startTime)/1000F));	
 		return sb.toString();
 	}
+	private enum ProcessState {INPROGRESS, CANCELLED, COMPLETED}
 }

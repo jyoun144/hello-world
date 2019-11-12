@@ -38,8 +38,7 @@ public class HomeSwingFrame extends JFrame
 	public void toggleRunButtons(Boolean isReadyState)
 	{
 		btnStartQuiz.setEnabled(isReadyState);	
-		btnCancelQuiz.setEnabled(!isReadyState);
-		txtMaxNumber.setEnabled(isReadyState);	
+		btnCancelQuiz.setEnabled(!isReadyState);		
 		if(isReadyState)
 		{
 			txtMaxNumber.requestFocus(isReadyState);
@@ -65,10 +64,8 @@ public class HomeSwingFrame extends JFrame
 		{		
 			String inputNumber = txtMaxNumber.getText().trim();
 			if(inputNumber.matches("\\d+") )
-			{
-				txtMaxNumber.setBackground(Color.GREEN);
-				this.toggleRunButtons(false);				
-				txtOutput.setText("Processing.......\n");
+			{				
+				this.toggleRunButtons(false);	
 				Long inputValue;
 				try
 				{
@@ -95,8 +92,7 @@ public class HomeSwingFrame extends JFrame
 			}
 			else
 			{				
-				txtOutput.setText(inputNumber + " IS NOT A VALID WHOLE NUMBER\n");
-				txtMaxNumber.setBackground(Color.RED);						
+				txtOutput.setText(inputNumber + " IS NOT A VALID WHOLE NUMBER\n");								
 				this.toggleRunButtons(true);
 				this.setFocusToInputNum();
 			}});		
@@ -104,17 +100,6 @@ public class HomeSwingFrame extends JFrame
 		{
 			this.worker.interrupt();
 			this.toggleRunButtons(true);			
-			txtMaxNumber.setEnabled(true);			
-			txtMaxNumber.setBackground(Color.RED);
-			txtMaxNumber.setText(EMPTY_STRING);			
-		});				
-		txtMaxNumber.addActionListener((ae) ->
-		{
-			String parsedText = txtMaxNumber.getText().trim();
-			if(!parsedText.contentEquals(EMPTY_STRING))
-			{				
-				txtMaxNumber.setText(EMPTY_STRING);				
-			}
 		});		
 	}
 	private void setNumberInput()
