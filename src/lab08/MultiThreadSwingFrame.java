@@ -2,6 +2,7 @@ package lab08;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ItemEvent;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -9,6 +10,8 @@ import java.awt.Insets;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JRadioButton;
+import javax.swing.ButtonGroup;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import java.util.concurrent.atomic.AtomicLong;
@@ -29,7 +32,14 @@ public class MultiThreadSwingFrame extends JFrame
 	btnCancelQuiz = new JButton("Cancel");	
 	private final JTextField txtMaxNumber = new JTextField(EMPTY_STRING);	
 	private final JTextArea txtOutput = new JTextArea(5,30);	
+	private final JRadioButton rb01 = new JRadioButton("1 thread", true);
+	private final JRadioButton rb05 = new JRadioButton("5 threads");
+	private final JRadioButton rb10 = new JRadioButton("10 threads");
+	private final JRadioButton rb15 = new JRadioButton("15 threads");
+	private final JRadioButton rb20 = new JRadioButton("20 threads");
 	private Producer producer = null;	
+	private int numOfThreads;
+	
 	
 	public MultiThreadSwingFrame()	{}	
 	
@@ -39,7 +49,8 @@ public class MultiThreadSwingFrame extends JFrame
 	}	
 	public void initializeFrame()
 	{
-		this.setListeners();
+		this.setListeners();	
+		this.createButtonGroup();
 		this.setGridBagLayout();
 		this.setNumberInput();	
 		this.setCalculationOutput();
@@ -62,6 +73,8 @@ public class MultiThreadSwingFrame extends JFrame
 		c.ipady = 50;
 		c.ipadx = 50;
 		this.add(txtOutput, c);
+		//GridBagConstraints g = this.getConstraints(0, 1, 4, 1, 10, FILL_CONSTRAINT_HORIZONTAL);			
+		//this.add(this.getButtonGroup(), g);		
 		GridBagConstraints d = this.getConstraints(0, 1, 4, 1, 10, FILL_CONSTRAINT_HORIZONTAL);			
 		this.add(txtMaxNumber, d);		
 		GridBagConstraints e = this.getConstraints(0, 2, 4, 1, 10, FILL_CONSTRAINT_HORIZONTAL);			
@@ -124,7 +137,8 @@ public class MultiThreadSwingFrame extends JFrame
 		{
 			this.producer.interrupt();
 			this.toggleRunButtons(true);			
-		});		
+		});	
+		this.setRadioButtonListeners();
 	}
 	private void setNumberInput()
 	{		
@@ -150,5 +164,55 @@ public class MultiThreadSwingFrame extends JFrame
 		c.fill = fillConstraint;
 		c.insets = new Insets(insetTopValue, 0, 0, 0);
 		return c;		
-	}	
+	}
+	private void createButtonGroup()
+	{
+		ButtonGroup group = new ButtonGroup();
+		group.add(rb01);
+		group.add(rb05);
+		group.add(rb10);
+		group.add(rb15);
+		group.add(rb20);		
+	}
+	private void setRadioButtonListeners()
+	{
+		rb01.addItemListener( e ->
+		{
+			itemStateChanged(e);		
+		});
+		rb05.addItemListener( e ->
+		{
+			itemStateChanged(e);		
+		});
+		rb10.addItemListener( e ->
+		{
+			itemStateChanged(e);		
+		});
+		rb15.addItemListener( e ->
+		{
+			itemStateChanged(e);		
+		});
+		rb20.addItemListener( e ->
+		{
+			itemStateChanged(e);		
+		});
+	}
+	public void itemStateChanged(ItemEvent e) {
+	    
+	    Object source = e.getItemSelectable();
+
+	    if (source == rb01) {
+	       this.numOfThreads = 1;
+	    } else if (source == rb05) {
+	    	this.numOfThreads = 5;
+	    } else if (source == rb10) {
+	    	this.numOfThreads = 10;
+	    } else if (source == rb15) {
+	    	this.numOfThreads = 15;
+	    }
+	    else
+	    {
+	    	this.numOfThreads = 20;	    	
+	    }
+	}
 }
