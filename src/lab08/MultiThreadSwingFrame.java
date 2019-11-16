@@ -31,6 +31,8 @@ public class MultiThreadSwingFrame extends JFrame
 	private final JTextArea txtOutput = new JTextArea(5,30);	
 	private Producer producer = null;
 	private Consumer consumer1 = null;
+	private Consumer consumer2 = null;
+	private Consumer consumer3 = null;
 	
 	public MultiThreadSwingFrame()	{}	
 	
@@ -86,12 +88,15 @@ public class MultiThreadSwingFrame extends JFrame
 					if(inputValue >= 2L && inputValue <= Long.MAX_VALUE)
 					{
 						BlockingQueue<PrimeCounter>	queue = new LinkedBlockingQueue<PrimeCounter>();
-						AtomicLong numOfPrimesFound = new AtomicLong(0);
-						AtomicLong numOfSearchedNumbers = new AtomicLong(0); 
+						final AtomicLong numOfPrimesFound = new AtomicLong(0);
+						final AtomicLong numOfSearchedNumbers = new AtomicLong(0); 
 						this.producer = new Producer(this, inputValue, queue, numOfPrimesFound,  numOfSearchedNumbers, Constants.PRIME_NUM_INTERVAL);
 						this.producer.start();
-						this.consumer1 = new Consumer(queue, numOfPrimesFound,  numOfSearchedNumbers);	
-						consumer1.setName("Consumer_Thread_1");
+						for(int i = 0; i < 1; i++)
+						{
+							new Consumer(queue, numOfPrimesFound,  numOfSearchedNumbers).start();
+						}
+						
 					}
 					else
 					{

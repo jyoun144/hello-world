@@ -8,8 +8,7 @@ import javax.swing.SwingUtilities;
 
 public class Producer extends Thread
 {
-	private static final long LONG_NUM_2 = 2;
-	private static final long LONG_NUM_0 = 0;
+	
 	private static final String MSG_PREFIX_CANCELLED = "************PROCESSING CANCELLED************\n";
 	private static final String MSG_PREFIX_PROCESSING = "************CALCULATIONS IN PROGRESS************\n";
 	private static final String MSG_PREFIX_COMPLETED = "************PROCESSING COMPLETED************\n";
@@ -31,44 +30,63 @@ public class Producer extends Thread
 		this.numInterval = numInterval;
 	}
 	
+	
 	@Override
 	 public void run(){	
+		long startTime = System.currentTimeMillis();
+		ProcessState processState = ProcessState.INPROGRESS;
 	    	 try
-	    	 {
-	    		ProcessState processState = ProcessState.INPROGRESS;
-    			long count = 0;
-    			long startTime = System.currentTimeMillis();
+	    	 { 		
+    				
+	    		 this.setOutputMessage(MSG_PREFIX_INITIAL);
     			// set output for every two seconds
     			long currentTime = (System.currentTimeMillis() - startTime)/2000L;
-    			long lastTime = currentTime;    			
-    			long i;
-    			this.setOutputMessage(MSG_PREFIX_INITIAL);
-    			
-	    		 for(i = 2; i <= this.maxPrimeNumber; this.getNextNumber(i, this.numInterval))
-	    	     {	    			 
+    			long lastTime = currentTime; 
+    			 long endNumber ;    		
+    			this.setOutputMessage(MSG_PREFIX_INITIAL);	    		
+    			long i = 2L;
+    			while(this.numOfSearchedNumbers.get() <  (this.maxPrimeNumber -1))    			
+	    	     {    			
 	    			 if(this.isInterrupted())
 	    			 {
 	    				 processState = ProcessState.CANCELLED;
+	    				 this.putQueueItem(Constants.POISON_LONG, Constants.POISON_LONG, startTime, processState);
+	    				 System.out.println("Producer thread softly interrupted");
 	    				 break;
 	    			 }	 
 	    			
-	    			 long endNumber = (i + this.numInterval);
-	    			 endNumber = endNumber <= this.numInterval ? endNumber : this.maxPrimeNumber;
-	    			 this.queue.put(new PrimeCounter(i, endNumber));
+	    		  if(i <=  this.maxPrimeNumber)
+	    		  {
+	    			  System.out.println("Start Num: " + Long.toString(i));
+	    			 endNumber = (i + this.numInterval);
+	    			 endNumber = endNumber <= this.maxPrimeNumber ? endNumber : this.maxPrimeNumber;
+	    			 System.out.println("End Num: " + Long.toString(endNumber));
+	    			 this.putQueueItem(i, endNumber, startTime, processState);
+	    			 i = endNumber + 1L;   			
+	    		  }	    			 
 	    			 if(lastTime != currentTime)	    			
 	    			 {
 	    				 lastTime = currentTime;	    				 
-	    				 this.setOutputMessage(this.getUpdateMessage(startTime, i, this.maxPrimeNumber, count, processState));
+	    				 this.setOutputMessage(this.getUpdateMessage(startTime, this.numOfSearchedNumbers.get(), this.maxPrimeNumber, this.numOfPrimesFound.get(), processState));
 	    			 }	    			 
 	    			// set output for every two seconds
-	    			 currentTime = (System.currentTimeMillis() - startTime)/2000L;		    		
-	    	     }
+	    			 currentTime = (System.currentTimeMillis() - startTime)/2000L;		    			
+	    		
+	    	     } // OUTER WHILE
+    			this.putQueueItem(Constants.POISON_LONG, Constants.POISON_LONG, startTime, ProcessState.COMPLETED);
 	    		 processState = processState.equals(ProcessState.INPROGRESS) ? ProcessState.COMPLETED : processState;
-	    		 this.setOutputMessage(this.getUpdateMessage(startTime, !processState.equals(ProcessState.CANCELLED) ? i-1 : i, this.maxPrimeNumber, count, processState));
+	    		 this.setOutputMessage(this.getUpdateMessage(startTime, this.numOfSearchedNumbers.get(), this.maxPrimeNumber, this.numOfPrimesFound.get(), processState));
 	    		 this.toggleRunButtons(true);	    		  		
-	    	 }
+	    	 }	    	
 	    	 catch(Exception ex)
 	    	 {
+	    		 try {
+	    		 this.putQueueItem(Constants.POISON_LONG, Constants.POISON_LONG, startTime, processState);
+	    		 }
+	    		 catch(Exception e)
+	    		 {
+	    			 
+	    		 }
 	    		 this.setOutputMessage("An exception occurred within the worker thread: " + ex.getMessage());    		
 	    		 this.toggleRunButtons(true);
 	    	 }     
@@ -116,10 +134,20 @@ public class Producer extends Thread
 		   append("Processing Time (seconds) ---> ").
 		   append( String.format("%.2f", (System.currentTimeMillis() - startTime)/1000F));	
 		return sb.toString();
-	}
-	private long getNextNumber(long currentIndex, long numInterval)
+	}	
+	private void putQueueItem(long startNum, long endNum, long startTime, ProcessState processState)  throws InterruptedException
 	{
-		return (currentIndex + 1 + numInterval);
+		try 
+		{
+			this.queue.put(new PrimeCounter(startNum, endNum));
+		}
+		catch(InterruptedException ex) 
+   	 {
+			 this.setOutputMessage(this.getUpdateMessage(startTime, this.numOfSearchedNumbers.get(), this.maxPrimeNumber, this.numOfPrimesFound.get(), processState));
+    		 this.toggleRunButtons(true);	
+    		 throw new InterruptedException();
+   		 
+   	 }
 	}
 	
 	private enum ProcessState {INPROGRESS, CANCELLED, COMPLETED}
