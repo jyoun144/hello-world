@@ -29,10 +29,7 @@ public class MultiThreadSwingFrame extends JFrame
 	btnCancelQuiz = new JButton("Cancel");	
 	private final JTextField txtMaxNumber = new JTextField(EMPTY_STRING);	
 	private final JTextArea txtOutput = new JTextArea(5,30);	
-	private Producer producer = null;
-	private Consumer consumer1 = null;
-	private Consumer consumer2 = null;
-	private Consumer consumer3 = null;
+	private Producer producer = null;	
 	
 	public MultiThreadSwingFrame()	{}	
 	
@@ -77,10 +74,12 @@ public class MultiThreadSwingFrame extends JFrame
 		btnStartQuiz.addActionListener((ae) ->
 		{		
 			String inputNumber = txtMaxNumber.getText().trim();
+			
 			if(inputNumber.matches("\\d+") )
 			{				
 				this.toggleRunButtons(false);	
 				Long inputValue;
+				final int numOfConsumerThreads = 10;
 				try
 				{
 					inputValue = Long.parseLong(inputNumber);
@@ -90,13 +89,12 @@ public class MultiThreadSwingFrame extends JFrame
 						BlockingQueue<PrimeCounter>	queue = new LinkedBlockingQueue<PrimeCounter>();
 						final AtomicLong numOfPrimesFound = new AtomicLong(0);
 						final AtomicLong numOfSearchedNumbers = new AtomicLong(0); 
-						this.producer = new Producer(this, inputValue, queue, numOfPrimesFound,  numOfSearchedNumbers, Constants.PRIME_NUM_INTERVAL);
+						this.producer = new Producer(this, inputValue, queue, numOfPrimesFound,  numOfSearchedNumbers, Constants.PRIME_NUM_INTERVAL, numOfConsumerThreads);
 						this.producer.start();
-						for(int i = 0; i < 1; i++)
+						for(int i = 0; i < numOfConsumerThreads; i++)
 						{
 							new Consumer(queue, numOfPrimesFound,  numOfSearchedNumbers).start();
-						}
-						
+						}						
 					}
 					else
 					{

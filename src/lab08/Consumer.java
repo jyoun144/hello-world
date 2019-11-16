@@ -31,11 +31,11 @@ public class Consumer extends Thread
 	    				for(long i = startNum; i <= endNum; i++)
 	    				{
 	    					if(this.isNumberPrime(i))
-	    					{
-	    						primeNumbersFound++;
+	    					{	    						
+	    						primeNumbersFound++;	    						
 	    					}	    					
 	    				}
-	    				this.updateCounts(primeNumbersFound, ((endNum - startNum) +1));	    				
+	    				this.updateCounts(primeNumbersFound, ((endNum - startNum) + 1));	    				
 	    			}
 	    			else
 	    			{

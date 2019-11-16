@@ -3,12 +3,10 @@ package lab08;
 import java.lang.StringBuilder;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.BlockingQueue;
-
 import javax.swing.SwingUtilities;
 
 public class Producer extends Thread
-{
-	
+{	
 	private static final String MSG_PREFIX_CANCELLED = "************PROCESSING CANCELLED************\n";
 	private static final String MSG_PREFIX_PROCESSING = "************CALCULATIONS IN PROGRESS************\n";
 	private static final String MSG_PREFIX_COMPLETED = "************PROCESSING COMPLETED************\n";
@@ -19,8 +17,9 @@ public class Producer extends Thread
 	private final AtomicLong numOfSearchedNumbers;
 	private final BlockingQueue<PrimeCounter> queue;
 	private final long numInterval;
+	private final int numOfConsumerThreads;
 	
-	public Producer(MultiThreadSwingFrame frame, long maxPrimeNumber, BlockingQueue<PrimeCounter> queue, AtomicLong numOfPrimesFound, AtomicLong numOfSearchedNumbers, long numInterval)
+	public Producer(MultiThreadSwingFrame frame, long maxPrimeNumber, BlockingQueue<PrimeCounter> queue, AtomicLong numOfPrimesFound, AtomicLong numOfSearchedNumbers, long numInterval, int numOfConsumerThreads)
 	{		
 		this.frame = frame;
 		this.maxPrimeNumber = maxPrimeNumber;		
@@ -28,16 +27,15 @@ public class Producer extends Thread
 		this.numOfPrimesFound = numOfPrimesFound;
 		this.numOfSearchedNumbers = numOfSearchedNumbers;
 		this.numInterval = numInterval;
-	}
-	
+		this.numOfConsumerThreads = numOfConsumerThreads;
+	}	
 	
 	@Override
 	 public void run(){	
 		long startTime = System.currentTimeMillis();
 		ProcessState processState = ProcessState.INPROGRESS;
 	    	 try
-	    	 { 		
-    				
+	    	 {     				
 	    		 this.setOutputMessage(MSG_PREFIX_INITIAL);
     			// set output for every two seconds
     			long currentTime = (System.currentTimeMillis() - startTime)/2000L;
@@ -56,12 +54,10 @@ public class Producer extends Thread
 	    			 }	 
 	    			
 	    		  if(i <=  this.maxPrimeNumber)
-	    		  {
-	    			  System.out.println("Start Num: " + Long.toString(i));
+	    		  {	    			
 	    			 endNumber = (i + this.numInterval);
-	    			 endNumber = endNumber <= this.maxPrimeNumber ? endNumber : this.maxPrimeNumber;
-	    			 System.out.println("End Num: " + Long.toString(endNumber));
-	    			 this.putQueueItem(i, endNumber, startTime, processState);
+	    			 endNumber = endNumber <= this.maxPrimeNumber ? endNumber : this.maxPrimeNumber;	    			
+	    			 this.putQueueItem(i, endNumber, startTime, processState);	    			
 	    			 i = endNumber + 1L;   			
 	    		  }	    			 
 	    			 if(lastTime != currentTime)	    			
@@ -73,9 +69,11 @@ public class Producer extends Thread
 	    			 currentTime = (System.currentTimeMillis() - startTime)/2000L;		    			
 	    		
 	    	     } // OUTER WHILE
-    			this.putQueueItem(Constants.POISON_LONG, Constants.POISON_LONG, startTime, ProcessState.COMPLETED);
+    			this.putMultiplePoisonItems(this.numOfConsumerThreads);
+    			//this.putQueueItem(Constants.POISON_LONG, Constants.POISON_LONG, startTime, ProcessState.COMPLETED);
 	    		 processState = processState.equals(ProcessState.INPROGRESS) ? ProcessState.COMPLETED : processState;
 	    		 this.setOutputMessage(this.getUpdateMessage(startTime, this.numOfSearchedNumbers.get(), this.maxPrimeNumber, this.numOfPrimesFound.get(), processState));
+	    		 
 	    		 this.toggleRunButtons(true);	    		  		
 	    	 }	    	
 	    	 catch(Exception ex)
@@ -142,12 +140,18 @@ public class Producer extends Thread
 			this.queue.put(new PrimeCounter(startNum, endNum));
 		}
 		catch(InterruptedException ex) 
-   	 {
+		{
 			 this.setOutputMessage(this.getUpdateMessage(startTime, this.numOfSearchedNumbers.get(), this.maxPrimeNumber, this.numOfPrimesFound.get(), processState));
-    		 this.toggleRunButtons(true);	
-    		 throw new InterruptedException();
-   		 
-   	 }
+			 this.toggleRunButtons(true);	
+			 throw new InterruptedException();   		 
+		}
+	}
+	private void putMultiplePoisonItems(int n) throws InterruptedException
+	{
+		for(int i = 0; i < n; i++)
+		{
+			this.queue.put(new PrimeCounter(Constants.POISON_LONG, Constants.POISON_LONG));			
+		}		
 	}
 	
 	private enum ProcessState {INPROGRESS, CANCELLED, COMPLETED}

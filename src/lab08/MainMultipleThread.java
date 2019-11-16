@@ -10,7 +10,7 @@ public class MainMultipleThread
 	{		
 		SwingUtilities.invokeLater(new Runnable() {
 	            public void run() {	            	
-	                createAndShowGUI(new MultiThreadSwingFrame(), 600, 600, "Prime Number Counter");
+	                createAndShowGUI(new MultiThreadSwingFrame(), 600, 600, "Prime Number Multi-Thread Counter");
 	            }
 	        });
 	}
