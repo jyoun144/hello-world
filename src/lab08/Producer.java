@@ -1,6 +1,9 @@
 package lab08;
 
 import java.lang.StringBuilder;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.BlockingQueue;
+
 import javax.swing.SwingUtilities;
 
 public class Producer extends Thread
@@ -13,11 +16,19 @@ public class Producer extends Thread
 	private static final String MSG_PREFIX_INITIAL = "*******PERFORMING INITIAL CALCULATIONS*******\n";	
 	private final long maxPrimeNumber;	
 	private final MultiThreadSwingFrame frame;	
+	private final AtomicLong numOfPrimesFound;
+	private final AtomicLong numOfSearchedNumbers;
+	private final BlockingQueue<PrimeCounter> queue;
+	private final long numInterval;
 	
-	public Producer(MultiThreadSwingFrame frame, long maxPrimeNumber)
+	public Producer(MultiThreadSwingFrame frame, long maxPrimeNumber, BlockingQueue<PrimeCounter> queue, AtomicLong numOfPrimesFound, AtomicLong numOfSearchedNumbers, long numInterval)
 	{		
 		this.frame = frame;
 		this.maxPrimeNumber = maxPrimeNumber;		
+		this.queue = queue;
+		this.numOfPrimesFound = numOfPrimesFound;
+		this.numOfSearchedNumbers = numOfSearchedNumbers;
+		this.numInterval = numInterval;
 	}
 	
 	@Override
@@ -33,22 +44,22 @@ public class Producer extends Thread
     			long i;
     			this.setOutputMessage(MSG_PREFIX_INITIAL);
     			
-	    		 for(i = 2; i <= this.maxPrimeNumber; i++)
+	    		 for(i = 2; i <= this.maxPrimeNumber; this.getNextNumber(i, this.numInterval))
 	    	     {	    			 
 	    			 if(this.isInterrupted())
 	    			 {
 	    				 processState = ProcessState.CANCELLED;
 	    				 break;
-	    			 }	    			 
+	    			 }	 
+	    			
+	    			 long endNumber = (i + this.numInterval);
+	    			 endNumber = endNumber <= this.numInterval ? endNumber : this.maxPrimeNumber;
+	    			 this.queue.put(new PrimeCounter(i, endNumber));
 	    			 if(lastTime != currentTime)	    			
 	    			 {
 	    				 lastTime = currentTime;	    				 
 	    				 this.setOutputMessage(this.getUpdateMessage(startTime, i, this.maxPrimeNumber, count, processState));
-	    			 }
-	    			 if(this.isNumberPrime(i))
-	    			 {			    	 
-			    		 count++;
-	    			 }	
+	    			 }	    			 
 	    			// set output for every two seconds
 	    			 currentTime = (System.currentTimeMillis() - startTime)/2000L;		    		
 	    	     }
@@ -61,21 +72,7 @@ public class Producer extends Thread
 	    		 this.setOutputMessage("An exception occurred within the worker thread: " + ex.getMessage());    		
 	    		 this.toggleRunButtons(true);
 	    	 }     
-	   }
-	private boolean isNumberPrime(long n)
-	{
-		boolean result = true;
-		long floor = n/LONG_NUM_2;		
-		for(long i = 2; i <= floor; i++)
-		{
-			if ((i != n) && (n % i) == LONG_NUM_0)
-			{
-				result = false;
-				break;
-			}
-		}
-		return result;
-	}
+	   }	
 	private void setOutputMessage(String text)
 	{
 		SwingUtilities.invokeLater(new Runnable() {
@@ -119,6 +116,10 @@ public class Producer extends Thread
 		   append("Processing Time (seconds) ---> ").
 		   append( String.format("%.2f", (System.currentTimeMillis() - startTime)/1000F));	
 		return sb.toString();
+	}
+	private long getNextNumber(long currentIndex, long numInterval)
+	{
+		return (currentIndex + 1 + numInterval);
 	}
 	
 	private enum ProcessState {INPROGRESS, CANCELLED, COMPLETED}

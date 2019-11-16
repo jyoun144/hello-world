@@ -11,6 +11,9 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class MultiThreadSwingFrame extends JFrame
 {
@@ -27,6 +30,7 @@ public class MultiThreadSwingFrame extends JFrame
 	private final JTextField txtMaxNumber = new JTextField(EMPTY_STRING);	
 	private final JTextArea txtOutput = new JTextArea(5,30);	
 	private Producer producer = null;
+	private Consumer consumer1 = null;
 	
 	public MultiThreadSwingFrame()	{}	
 	
@@ -78,10 +82,16 @@ public class MultiThreadSwingFrame extends JFrame
 				try
 				{
 					inputValue = Long.parseLong(inputNumber);
+				
 					if(inputValue >= 2L && inputValue <= Long.MAX_VALUE)
 					{
-						this.producer = new Producer(this, inputValue);
+						BlockingQueue<PrimeCounter>	queue = new LinkedBlockingQueue<PrimeCounter>();
+						AtomicLong numOfPrimesFound = new AtomicLong(0);
+						AtomicLong numOfSearchedNumbers = new AtomicLong(0); 
+						this.producer = new Producer(this, inputValue, queue, numOfPrimesFound,  numOfSearchedNumbers, Constants.PRIME_NUM_INTERVAL);
 						this.producer.start();
+						this.consumer1 = new Consumer(queue, numOfPrimesFound,  numOfSearchedNumbers);	
+						consumer1.setName("Consumer_Thread_1");
 					}
 					else
 					{

@@ -60,7 +60,7 @@ public class Consumer extends Thread
 		long floor = n/Constants.LONG_2;		
 		for(long i = 2; i <= floor; i++)
 		{
-			if ((i != n) && (n % i) == Constants.LONG_2)
+			if ((i != n) && (n % i) == Constants.LONG_0)
 			{
 				result = false;
 				break;
