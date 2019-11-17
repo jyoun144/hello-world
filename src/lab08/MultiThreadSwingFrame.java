@@ -2,6 +2,7 @@ package lab08;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -69,17 +70,25 @@ public class MultiThreadSwingFrame extends JFrame
 	private void setGridBagLayout()
 	{
 		this.setLayout(new GridBagLayout());
-		GridBagConstraints c = this.getConstraints(0, 0, 4, 1, 0, FILL_CONSTRAINT_HORIZONTAL);
+		GridBagConstraints c = this.getConstraints(0, 0, 5, 1, 0, FILL_CONSTRAINT_HORIZONTAL);
 		c.ipady = 50;
 		c.ipadx = 50;
 		this.add(txtOutput, c);
-		//GridBagConstraints g = this.getConstraints(0, 1, 4, 1, 10, FILL_CONSTRAINT_HORIZONTAL);			
-		//this.add(this.getButtonGroup(), g);		
-		GridBagConstraints d = this.getConstraints(0, 1, 4, 1, 10, FILL_CONSTRAINT_HORIZONTAL);			
+		GridBagConstraints g = this.getConstraints(0, 1, 1, 1, 10, FILL_CONSTRAINT_HORIZONTAL);			
+		this.add(rb01, g);	
+		GridBagConstraints h = this.getConstraints(1, 1, 1, 1, 10, FILL_CONSTRAINT_HORIZONTAL);			
+		this.add(rb05, h);	
+		GridBagConstraints i = this.getConstraints(2, 1, 1, 1, 10, FILL_CONSTRAINT_HORIZONTAL);			
+		this.add(rb10, i);
+		GridBagConstraints j = this.getConstraints(3, 1, 1, 1, 10, FILL_CONSTRAINT_HORIZONTAL);			
+		this.add(rb15, j);
+		GridBagConstraints k = this.getConstraints(4, 1, 1, 1, 10, FILL_CONSTRAINT_HORIZONTAL);			
+		this.add(rb20, k);
+		GridBagConstraints d = this.getConstraints(0, 2, 5, 1, 10, FILL_CONSTRAINT_HORIZONTAL);			
 		this.add(txtMaxNumber, d);		
-		GridBagConstraints e = this.getConstraints(0, 2, 4, 1, 10, FILL_CONSTRAINT_HORIZONTAL);			
+		GridBagConstraints e = this.getConstraints(0, 3, 5, 1, 10, FILL_CONSTRAINT_HORIZONTAL);			
 		this.add(btnStartQuiz, e);
-		GridBagConstraints f = this.getConstraints(0, 3, 4, 1, 10, FILL_CONSTRAINT_HORIZONTAL);		
+		GridBagConstraints f = this.getConstraints(0, 4, 5, 1, 10, FILL_CONSTRAINT_HORIZONTAL);		
 		this.add(btnCancelQuiz, f);
 	}	
 	private void setListeners()
@@ -176,43 +185,47 @@ public class MultiThreadSwingFrame extends JFrame
 	}
 	private void setRadioButtonListeners()
 	{
-		rb01.addItemListener( e ->
+		rb01.addActionListener( e ->
 		{
-			itemStateChanged(e);		
+			actionPerformed(e);		
 		});
-		rb05.addItemListener( e ->
+		rb05.addActionListener( e ->
 		{
-			itemStateChanged(e);		
+			actionPerformed(e);		
 		});
-		rb10.addItemListener( e ->
+		rb10.addActionListener( e ->
 		{
-			itemStateChanged(e);		
+			actionPerformed(e);		
 		});
-		rb15.addItemListener( e ->
+		rb15.addActionListener( e ->
 		{
-			itemStateChanged(e);		
+			actionPerformed(e);		
 		});
-		rb20.addItemListener( e ->
+		rb20.addActionListener( e ->
 		{
-			itemStateChanged(e);		
-		});
+			actionPerformed(e);		
+		});		
 	}
-	public void itemStateChanged(ItemEvent e) {
-	    
-	    Object source = e.getItemSelectable();
-
-	    if (source == rb01) {
-	       this.numOfThreads = 1;
-	    } else if (source == rb05) {
-	    	this.numOfThreads = 5;
-	    } else if (source == rb10) {
-	    	this.numOfThreads = 10;
-	    } else if (source == rb15) {
-	    	this.numOfThreads = 15;
+	 public void actionPerformed(ActionEvent event) {
+		 
+	        Object source = event.getSource();
+	        if (source == rb01) {	    	
+	        	this.numOfThreads = 1;
+	 	    } else if (source == rb05) {
+	 	    	this.numOfThreads = 5;
+	 	    	
+	 	    } else if (source == rb10) {
+	 	    	this.numOfThreads = 10;
+	 	    	
+	 	    } else if (source == rb15) {
+	 	    	this.numOfThreads = 15;
+	 	    	
+	 	    }
+	 	    else
+	 	    {
+	 	    	this.numOfThreads = 20;	 	 	    	
+	 	    }
+	        System.out.println("Changed num of threads to: " + this.numOfThreads);	 
 	    }
-	    else
-	    {
-	    	this.numOfThreads = 20;	    	
-	    }
-	}
+	
 }
