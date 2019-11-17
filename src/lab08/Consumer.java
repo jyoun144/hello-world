@@ -45,12 +45,12 @@ public class Consumer extends Thread
 	    	 }
 	    	 catch(InterruptedException ex)
 	    	 {
-	    		 System.out.println( ":  " + "Exiting...Interrupted Exception");
+	    		 System.out.println(this.getName() + ":  " + "Exiting...Interrupted Exception");
 	    		 ex.printStackTrace();
 	    	 }
 	    	 catch(Exception ex)
 	    	 {
-	    		 System.out.println( ":  " + "Exiting...General Exception");
+	    		 System.out.println(this.getName() + ":  " + "Exiting...General Exception");
 	    		 ex.printStackTrace();
 	    	 }
 	}
@@ -78,12 +78,12 @@ public class Consumer extends Thread
 		boolean performBreak = false;
 		if(startNumValue == Constants.POISON_LONG)
 		{
-			System.out.println( ":  " + "Exiting...received poison");
+			System.out.println(this.getName() + ":  " + "Exiting...received poison");
 			performBreak = true;
 		}
 		if(this.isInterrupted())
 		{
-			System.out.println( ":  " + "Exiting...soft interuption");
+			System.out.println(this.getName() + ":  " + "Exiting...soft interuption");
 			performBreak = true;
 			
 		}

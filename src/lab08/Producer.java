@@ -105,9 +105,10 @@ public class Producer extends Thread
             }
         });
 	}	
-	private String getUpdateMessage(long startTime, long currentPrime, long maxPrime, long count, ProcessState processState)
+	private String getUpdateMessage(long startTime, long currentPrimeSearchCount, long maxPrime, long count, ProcessState processState)
 	{
 		StringBuilder sb = new StringBuilder();
+		currentPrimeSearchCount++;
 		if(processState.equals(ProcessState.CANCELLED))
 		{
 			sb.append(MSG_PREFIX_CANCELLED);
@@ -122,7 +123,7 @@ public class Producer extends Thread
 		}
 		sb.append("Prime Number Count [2, ").
 		   append("(").
-		   append(currentPrime).
+		   append(currentPrimeSearchCount).
 		   append("/").
 		   append(maxPrime).
 		   append(")").

@@ -3,7 +3,6 @@ package lab08;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
-import java.awt.event.ItemEvent;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -39,7 +38,7 @@ public class MultiThreadSwingFrame extends JFrame
 	private final JRadioButton rb15 = new JRadioButton("15 threads");
 	private final JRadioButton rb20 = new JRadioButton("20 threads");
 	private Producer producer = null;	
-	private int numOfThreads;
+	private int numOfConsumerThreads = 1;
 	
 	
 	public MultiThreadSwingFrame()	{}	
@@ -56,7 +55,7 @@ public class MultiThreadSwingFrame extends JFrame
 		this.setNumberInput();	
 		this.setCalculationOutput();
 		this.toggleRunButtons(true);
-		this.txtMaxNumber.requestFocus();
+		this.txtMaxNumber.requestFocus();		
 	}	
 	public void toggleRunButtons(Boolean isReadyState)
 	{
@@ -100,8 +99,7 @@ public class MultiThreadSwingFrame extends JFrame
 			if(inputNumber.matches("\\d+") )
 			{				
 				this.toggleRunButtons(false);	
-				Long inputValue;
-				final int numOfConsumerThreads = 10;
+				Long inputValue;				
 				try
 				{
 					inputValue = Long.parseLong(inputNumber);
@@ -113,9 +111,12 @@ public class MultiThreadSwingFrame extends JFrame
 						final AtomicLong numOfSearchedNumbers = new AtomicLong(0); 
 						this.producer = new Producer(this, inputValue, queue, numOfPrimesFound,  numOfSearchedNumbers, Constants.PRIME_NUM_INTERVAL, numOfConsumerThreads);
 						this.producer.start();
-						for(int i = 0; i < numOfConsumerThreads; i++)
+						for(int i = 0; i < this.numOfConsumerThreads; i++)
 						{
-							new Consumer(queue, numOfPrimesFound,  numOfSearchedNumbers).start();
+							Consumer thread = new Consumer(queue, numOfPrimesFound,  numOfSearchedNumbers);
+							thread.setName("ConsumerThread_" + (i + 1));
+							//new Consumer(queue, numOfPrimesFound,  numOfSearchedNumbers).start();
+							thread.start();
 						}						
 					}
 					else
@@ -176,7 +177,7 @@ public class MultiThreadSwingFrame extends JFrame
 	}
 	private void createButtonGroup()
 	{
-		ButtonGroup group = new ButtonGroup();
+		ButtonGroup group = new ButtonGroup();		
 		group.add(rb01);
 		group.add(rb05);
 		group.add(rb10);
@@ -210,22 +211,20 @@ public class MultiThreadSwingFrame extends JFrame
 		 
 	        Object source = event.getSource();
 	        if (source == rb01) {	    	
-	        	this.numOfThreads = 1;
+	        	this.numOfConsumerThreads = 1;
 	 	    } else if (source == rb05) {
-	 	    	this.numOfThreads = 5;
+	 	    	this.numOfConsumerThreads = 5;
 	 	    	
 	 	    } else if (source == rb10) {
-	 	    	this.numOfThreads = 10;
+	 	    	this.numOfConsumerThreads = 10;
 	 	    	
 	 	    } else if (source == rb15) {
-	 	    	this.numOfThreads = 15;
-	 	    	
+	 	    	this.numOfConsumerThreads = 15;	 	    	
 	 	    }
 	 	    else
 	 	    {
-	 	    	this.numOfThreads = 20;	 	 	    	
+	 	    	this.numOfConsumerThreads = 20;	 	 	    	
 	 	    }
-	        System.out.println("Changed num of threads to: " + this.numOfThreads);	 
-	    }
-	
+	        System.out.println("Changed num of threads to: " + this.numOfConsumerThreads);	 
+	    }	
 }
