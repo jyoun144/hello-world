@@ -62,20 +62,19 @@ public class SwingUpdater extends Thread
 	    			 }	 
 	    			
 	    		  if(i <=  this.maxPrimeNumber)
-	    		  {	 
-	    			  if(((ThreadPoolExecutor)workerPool).getQueue().size() < 10000)
-	    			  {
-	    			  
-	    			 endNumber = (i + this.numInterval);
-	    			 endNumber = endNumber <= this.maxPrimeNumber ? endNumber : this.maxPrimeNumber;  
-	    			 list.add(workerPool.submit(new ConsumerService(this.numOfPrimesFound, this.numOfSearchedNumbers, new PrimeCounter(i, endNumber))));	    			 
-	    			 i = endNumber + 1L;  
+	    		  {	
+	    			  // Limits the max number of tasks that can reside within the queue in order to prevent memory overflow
+	    			  if(((ThreadPoolExecutor)workerPool).getQueue().size() < Constants.MAX_TASK_QUEUE_SIZE)
+	    			  {	    			  
+		    			 endNumber = (i + this.numInterval);
+		    			 endNumber = endNumber <= this.maxPrimeNumber ? endNumber : this.maxPrimeNumber;  
+		    			 list.add(workerPool.submit(new ConsumerService(this.numOfPrimesFound, this.numOfSearchedNumbers, new PrimeCounter(i, endNumber))));	    			 
+		    			 i = endNumber + 1L;  
 	    			  }
 	    			  else
 	    			  {
 	    				  Thread.sleep(100);
-	    			  }
-	    			// System.out.println(((ThreadPoolExecutor)workerPool).getQueue().size());
+	    			  }	    			
 	    		  }	    			 
 	    			 if(lastTime != currentTime)	    			
 	    			 {
@@ -91,21 +90,16 @@ public class SwingUpdater extends Thread
 	    		this.setOutputMessage(this.getUpdateMessage(startTime, this.numOfSearchedNumbers.get(), this.maxPrimeNumber, this.numOfPrimesFound.get(), processState));		
 	    	 }	 
 	    	 catch(InterruptedException ie)
-	    	 {
-	    		 this.cancelThreads(list);
-	    		 this.toggleRunButtons(true);
-	    		 
+	    	 {	    		
+				 this.cancelThreads(list);
+				 this.toggleRunButtons(true);
+				 System.out.println(this.getName() + ":  interrupted by user");
 	    	 }
 	    	 catch(Exception ex)
-	    	 {
-	    		 try {
-	    			   this.cancelThreads(list);
-	    			 	System.out.println(this.getName() + ":" + "\n e.printStackTrace()");	    			 	
-	    		 	 }
-	    		 catch(Exception e)
-	    		 {
-	    			 System.out.println(this.getName() + ":" + "\n e.printStackTrace()");	    			   			 
-	    		 }
+	    	 {	    		 
+	    		 this.cancelThreads(list);
+	    		 System.out.println(this.getName() + ":");
+	    		 ex.printStackTrace();
 	    		 this.setOutputMessage("A serious system error occurred.  Please, try resubmitting input.");    		
 	    		 this.toggleRunButtons(true);
 	    	 }     

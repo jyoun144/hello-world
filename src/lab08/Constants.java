@@ -6,6 +6,7 @@ public class Constants
 	public static final long LONG_2 = 2L;
 	public static final long LONG_0 = 0L;	
 	public static final long PRIME_NUM_INTERVAL = 10;
+	public static final int MAX_TASK_QUEUE_SIZE = 10000;
 	public static final String ERROR_MSG_NUM_FORMAT = "******NUMBER FORMAT EXCEPTION*****\n*****ENTER A VALID WHOLE NUMBER*****";
 	public static final String ERROR_MSG_GENERAL = "******GENERAL SYSTEM EXCEPTION*****\n*****ENTER A VALID WHOLE NUMBER*****";
 	public static final String ERROR_MSG_INVALID_RANGE = "******INVALID NUMBER ENTRY*****\n*****ENTER A WHOLE NUMBER BETWEEN 2 AND 9223372036854775807*****";
