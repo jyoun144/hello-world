@@ -20,9 +20,11 @@ public class SwingUpdater extends Thread
 	private final AtomicLong numOfSearchedNumbers;	
 	private final long numInterval;	
 	private final ExecutorService workerPool;
+	private final int numOfWorkerThreads;
 	private enum ProcessState {INPROGRESS, CANCELLED, COMPLETED}
 	
-	public SwingUpdater(MultiThreadSwingFrame frame, long maxPrimeNumber, AtomicLong numOfPrimesFound, AtomicLong numOfSearchedNumbers, long numInterval, ExecutorService workerPool)
+	
+	public SwingUpdater(MultiThreadSwingFrame frame, long maxPrimeNumber, AtomicLong numOfPrimesFound, AtomicLong numOfSearchedNumbers, long numInterval, ExecutorService workerPool, int numOfWorkerThreads)
 	{		
 		this.frame = frame;
 		this.maxPrimeNumber = maxPrimeNumber;		
@@ -30,6 +32,7 @@ public class SwingUpdater extends Thread
 		this.numOfSearchedNumbers = numOfSearchedNumbers;
 		this.numInterval = numInterval;		
 		this.workerPool = workerPool;
+		this.numOfWorkerThreads = numOfWorkerThreads;
 	}	
 	
 	@Override
@@ -132,7 +135,10 @@ public class SwingUpdater extends Thread
 		   append(count).
 		   append("\n").
 		   append("Processing Time (seconds) ---> ").
-		   append( String.format("%.2f", (System.currentTimeMillis() - startTime)/1000F));	
+		   append( String.format("%.2f", (System.currentTimeMillis() - startTime)/1000F)).
+		   append("\n").
+		   append("Number of worker threads ---> " + this.numOfWorkerThreads);
+		// this.numOfWorkerThreads
 		return sb.toString();
 	}	
 	private void cancelThreads(List<Future<?>> list)

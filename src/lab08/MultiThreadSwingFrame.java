@@ -23,10 +23,6 @@ public class MultiThreadSwingFrame extends JFrame
 	private static final long serialVersionUID = 8284044802749048904L;	
 	private static final String EMPTY_STRING = "";	
 	private static final int FILL_CONSTRAINT_HORIZONTAL = GridBagConstraints.HORIZONTAL;	
-	private static final String ERROR_MSG_NUM_FORMAT = "******NUMBER FORMAT EXCEPTION*****\n*****ENTER A VALID WHOLE NUMBER*****";
-	private static final String ERROR_MSG_GENERAL = "******GENERAL SYSTEM EXCEPTION*****\n*****ENTER A VALID WHOLE NUMBER*****";
-	private static final String ERROR_MSG_INVALID_RANGE = "******INVALID NUMBER ENTRY*****\n*****ENTER A WHOLE NUMBER BETWEEN 2 AND 9223372036854775807*****";
-	private static final String INFO_MSG_INITIAL = "1. Input a whole number between 2 and 9,223,372,036,854,775,807 \n into the text box with a blue border.  \n\n2. Click the 'Start' button to calculate the number of prime \nnumbers between 2 and the input whole number.";
 	private final JButton	
 	btnStartQuiz = new JButton("Start"),
 	btnCancelQuiz = new JButton("Cancel");	
@@ -64,12 +60,13 @@ public class MultiThreadSwingFrame extends JFrame
 		{
 			txtMaxNumber.requestFocus(isReadyState);
 		}
+		this.setRadioButtons(isReadyState);
 	}	
 	private void setGridBagLayout()
 	{
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints c = this.getConstraints(0, 0, 5, 1, 0, FILL_CONSTRAINT_HORIZONTAL);
-		c.ipady = 50;
+		c.ipady = 75;
 		c.ipadx = 50;
 		this.add(txtOutput, c);
 		GridBagConstraints g = this.getConstraints(0, 1, 1, 1, 10, FILL_CONSTRAINT_HORIZONTAL);			
@@ -108,24 +105,24 @@ public class MultiThreadSwingFrame extends JFrame
 						final AtomicLong numOfPrimesFound = new AtomicLong(0);
 						final AtomicLong numOfSearchedNumbers = new AtomicLong(0);
 						ExecutorService threadPool = Executors.newFixedThreadPool(this.numOfConsumerThreads);
-						this.swingUpdater = new SwingUpdater(this, inputValue, numOfPrimesFound,  numOfSearchedNumbers, Constants.PRIME_NUM_INTERVAL, threadPool);
+						this.swingUpdater = new SwingUpdater(this, inputValue, numOfPrimesFound,  numOfSearchedNumbers, Constants.PRIME_NUM_INTERVAL, threadPool, this.numOfConsumerThreads);
 						this.swingUpdater.setName("ProducerThread");
 						this.swingUpdater.start();				
 					}
 					else
 					{
-						this.setMessage(ERROR_MSG_INVALID_RANGE);
+						this.setMessage(Constants.ERROR_MSG_INVALID_RANGE);
 					}
 					txtMaxNumber.requestFocus();
 				}
 				catch(NumberFormatException ne)
 				{					
-					this.setMessage(ERROR_MSG_NUM_FORMAT); 
+					this.setMessage(Constants.ERROR_MSG_NUM_FORMAT); 
 					 this.toggleRunButtons(true);
 				}
 				catch(Exception ex)
 				{
-					this.setMessage(ERROR_MSG_GENERAL);
+					this.setMessage(Constants.ERROR_MSG_GENERAL);
 					 this.toggleRunButtons(true);
 				}					
 			}
@@ -154,7 +151,7 @@ public class MultiThreadSwingFrame extends JFrame
 	private void setCalculationOutput()
 	{		
 		txtOutput.setEditable(false);
-		txtOutput.setText(INFO_MSG_INITIAL);		
+		txtOutput.setText(Constants.INFO_MSG_INITIAL);		
 		txtOutput.setFont(new Font("SansSerif", Font.PLAIN, 15));
 	}
 	private GridBagConstraints getConstraints(int gridX, int gridY, int gridWidth, int gridHeight, int insetTopValue, int fillConstraint)
@@ -200,7 +197,7 @@ public class MultiThreadSwingFrame extends JFrame
 			actionPerformed(e);		
 		});		
 	}
-	 public void actionPerformed(ActionEvent event) {
+	 private void actionPerformed(ActionEvent event) {
 		 
 	        Object source = event.getSource();
 	        if (source == rb01) {	    	
@@ -219,5 +216,13 @@ public class MultiThreadSwingFrame extends JFrame
 	 	    	this.numOfConsumerThreads = 20;	 	 	    	
 	 	    }
 	        System.out.println("Changed num of threads to: " + this.numOfConsumerThreads);	 
-	    }	
+	    }
+	 private void setRadioButtons(boolean isEnabled)
+	 {
+		 rb01.setEnabled(isEnabled);
+		 rb05.setEnabled(isEnabled);
+		 rb10.setEnabled(isEnabled);
+		 rb15.setEnabled(isEnabled);
+	 	 rb20.setEnabled(isEnabled);
+	 }
 }
