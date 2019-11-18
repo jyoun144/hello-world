@@ -29,10 +29,9 @@ public class MultiThreadSwingFrame extends JFrame
 	private final JTextField txtMaxNumber = new JTextField(EMPTY_STRING);	
 	private final JTextArea txtOutput = new JTextArea(5,30);	
 	private final JRadioButton rb01 = new JRadioButton("1 thread", true);
-	private final JRadioButton rb05 = new JRadioButton("5 threads");
-	private final JRadioButton rb10 = new JRadioButton("10 threads");
-	private final JRadioButton rb15 = new JRadioButton("15 threads");
-	private final JRadioButton rb20 = new JRadioButton("20 threads");		
+	private final JRadioButton rb02 = new JRadioButton("2 threads");
+	private final JRadioButton rb3 = new JRadioButton("3 threads");
+	private final JRadioButton rb4 = new JRadioButton("4 threads");			
 	private int numOfConsumerThreads = 1;	
     private SwingUpdater swingUpdater = null;   
 	
@@ -72,18 +71,16 @@ public class MultiThreadSwingFrame extends JFrame
 		GridBagConstraints g = this.getConstraints(0, 1, 1, 1, 10, FILL_CONSTRAINT_HORIZONTAL);			
 		this.add(rb01, g);	
 		GridBagConstraints h = this.getConstraints(1, 1, 1, 1, 10, FILL_CONSTRAINT_HORIZONTAL);			
-		this.add(rb05, h);	
+		this.add(rb02, h);	
 		GridBagConstraints i = this.getConstraints(2, 1, 1, 1, 10, FILL_CONSTRAINT_HORIZONTAL);			
-		this.add(rb10, i);
+		this.add(rb3, i);
 		GridBagConstraints j = this.getConstraints(3, 1, 1, 1, 10, FILL_CONSTRAINT_HORIZONTAL);			
-		this.add(rb15, j);
-		GridBagConstraints k = this.getConstraints(4, 1, 1, 1, 10, FILL_CONSTRAINT_HORIZONTAL);			
-		this.add(rb20, k);
-		GridBagConstraints d = this.getConstraints(0, 2, 5, 1, 10, FILL_CONSTRAINT_HORIZONTAL);			
+		this.add(rb4, j);		
+		GridBagConstraints d = this.getConstraints(0, 2, 4, 1, 10, FILL_CONSTRAINT_HORIZONTAL);			
 		this.add(txtMaxNumber, d);		
-		GridBagConstraints e = this.getConstraints(0, 3, 5, 1, 10, FILL_CONSTRAINT_HORIZONTAL);			
+		GridBagConstraints e = this.getConstraints(0, 3, 4, 1, 10, FILL_CONSTRAINT_HORIZONTAL);			
 		this.add(btnStartQuiz, e);
-		GridBagConstraints f = this.getConstraints(0, 4, 5, 1, 10, FILL_CONSTRAINT_HORIZONTAL);		
+		GridBagConstraints f = this.getConstraints(0, 4, 4, 1, 10, FILL_CONSTRAINT_HORIZONTAL);		
 		this.add(btnCancelQuiz, f);
 	}	
 	private void setListeners()
@@ -169,10 +166,9 @@ public class MultiThreadSwingFrame extends JFrame
 	{
 		ButtonGroup group = new ButtonGroup();		
 		group.add(rb01);
-		group.add(rb05);
-		group.add(rb10);
-		group.add(rb15);
-		group.add(rb20);		
+		group.add(rb02);
+		group.add(rb3);
+		group.add(rb4);			
 	}
 	private void setRadioButtonListeners()
 	{
@@ -180,49 +176,40 @@ public class MultiThreadSwingFrame extends JFrame
 		{
 			actionPerformed(e);		
 		});
-		rb05.addActionListener( e ->
+		rb02.addActionListener( e ->
 		{
 			actionPerformed(e);		
 		});
-		rb10.addActionListener( e ->
+		rb3.addActionListener( e ->
 		{
 			actionPerformed(e);		
 		});
-		rb15.addActionListener( e ->
+		rb4.addActionListener( e ->
 		{
 			actionPerformed(e);		
-		});
-		rb20.addActionListener( e ->
-		{
-			actionPerformed(e);		
-		});		
+		});			
 	}
 	 private void actionPerformed(ActionEvent event) {
 		 
 	        Object source = event.getSource();
 	        if (source == rb01) {	    	
 	        	this.numOfConsumerThreads = 1;
-	 	    } else if (source == rb05) {
-	 	    	this.numOfConsumerThreads = 5;
+	 	    } else if (source == rb02) {
+	 	    	this.numOfConsumerThreads = 2;
 	 	    	
-	 	    } else if (source == rb10) {
-	 	    	this.numOfConsumerThreads = 10;
-	 	    	
-	 	    } else if (source == rb15) {
-	 	    	this.numOfConsumerThreads = 15;	 	    	
-	 	    }
-	 	    else
+	 	    } else if (source == rb3) {
+	 	    	this.numOfConsumerThreads = 3;  
+	 	    } else
 	 	    {
-	 	    	this.numOfConsumerThreads = 20;	 	 	    	
+	 	    	this.numOfConsumerThreads = 4;	 	 	    	
 	 	    }
 	        System.out.println("Changed num of threads to: " + this.numOfConsumerThreads);	 
 	    }
 	 private void setRadioButtons(boolean isEnabled)
 	 {
 		 rb01.setEnabled(isEnabled);
-		 rb05.setEnabled(isEnabled);
-		 rb10.setEnabled(isEnabled);
-		 rb15.setEnabled(isEnabled);
-	 	 rb20.setEnabled(isEnabled);
+		 rb02.setEnabled(isEnabled);
+		 rb3.setEnabled(isEnabled);
+		 rb4.setEnabled(isEnabled);	 	 
 	 }
 }
