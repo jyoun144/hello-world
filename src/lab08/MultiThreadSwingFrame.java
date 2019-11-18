@@ -31,7 +31,8 @@ public class MultiThreadSwingFrame extends JFrame
 	private final JRadioButton rb01 = new JRadioButton("1 thread", true);
 	private final JRadioButton rb02 = new JRadioButton("2 threads");
 	private final JRadioButton rb3 = new JRadioButton("3 threads");
-	private final JRadioButton rb4 = new JRadioButton("4 threads");			
+	private final JRadioButton rb4 = new JRadioButton("4 threads");	
+	private final JRadioButton rb8 = new JRadioButton("8 threads");		
 	private int numOfConsumerThreads = 1;	
     private SwingUpdater swingUpdater = null;   
 	
@@ -75,12 +76,14 @@ public class MultiThreadSwingFrame extends JFrame
 		GridBagConstraints i = this.getConstraints(2, 1, 1, 1, 10, FILL_CONSTRAINT_HORIZONTAL);			
 		this.add(rb3, i);
 		GridBagConstraints j = this.getConstraints(3, 1, 1, 1, 10, FILL_CONSTRAINT_HORIZONTAL);			
-		this.add(rb4, j);		
-		GridBagConstraints d = this.getConstraints(0, 2, 4, 1, 10, FILL_CONSTRAINT_HORIZONTAL);			
+		this.add(rb4, j);
+		GridBagConstraints k = this.getConstraints(4, 1, 1, 1, 10, FILL_CONSTRAINT_HORIZONTAL);			
+		this.add(rb8, k);
+		GridBagConstraints d = this.getConstraints(0, 2, 5, 1, 10, FILL_CONSTRAINT_HORIZONTAL);			
 		this.add(txtMaxNumber, d);		
-		GridBagConstraints e = this.getConstraints(0, 3, 4, 1, 10, FILL_CONSTRAINT_HORIZONTAL);			
+		GridBagConstraints e = this.getConstraints(0, 3, 5, 1, 10, FILL_CONSTRAINT_HORIZONTAL);			
 		this.add(btnStartQuiz, e);
-		GridBagConstraints f = this.getConstraints(0, 4, 4, 1, 10, FILL_CONSTRAINT_HORIZONTAL);		
+		GridBagConstraints f = this.getConstraints(0, 4, 5, 1, 10, FILL_CONSTRAINT_HORIZONTAL);		
 		this.add(btnCancelQuiz, f);
 	}	
 	private void setListeners()
@@ -168,7 +171,8 @@ public class MultiThreadSwingFrame extends JFrame
 		group.add(rb01);
 		group.add(rb02);
 		group.add(rb3);
-		group.add(rb4);			
+		group.add(rb4);	
+		group.add(rb8);
 	}
 	private void setRadioButtonListeners()
 	{
@@ -187,7 +191,11 @@ public class MultiThreadSwingFrame extends JFrame
 		rb4.addActionListener( e ->
 		{
 			actionPerformed(e);		
-		});			
+		});	
+		rb8.addActionListener( e ->
+		{
+			actionPerformed(e);		
+		});	
 	}
 	 private void actionPerformed(ActionEvent event) {
 		 
@@ -199,9 +207,11 @@ public class MultiThreadSwingFrame extends JFrame
 	 	    	
 	 	    } else if (source == rb3) {
 	 	    	this.numOfConsumerThreads = 3;  
-	 	    } else
+	 	    }else if (source == rb4) {
+	 	    	this.numOfConsumerThreads = 4;	 	    
+	 	    }else
 	 	    {
-	 	    	this.numOfConsumerThreads = 4;	 	 	    	
+	 	    	this.numOfConsumerThreads = 8;	 	 	    	
 	 	    }
 	        System.out.println("Changed num of threads to: " + this.numOfConsumerThreads);	 
 	    }
@@ -210,6 +220,7 @@ public class MultiThreadSwingFrame extends JFrame
 		 rb01.setEnabled(isEnabled);
 		 rb02.setEnabled(isEnabled);
 		 rb3.setEnabled(isEnabled);
-		 rb4.setEnabled(isEnabled);	 	 
+		 rb4.setEnabled(isEnabled);	
+		 rb8.setEnabled(isEnabled);	 
 	 }
 }
