@@ -25,8 +25,7 @@ public class ConsumerService extends Thread
 			 for(long i = startNum; i <= endNum; i++)
 			 {
 				 if(this.isInterrupted())
-				 {
-					 //System.out.println(this.getName() + ":  " + "Exiting...soft interuption");
+				 {					 
 					 System.out.println("Working thread Exiting...soft interuption");
 					 break;
 				 }	    					
@@ -38,8 +37,7 @@ public class ConsumerService extends Thread
 					this.updateCounts(primeNumbersFound, ((endNum - startNum) + 1));	 
 		 }	    	 
 		 catch(Exception ex)
-		 {
-			 // System.out.println(this.getName() + ":  " + "Exiting...General Exception");
+		 {			 
 			 System.out.println("Working thread within general exception block");
 			 ex.printStackTrace();
 		 }

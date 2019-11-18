@@ -15,8 +15,6 @@ import javax.swing.ButtonGroup;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ExecutorService; 
 import java.util.concurrent.Executors; 
 
@@ -38,11 +36,9 @@ public class MultiThreadSwingFrame extends JFrame
 	private final JRadioButton rb05 = new JRadioButton("5 threads");
 	private final JRadioButton rb10 = new JRadioButton("10 threads");
 	private final JRadioButton rb15 = new JRadioButton("15 threads");
-	private final JRadioButton rb20 = new JRadioButton("20 threads");
-	private Producer producer = null;	
+	private final JRadioButton rb20 = new JRadioButton("20 threads");		
 	private int numOfConsumerThreads = 1;	
-    private SwingUpdater swingUpdater = null;
-    ExecutorService pool = Executors.newFixedThreadPool(10); 
+    private SwingUpdater swingUpdater = null;   
 	
 	public MultiThreadSwingFrame()	{}	
 	
@@ -110,24 +106,11 @@ public class MultiThreadSwingFrame extends JFrame
 					if(inputValue >= 2L && inputValue <= Long.MAX_VALUE)
 					{						
 						final AtomicLong numOfPrimesFound = new AtomicLong(0);
-						final AtomicLong numOfSearchedNumbers = new AtomicLong(0);						
-						this.swingUpdater = new SwingUpdater(this, inputValue, numOfPrimesFound,  numOfSearchedNumbers, Constants.PRIME_NUM_INTERVAL, pool );
+						final AtomicLong numOfSearchedNumbers = new AtomicLong(0);
+						ExecutorService threadPool = Executors.newFixedThreadPool(this.numOfConsumerThreads);
+						this.swingUpdater = new SwingUpdater(this, inputValue, numOfPrimesFound,  numOfSearchedNumbers, Constants.PRIME_NUM_INTERVAL, threadPool);
 						this.swingUpdater.setName("ProducerThread");
-						this.swingUpdater.start();			
-						/*
-						BlockingQueue<PrimeCounter>	queue = new LinkedBlockingQueue<PrimeCounter>();
-						final AtomicLong numOfPrimesFound = new AtomicLong(0);
-						final AtomicLong numOfSearchedNumbers = new AtomicLong(0); 
-						this.producer = new Producer(this, inputValue, queue, numOfPrimesFound,  numOfSearchedNumbers, Constants.PRIME_NUM_INTERVAL, this.numOfConsumerThreads);
-						this.producer.setName("ProducerThread");
-						this.producer.start();
-						for(int i = 0; i < this.numOfConsumerThreads; i++)
-						{
-							Consumer thread = new Consumer(queue, numOfPrimesFound,  numOfSearchedNumbers);
-							thread.setName("ConsumerThread_" + (i + 1));							
-							thread.start();
-						}	
-						*/					
+						this.swingUpdater.start();				
 					}
 					else
 					{
@@ -155,10 +138,8 @@ public class MultiThreadSwingFrame extends JFrame
 		
 		btnCancelQuiz.addActionListener((ae) ->
 		{
-			this.toggleRunButtons(true);
-		//	this.producer.interrupt();
-			this.swingUpdater.interrupt();
-						
+			this.toggleRunButtons(true);	
+			this.swingUpdater.interrupt();						
 		});	
 		this.setRadioButtonListeners();
 	}
