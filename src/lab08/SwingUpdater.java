@@ -7,6 +7,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadPoolExecutor;
 
 public class SwingUpdater extends Thread
 {	
@@ -39,9 +40,10 @@ public class SwingUpdater extends Thread
 	 public void run(){	
 		long startTime = System.currentTimeMillis();
 		ProcessState processState = ProcessState.INPROGRESS;
-		List<Future<?>> list = new ArrayList<>();
+		List<Future<?>> list = new ArrayList<>();		
 	    	 try
-	    	 {     				
+	    	 {     		
+	    		 
 	    		 this.setOutputMessage(MSG_PREFIX_INITIAL);
     			// set output for every two seconds
     			long currentTime = (System.currentTimeMillis() - startTime)/2000L;
@@ -60,11 +62,20 @@ public class SwingUpdater extends Thread
 	    			 }	 
 	    			
 	    		  if(i <=  this.maxPrimeNumber)
-	    		  {	    			
+	    		  {	 
+	    			  if(((ThreadPoolExecutor)workerPool).getQueue().size() < 10000)
+	    			  {
+	    			  
 	    			 endNumber = (i + this.numInterval);
 	    			 endNumber = endNumber <= this.maxPrimeNumber ? endNumber : this.maxPrimeNumber;  
 	    			 list.add(workerPool.submit(new ConsumerService(this.numOfPrimesFound, this.numOfSearchedNumbers, new PrimeCounter(i, endNumber))));	    			 
-	    			 i = endNumber + 1L;   			
+	    			 i = endNumber + 1L;  
+	    			  }
+	    			  else
+	    			  {
+	    				  Thread.sleep(100);
+	    			  }
+	    			// System.out.println(((ThreadPoolExecutor)workerPool).getQueue().size());
 	    		  }	    			 
 	    			 if(lastTime != currentTime)	    			
 	    			 {
@@ -78,7 +89,13 @@ public class SwingUpdater extends Thread
     			this.toggleRunButtons(true);    				
 	    		processState = processState.equals(ProcessState.INPROGRESS) ? ProcessState.COMPLETED : processState;
 	    		this.setOutputMessage(this.getUpdateMessage(startTime, this.numOfSearchedNumbers.get(), this.maxPrimeNumber, this.numOfPrimesFound.get(), processState));		
-	    	 }	    	 
+	    	 }	 
+	    	 catch(InterruptedException ie)
+	    	 {
+	    		 this.cancelThreads(list);
+	    		 this.toggleRunButtons(true);
+	    		 
+	    	 }
 	    	 catch(Exception ex)
 	    	 {
 	    		 try {

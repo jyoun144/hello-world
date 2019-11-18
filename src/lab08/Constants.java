@@ -2,6 +2,7 @@ package lab08;
 
 public class Constants
 {
+	//9223372036854775807
 	public static final long LONG_2 = 2L;
 	public static final long LONG_0 = 0L;	
 	public static final long PRIME_NUM_INTERVAL = 10;
