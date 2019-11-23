@@ -22,8 +22,7 @@ public class SwingUpdater extends Thread
 	private final long numInterval;	
 	private final ExecutorService workerPool;
 	private final int numOfWorkerThreads;
-	private enum ProcessState {INPROGRESS, CANCELLED, COMPLETED}
-	
+	private enum ProcessState {INPROGRESS, CANCELLED, COMPLETED}	
 	
 	public SwingUpdater(MultiThreadSwingFrame frame, long maxPrimeNumber, AtomicLong numOfPrimesFound, AtomicLong numOfSearchedNumbers, long numInterval, ExecutorService workerPool, int numOfWorkerThreads)
 	{		
@@ -42,8 +41,7 @@ public class SwingUpdater extends Thread
 		ProcessState processState = ProcessState.INPROGRESS;
 		List<Future<?>> list = new ArrayList<>();		
 	    	 try
-	    	 {     		
-	    		 
+	    	 {    		 
 	    		 this.setOutputMessage(MSG_PREFIX_INITIAL);
     			// set output for every two seconds
     			long currentTime = (System.currentTimeMillis() - startTime)/2000L;
@@ -52,7 +50,7 @@ public class SwingUpdater extends Thread
     			this.setOutputMessage(MSG_PREFIX_INITIAL);	    		
     			long i = 2L;    			
     			while(this.numOfSearchedNumbers.get() <  (this.maxPrimeNumber -1))    			
-	    	     {    			
+	    	     {    				
 	    			 if(this.isInterrupted())
 	    			 {
 	    				 processState = ProcessState.CANCELLED;   				
@@ -68,12 +66,15 @@ public class SwingUpdater extends Thread
 	    			  {	    			  
 		    			 endNumber = (i + this.numInterval);
 		    			 endNumber = endNumber <= this.maxPrimeNumber ? endNumber : this.maxPrimeNumber;  
-		    			 list.add(workerPool.submit(new ConsumerService(this.numOfPrimesFound, this.numOfSearchedNumbers, new PrimeCounter(i, endNumber))));	    			 
+		    			 list.add(workerPool.submit(new ConsumerService(this.numOfPrimesFound, this.numOfSearchedNumbers, new PrimeCounter(i, endNumber))));		    			
 		    			 i = endNumber + 1L;  
 	    			  }
 	    			  else
 	    			  {
-	    				  Thread.sleep(100);
+	    				  // Removes completed tasks from list
+	    				  // Ensures list of Future<Consumer> references does not grow too large
+	    				  this.removeCompletedTasks(list);	   
+	    				 Thread.sleep(100);
 	    			  }	    			
 	    		  }	    			 
 	    			 if(lastTime != currentTime)	    			
@@ -84,17 +85,19 @@ public class SwingUpdater extends Thread
 	    			// set output for every two seconds
 	    			 currentTime = (System.currentTimeMillis() - startTime)/2000L;		    			
 	    		
-	    	     } 		
+	    	     }    			
     			this.toggleRunButtons(true);    				
 	    		processState = processState.equals(ProcessState.INPROGRESS) ? ProcessState.COMPLETED : processState;
 	    		this.setOutputMessage(this.getUpdateMessage(startTime, this.numOfSearchedNumbers.get(), this.maxPrimeNumber, this.numOfPrimesFound.get(), processState));		
-	    	 }	 
+	    	 }	
+	    	
 	    	 catch(InterruptedException ie)
 	    	 {	    		
 				 this.cancelThreads(list);
 				 this.toggleRunButtons(true);
 				 System.out.println(this.getName() + ":  interrupted by user");
-	    	 }
+	    	 }	
+	    	    	 
 	    	 catch(Exception ex)
 	    	 {	    		 
 	    		 this.cancelThreads(list);
@@ -148,21 +151,35 @@ public class SwingUpdater extends Thread
 		   append("Processing Time (seconds) ---> ").
 		   append( String.format("%.2f", (System.currentTimeMillis() - startTime)/1000F)).
 		   append("\n").
-		   append("Number of worker threads ---> " + this.numOfWorkerThreads);
-		// this.numOfWorkerThreads
+		   append("Number of worker threads ---> " + this.numOfWorkerThreads);		
 		return sb.toString();
 	}	
 	private void cancelThreads(List<Future<?>> list)
-	{
+	{		
 		if(list != null)
 		{
 			for(Future<?> item : list)
-			{
+			{				
 				if(item != null && !item.isCancelled() && !item.isDone())
 				{
 					item.cancel(true);
 				}
 			}
 		}
+	}	
+	private void removeCompletedTasks(List<Future<?>> list)
+	{			
+		List<Future<?>> completedTasks = new ArrayList<Future<?>>();		
+		for(Future<?> item : list)
+		{				
+			if(item.isDone())
+			{
+				completedTasks.add(item);
+			}
+		}
+		if(completedTasks.size() > 0)
+		{
+			list.removeAll(completedTasks);
+		}		
 	}
 }
