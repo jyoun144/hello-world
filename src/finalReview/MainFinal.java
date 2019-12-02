@@ -45,12 +45,12 @@ public class MainFinal
 			(new Thread(new MyWorker())).start();			
 		}		
 	}
-	private static void question_6_lazyInitRace()
+	private static void question_6_lazyInitRace() 
 	{
 		LazyInitRace obj = new LazyInitRace();
-		for(int i=0; i< 20; i++)
+		for(int i=0; i< 40; i++)
 		{
-			new Thread(new InstanceTest(obj)).start();
+			new Thread(new InstanceTest(obj)).start();			
 		}
 	   
 	}
