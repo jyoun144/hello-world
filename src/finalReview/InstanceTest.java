@@ -10,6 +10,6 @@ public class InstanceTest implements Runnable
 	@Override
 	public void run()
 	{
-		var result = this.obj.getInstance();
+		var result = this.obj.getInstance();	
 	}
 }

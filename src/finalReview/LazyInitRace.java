@@ -3,7 +3,6 @@ package finalReview;
 public class LazyInitRace
 {
 	private ExpensiveObject instance = null;
-	private int counter = 0;	
 	
 	public ExpensiveObject getInstance()
 	{		
@@ -14,17 +13,14 @@ public class LazyInitRace
 		else
 		{
 			synchronized(this)
-			{
-				System.out.println(++counter);
-				
+			{			
 				if(this.instance == null)
 				{				
 					this.instance = new ExpensiveObject();					
-				}
+				}				
 			}
-			return this.instance;
-		}
-		
+			return this.instance;			
+		}		
 	}
 		
 	
