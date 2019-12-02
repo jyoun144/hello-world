@@ -22,7 +22,8 @@ public class MainFinal
 	public static void main(String[] args)
 	{
 		//question_1_implementing_runnable_interface_and_extending_thread_class();
-		question_2_run_multiple_threads_in_parallel();
+		// question_2_run_multiple_threads_in_parallel();
+		question_6_lazyInitRace();
 		
 
 	}
@@ -44,5 +45,16 @@ public class MainFinal
 			(new Thread(new MyWorker())).start();			
 		}		
 	}
+	private static void question_6_lazyInitRace()
+	{
+		LazyInitRace obj = new LazyInitRace();
+		for(int i=0; i< 20; i++)
+		{
+			new Thread(new InstanceTest(obj)).start();
+		}
+	   
+	}
+	
+	
 
 }
