@@ -14,14 +14,13 @@ public class MyCallableTake implements Callable<String> {
 		this.blockingQueue = blockingQueue;
 	}	
 	@Override
-	public String call() throws Exception {		
-        //return the thread name executing this callable task
+	public String call() throws Exception {	       
 		String queueItem = "";
 		try
 		{
 			this.semaphore.acquire();
 			queueItem = this.blockingQueue.take();	
-			System.out.println(Thread.currentThread().getName() + " took item from queue");
+			System.out.println(System.currentTimeMillis() + ":" + Thread.currentThread().getName() + " took item from queue");
 		}
 		catch(InterruptedException ex)
 		{
@@ -32,5 +31,4 @@ public class MyCallableTake implements Callable<String> {
 		}
         return ("String Name: " + Thread.currentThread().getName() + "/" + "Queue Item: " + queueItem);
 	}
-
 }

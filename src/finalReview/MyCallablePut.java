@@ -18,7 +18,7 @@ public class MyCallablePut implements Callable<String> {
 		Thread.sleep(waitTime);
         //return the thread name executing this callable task
 		this.blockingQueue.put(Thread.currentThread().getName());	
-		System.out.println(Thread.currentThread().getName() + " put item in Blocking Queue");
+		System.out.println(System.currentTimeMillis() + ":" + Thread.currentThread().getName() + " put item in Blocking Queue");
         return Thread.currentThread().getName();
 	}
 
