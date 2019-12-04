@@ -103,14 +103,7 @@ public class MainFinal
 						&& futureTasktake4.isDone()){
 					System.out.println("Done");					
 					return;
-				}				
-				
-			//} catch (InterruptedException | ExecutionException e) {
-				//e.printStackTrace();
-			//}catch(TimeoutException e){
-				//do nothing
-			//}
-			//}
+				}
 		}
 	}	
 	private static FutureTask<String> getFutureThreadTake(BlockingQueue<String> blockingQueue, Semaphore semaphore, String threadName)
@@ -125,7 +118,6 @@ public class MainFinal
 		MyCallablePut callable = new MyCallablePut(timeDelay, blockingQueue);	
 		FutureTask<String> futureTaskput = new FutureTask<String>(callable);
 		 new Thread(futureTaskput, threadName).start();
-		 return futureTaskput;
-		
+		 return futureTaskput;		
 	}
 }
